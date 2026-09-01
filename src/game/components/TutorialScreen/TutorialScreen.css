@@ -1,0 +1,84 @@
+.tutorial-screen {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 1.375rem;
+  background:
+    radial-gradient(circle at center, rgba(250, 194, 79, 0.14), transparent 50%),
+    linear-gradient(135deg, #1a0e07, #452711);
+}
+
+.tutorial-screen__card {
+  width: min(45rem, 100%);
+  border: 0.125rem solid rgba(255, 219, 134, 0.35);
+  border-radius: var(--radius);
+  padding: clamp(1.625rem, 5vw, 3.25rem);
+  background:
+    linear-gradient(180deg, rgba(75, 42, 17, 0.94), rgba(26, 15, 7, 0.95));
+  box-shadow: 0 1.75rem 5.625rem rgba(0, 0, 0, 0.45);
+}
+
+.tutorial-screen__eyebrow {
+  display: inline-flex;
+  border: 0.0625rem solid rgba(255, 224, 138, 0.35);
+  border-radius: 62.4375rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--gold-light);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+.tutorial-screen h1 {
+  margin: 1.125rem 0 0;
+  font-family: var(--font-title);
+  font-size: clamp(2.125rem, 6vw, 4rem);
+  color: var(--gold-light);
+}
+
+.tutorial-screen p {
+  color: rgba(255, 248, 223, 0.86);
+  font-size: clamp(1.125rem, 2.4vw, 1.4375rem);
+  line-height: 1.65;
+}
+
+.tutorial-screen__progress {
+  display: flex;
+  gap: 0.5625rem;
+  margin-top: 1.75rem;
+}
+
+.tutorial-screen__progress span {
+  width: 2.375rem;
+  height: 0.5rem;
+  border-radius: 62.4375rem;
+  background: rgba(255, 248, 223, 0.18);
+}
+
+.tutorial-screen__progress .is-active {
+  background: var(--gold);
+}
+
+.tutorial-screen__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2.125rem;
+  flex-wrap: wrap;
+}
+
+.tutorial-screen button {
+  border: 0;
+  border-radius: 62.4375rem;
+  padding: 0.875rem 1.25rem;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  color: var(--ink);
+  font-weight: 900;
+}
+
+.tutorial-screen__secondary {
+  background: rgba(255, 248, 223, 0.12) !important;
+  color: var(--white) !important;
+  border: 0.0625rem solid rgba(255, 248, 223, 0.18) !important;
+}

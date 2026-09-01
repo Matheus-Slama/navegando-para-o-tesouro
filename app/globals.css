@@ -1,0 +1,70 @@
+:root {
+  --bg-dark: #120b07;
+  --paper: #efd09a;
+  --paper-dark: #b77a38;
+  --ink: #2b1608;
+  --gold: #f2b332;
+  --gold-light: #ffe08a;
+  --gold-dark: #8c5517;
+  --blue: #0f5874;
+  --blue-dark: #082e43;
+  --red: #d73624;
+  --green: #4caf50;
+  --white: #fff8df;
+  --shadow: rgba(0, 0, 0, 0.42);
+  --panel: rgba(37, 22, 11, 0.82);
+  --panel-border: rgba(255, 220, 130, 0.28);
+  --radius: 1.375rem;
+  --font-title: Georgia, 'Times New Roman', serif;
+  --font-ui: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--bg-dark);
+  color: var(--white);
+  font-family: var(--font-ui);
+}
+
+button,
+textarea,
+select,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+.game-page {
+  min-height: 100svh;
+  background:
+    radial-gradient(circle at center, rgba(255, 207, 109, 0.14), transparent 45%),
+    linear-gradient(135deg, #0c0704, #251409 55%, #110906);
+  overflow: hidden;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+.sr-only {
+  position: absolute;
+  width: 0.0625rem;
+  height: 0.0625rem;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+  white-space: nowrap;
+}
