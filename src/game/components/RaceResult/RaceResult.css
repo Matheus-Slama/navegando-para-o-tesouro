@@ -1,0 +1,36 @@
+.race-result {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(8, 25, 37, 0.7);
+  backdrop-filter: blur(0.25rem);
+}
+
+.race-result__card {
+  width: min(100%, 22rem);
+  padding: 1.5rem;
+  border: 0.2rem solid var(--gold-light);
+  border-radius: 1.25rem;
+  background: linear-gradient(160deg, #fff4c7, #e7bd68);
+  color: var(--ink);
+  text-align: center;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.45);
+}
+
+.race-result--defeat .race-result__card { border-color: #d16b4d; }
+.race-result__icon { font-size: 3rem; }
+.race-result h2 { margin: 0.5rem 0; font-family: var(--font-title); font-size: 1.5rem; }
+.race-result p { margin: 0 0 1.25rem; line-height: 1.45; }
+
+.race-result button {
+  min-height: 3rem;
+  border: 0.15rem solid var(--gold-dark);
+  border-radius: 999px;
+  padding: 0.65rem 1.25rem;
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 800;
+}

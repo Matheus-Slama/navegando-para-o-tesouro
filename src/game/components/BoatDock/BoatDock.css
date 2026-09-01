@@ -1,0 +1,61 @@
+.boat-dock {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: max(0.5rem, env(safe-area-inset-bottom));
+  width: calc(100% - 1rem);
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: 0;
+  pointer-events: none;
+}
+
+.boat-dock__boat {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  filter: drop-shadow(0 0.75rem 0.5rem rgba(18, 9, 3, 0.4));
+  transform-origin: center bottom;
+  transition: transform 180ms ease, filter 180ms ease;
+  pointer-events: auto;
+}
+
+.boat-dock__boat img {
+  width: 100%;
+  max-height: 22cqh;
+  object-fit: contain;
+  image-rendering: pixelated;
+  user-select: none;
+}
+
+.boat-dock__boat:hover {
+  transform: translateY(-0.5rem) scale(1.04);
+  filter: drop-shadow(0 1rem 0.625rem rgba(18, 9, 3, 0.48));
+}
+
+.boat-dock__boat:focus-visible {
+  outline: 0.25rem solid var(--gold-light);
+  outline-offset: 0.125rem;
+  border-radius: 1rem;
+}
+
+.boat-dock__boat.is-selected {
+  transform: translateY(-0.75rem) scale(1.08);
+  filter:
+    drop-shadow(0 0 0.375rem var(--gold-light))
+    drop-shadow(0 1rem 0.625rem rgba(18, 9, 3, 0.5));
+}
+
+.boat-dock__boat.is-racing {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boat-dock__boat {
+    transition: none;
+  }
+}

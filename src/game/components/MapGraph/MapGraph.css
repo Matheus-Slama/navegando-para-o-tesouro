@@ -1,0 +1,82 @@
+.map-graph,
+.map-graph__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-graph {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.map-graph__route-direction {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.001);
+  stroke-width: 1;
+}
+
+.map-graph__chevron {
+  fill: none;
+  stroke: #080d12;
+  stroke-width: 3.5;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  shape-rendering: geometricPrecision;
+}
+
+.map-graph__island,
+.map-graph__weight {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.map-graph__island {
+  display: grid;
+  justify-items: center;
+  width: clamp(4.8rem, 21cqw, 7rem);
+}
+
+.map-graph__island-sprite {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  filter: drop-shadow(0 0.25rem 0.2rem rgba(15, 89, 130, 0.42));
+}
+
+.map-graph__island-sheet {
+  position: absolute;
+  display: block;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.map-graph__weight {
+  z-index: 8;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.06rem;
+  min-width: 2.15rem;
+  min-height: 1.45rem;
+  justify-content: center;
+  padding: 0.14rem 0.26rem;
+  border: 2px solid rgba(25, 18, 10, 0.88);
+  border-radius: 0.55rem;
+  background: linear-gradient(180deg, rgba(255, 248, 214, 0.96), rgba(239, 207, 137, 0.96));
+  box-shadow: 0 0.18rem 0.35rem rgba(20, 40, 50, 0.35);
+  color: #17110b;
+  font: 900 clamp(0.75rem, 3.3cqw, 0.95rem)/1 system-ui, sans-serif;
+  text-align: center;
+  text-shadow: 0 1px 0 #fff4c7, 1px 0 0 #fff4c7, 0 -1px 0 #fff4c7, -1px 0 0 #fff4c7;
+}
+
+.map-graph__weight-icon {
+  width: 1.45em;
+  height: 1.45em;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0.08rem 0.08rem rgba(36, 18, 6, 0.5));
+}
