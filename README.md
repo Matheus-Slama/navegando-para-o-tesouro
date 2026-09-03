@@ -86,7 +86,7 @@ public/assets/game/
 1. O jogador entra na **tela inicial**.
 2. O jogo mostra o **tutorial fixo**.
 3. A fase é gerada a partir do arquivo `phases.js`.
-4. O jogador escolhe uma das ilhas iniciais.
+4. O jogador escolhe um dos barcos.
 5. Os barcos fazem a corrida.
 6. O algoritmo de Dijkstra calcula o melhor caminho de cada origem até a ilha do tesouro.
 7. O jogo mostra se a escolha do jogador estava correta.
@@ -110,7 +110,7 @@ Exemplo de configuração:
   objective: 'Somar os pesos das arestas para encontrar o menor custo.',
   islandCount: 8,
   extraRouteCount: 6,
-  weights: { min: 1, max: 9, visible: true },
+  weights: { min: 1, max: 9 },
   directed: false,
   uniqueWinnerGap: 4,
   score: { base: 250, hintPenalty: 25, wrongChoicePenalty: 40 },
@@ -126,9 +126,9 @@ Exemplo de configuração:
 
 | Campo | Função |
 |---|---|
-| `islandCount` | Quantidade de ilhas intermediárias geradas |
+| `islandCount` | Quantidade fixa ou intervalo `{ min, max }` de ilhas intermediárias |
 | `extraRouteCount` | Quantidade de rotas extras entre ilhas |
-| `weights` | Peso mínimo/máximo e visibilidade no mapa |
+| `weights` | Peso mínimo e máximo; os pesos são sempre exibidos no mapa |
 | `difficulty` | Dificuldade apresentada para a fase |
 | `score` | Pontuação base e penalidades |
 | `directed` | Define se as rotas têm direção |
@@ -210,7 +210,7 @@ Retorna:
 }
 ```
 
-O vencedor da fase é a ilha inicial com menor distância até o tesouro.
+O vencedor da fase é o barco cujo caminho possui o menor custo até o tesouro.
 
 ## Geração dos grafos
 
@@ -222,7 +222,7 @@ src/game/core/graphGenerator.js
 
 Ele faz:
 
-1. cria as quatro ilhas iniciais fixas;
+1. cria as quatro posições iniciais dos barcos;
 2. cria a ilha final fixa;
 3. gera ilhas intermediárias;
 4. cria rotas principais para cada barco;

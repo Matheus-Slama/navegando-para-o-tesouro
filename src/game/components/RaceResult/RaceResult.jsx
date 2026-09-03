@@ -16,11 +16,16 @@ export function RaceResult({ result, selectedBoat, winner, isFinalPhase, onConti
   return (
     <section className={`race-result race-result--${result}`} role="dialog" aria-modal="true" aria-labelledby="race-result-title">
       <div className="race-result__card">
-        <span className="race-result__icon" aria-hidden="true">{result === 'victory' ? '🏆' : '🧭'}</span>
-        <h2 id="race-result-title">{result === 'victory' ? 'Você encontrou o melhor caminho!' : 'Esse não era o menor caminho'}</h2>
+        <h2 id="race-result-title">
+          {result === 'victory'
+            ? isFinalPhase ? 'Você venceu!' : 'Você encontrou o melhor caminho!'
+            : 'Esse não era o menor caminho'}
+        </h2>
         <p>
           {result === 'victory'
-            ? `O ${selectedBoatName} chegou primeiro ao tesouro.`
+            ? isFinalPhase
+              ? 'Parabéns! O verdadeiro tesouro é aprender o melhor caminho.'
+              : 'Siga para a próxima fase.'
             : `O ${winnerBoatName} chegou ao tesouro antes do ${selectedBoatName}.`}
         </p>
         <button type="button" onClick={onContinue}>

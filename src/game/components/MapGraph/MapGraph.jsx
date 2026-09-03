@@ -1,43 +1,78 @@
 import './MapGraph.css';
-import Image from 'next/image';
 import { AnimatedBoats } from '@/game/components/AnimatedBoat/AnimatedBoat';
 import { GAME_ASSETS } from '@/game/config/gameAssets';
 
-export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinnerArrive }) {
+export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinnerArrive, routeStyle = 'chevrons' }) {
   const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const islands = graph.nodes.filter((node) => node.type === 'intermediate');
-  const weightPositions = getWeightPositions(graph, nodesById);
+  const isDense = islands.length >= 15;
+  const weightPositions = getWeightPositions(graph, nodesById, isDense);
+  const usesChevrons = routeStyle === 'chevrons';
+  const arrowMarkerId = routeStyle === 'arrows-white' ? 'route-arrow-white' : 'route-arrow-black';
 
   return (
-    <div className="map-graph" role="img" aria-label={`Mapa da fase ${phase.name}, dificuldade ${phase.difficulty}`}>
+    <div className={`map-graph${isDense ? ' map-graph--dense' : ''}`} role="img" aria-label={`Mapa da fase ${phase.name}, dificuldade ${phase.difficulty}`}>
       <svg className="map-graph__canvas" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <marker id="route-chevron" viewBox="0 0 14 14" refX="7" refY="7" markerWidth="28" markerHeight="12" orient="auto" markerUnits="userSpaceOnUse">
           <path className="map-graph__chevron" d="M 1.5 1.5 L 6.5 7 L 1.5 12.5 M 7.5 1.5 L 12.5 7 L 7.5 12.5" />
+        </marker>
+        <marker id="route-arrow-white" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="12" markerHeight="12" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+          <path className="map-graph__arrow map-graph__arrow--white" d="M 1 1 L 10 6 L 1 11" />
+        </marker>
+        <marker id="route-arrow-black" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="12" markerHeight="12" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+          <path className="map-graph__arrow map-graph__arrow--black" d="M 1 1 L 10 6 L 1 11" />
         </marker>
       </defs>
       <g className="map-graph__routes">
         {graph.edges.map((edge) => {
           const from = nodesById.get(edge.from);
           const to = nodesById.get(edge.to);
-          const route = getVisibleRoute(from, to);
+          const route = getVisibleRoute(from, to, isDense);
 
           return (
             <g key={edge.id}>
-              <polyline
-                className="map-graph__route-direction"
-                points={getDirectionPoints(route)}
-                markerMid="url(#route-chevron)"
-                markerEnd="url(#route-chevron)"
-              />
+              {usesChevrons ? (
+                <polyline
+                  className="map-graph__route-direction map-graph__route-direction--chevrons"
+                  points={getDirectionPoints(route)}
+                  markerMid="url(#route-chevron)"
+                  markerEnd="url(#route-chevron)"
+                />
+              ) : (
+                <line
+                  className={`map-graph__route-direction map-graph__route-direction--${routeStyle}`}
+                  x1={route.x1}
+                  y1={route.y1}
+                  x2={route.x2}
+                  y2={route.y2}
+                  markerEnd={`url(#${arrowMarkerId})`}
+                />
+              )}
             </g>
+          );
+        })}
+      </g>
+      <g className="map-graph__weight-connectors">
+        {graph.edges.map((edge) => {
+          const position = weightPositions.get(edge.id);
+          if (!position) return null;
+
+          return (
+            <line
+              key={`${edge.id}-connector`}
+              className="map-graph__weight-connector"
+              x1={position.anchorX * 10}
+              y1={position.anchorY * 6.5}
+              x2={position.x * 10}
+              y2={position.y * 6.5}
+            />
           );
         })}
       </g>
       </svg>
 
       {graph.edges.map((edge) => {
-        if (!phase.weights.visible) return null;
         const position = weightPositions.get(edge.id);
         if (!position) return null;
 
@@ -49,14 +84,6 @@ export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinner
             aria-label={`Tempo da rota: ${edge.weight}`}
             title={`Tempo: ${edge.weight}`}
           >
-            <Image
-              className="map-graph__weight-icon"
-              src="/assets/game/ui/route-weight-hourglass.png"
-              alt=""
-              width={1235}
-              height={1274}
-              sizes="10vw"
-            />
             <span>{edge.weight}</span>
           </span>
         );
@@ -106,7 +133,7 @@ export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinner
   );
 }
 
-function getWeightPositions(graph, nodesById) {
+function getWeightPositions(graph, nodesById, isDense) {
   const positions = new Map();
   const occupied = [];
 
@@ -119,56 +146,86 @@ function getWeightPositions(graph, nodesById) {
     const deltaY = to.y - from.y;
     const length = Math.hypot(deltaX, deltaY) || 1;
     const perpendicular = { x: -deltaY / length, y: deltaX / length };
-    const offsets = length < 28
-      ? [5, -5, 7, -7, 9, -9]
-      : [0, 1.5, -1.5, 3, -3];
+    const offsets = isDense
+      ? [1.5, -1.5, 2.5, -2.5, 3.5, -3.5, 4.5, -4.5]
+      : length < 28
+        ? [3.5, -3.5, 5, -5, 6.5, -6.5]
+        : [2, -2, 3, -3, 4, -4, 5, -5];
     const candidates = [];
 
-    [0.5, 0.42, 0.58, 0.34, 0.66, 0.26, 0.74].forEach((progress) => {
+    [0.5, 0.42, 0.58, 0.34, 0.66, 0.26, 0.74, 0.18, 0.82].forEach((progress) => {
       offsets.forEach((offset) => {
         candidates.push({
           x: from.x + deltaX * progress + perpendicular.x * offset,
-          y: from.y + deltaY * progress + perpendicular.y * offset
+          y: from.y + deltaY * progress + perpendicular.y * offset,
+          anchorX: from.x + deltaX * progress,
+          anchorY: from.y + deltaY * progress
         });
       });
     });
 
-    let position = candidates.find((candidate) =>
-      isWeightPositionFree(candidate, graph.nodes, occupied)
-    );
+    const position = candidates.find((candidate) =>
+      isWeightPositionFree(candidate, graph.nodes, occupied, isDense)
+    ) ?? getBestAvailableWeightPosition(candidates, graph.nodes, occupied);
 
-    if (position) {
-      positions.set(edge.id, position);
-      occupied.push(position);
-    }
+    positions.set(edge.id, position);
+    occupied.push(position);
   });
 
   return positions;
 }
 
-function isWeightPositionFree(position, nodes, occupied) {
-  const insideMap = position.x > 7 && position.x < 93 && position.y > 9 && position.y < 86;
+function isWeightPositionFree(position, nodes, occupied, isDense) {
+  const insideMap = isInsideWeightArea(position);
   const touchesNode = nodes.some((node) => {
     const radii = node.type === 'finish'
       ? { x: 19, y: 11 }
       : node.type === 'start'
         ? { x: 13, y: 7 }
-        : { x: 11, y: 5.5 };
+        : isDense ? { x: 9.5, y: 4.5 } : { x: 11, y: 5.5 };
     const deltaX = (position.x - node.x / 10) / radii.x;
     const deltaY = (position.y - node.y / 6.5) / radii.y;
 
     return deltaX ** 2 + deltaY ** 2 < 1;
   });
   const touchesWeight = occupied.some((other) =>
-    Math.abs(position.x - other.x) < 14 && Math.abs(position.y - other.y) < 7
+    Math.abs(position.x - other.x) < (isDense ? 7 : 10) &&
+    Math.abs(position.y - other.y) < (isDense ? 3.25 : 4.5)
   );
 
   return insideMap && !touchesNode && !touchesWeight;
 }
 
-function getVisibleRoute(from, to) {
-  const start = getNodeBoundary(from, to);
-  const end = getNodeBoundary(to, from);
+function getBestAvailableWeightPosition(candidates, nodes, occupied) {
+  const insideCandidates = candidates.filter(isInsideWeightArea);
+
+  return insideCandidates.reduce((best, candidate) =>
+    getWeightPositionScore(candidate, nodes, occupied) > getWeightPositionScore(best, nodes, occupied)
+      ? candidate
+      : best
+  );
+}
+
+function getWeightPositionScore(position, nodes, occupied) {
+  const nodeDistance = Math.min(...nodes.map((node) =>
+    Math.hypot(position.x - node.x / 10, position.y - node.y / 6.5)
+  ));
+  const weightDistance = occupied.length
+    ? Math.min(...occupied.map((other) =>
+        Math.hypot((position.x - other.x) / 2, position.y - other.y)
+      ))
+    : 100;
+
+  return Math.min(nodeDistance, weightDistance);
+}
+
+function isInsideWeightArea(position) {
+  return position.x > 7 && position.x < 93 && position.y > 9 && position.y < 86;
+}
+
+function getVisibleRoute(from, to, isDense) {
+  const start = getNodeBoundary(from, to, isDense);
+  const end = getNodeBoundary(to, from, isDense);
 
   return { x1: start.x, y1: start.y, x2: end.x, y2: end.y };
 }
@@ -185,12 +242,12 @@ function getDirectionPoints(route) {
   }).join(' ');
 }
 
-function getNodeBoundary(node, otherNode) {
+function getNodeBoundary(node, otherNode, isDense) {
   const deltaX = otherNode.x - node.x;
   const deltaY = otherNode.y - node.y;
   const radii = {
     start: { x: 105, y: 46 },
-    intermediate: { x: 88, y: 28 },
+    intermediate: isDense ? { x: 78, y: 25 } : { x: 88, y: 28 },
     finish: { x: 55, y: 12 }
   }[node.type];
   const radiusX = radii.x;

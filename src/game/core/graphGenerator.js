@@ -19,7 +19,7 @@ import erdosRenyi from 'graphology-generators/random/erdos-renyi';
 export function generateGraphForPhase(phase, seed = Date.now()) {
   let attempt = 0;
 
-  while (attempt < 200) {
+  while (true) {
     const graph = buildCandidateGraph(phase, seed + attempt * 97);
     const results = getPhaseResults(graph, phase);
 
@@ -33,11 +33,17 @@ export function generateGraphForPhase(phase, seed = Date.now()) {
 
     attempt += 1;
   }
-
-  throw new Error(`Não foi possível gerar um mapa válido para a fase ${phase.id}.`);
 }
 
 function isValidGraph(graph, results, phase) {
+  const allEdgesHaveWeights = graph.edges.every((edge) =>
+    Number.isFinite(edge.weight) && edge.weight > 0
+  );
+
+  if (!allEdgesHaveWeights) {
+    return false;
+  }
+
   if (results.ordered.length !== START_ISLANDS.length || !results.hasUniqueWinner) {
     return false;
   }
@@ -57,9 +63,10 @@ function isValidGraph(graph, results, phase) {
 
 function buildCandidateGraph(phase, seed) {
   const random = createSeededRandom(seed);
+  const islandCount = getIslandCount(phase.islandCount, random);
   const nodes = [
     ...START_ISLANDS.map((start) => ({ ...start, type: 'start' })),
-    ...createIntermediateNodes(phase, random),
+    ...createIntermediateNodes(islandCount, random),
     { ...FINISH_ISLAND, type: 'finish' }
   ];
   const edges = [];
@@ -73,7 +80,7 @@ function buildCandidateGraph(phase, seed) {
     order: intermediateNodes.length,
     approximateSize: Math.min(
       maximumRandomEdges,
-      Math.max(intermediateNodes.length - 1, phase.extraRouteCount + intermediateNodes.length)
+      phase.extraRouteCount
     ),
     rng: random
   });
@@ -83,7 +90,7 @@ function buildCandidateGraph(phase, seed) {
   START_ISLANDS.forEach((start, index) => {
     const baseWeight = randomInt(random, phase.weights.min, phase.weights.max);
     const winnerBonus = index === forcedWinnerIndex
-      ? -Math.floor(phase.weights.max / 3)
+      ? -Math.max(1, Math.floor(phase.weights.max / 3))
       : randomInt(random, 1, 5);
     const destinations = shuffle(
       random,
@@ -95,7 +102,7 @@ function buildCandidateGraph(phase, seed) {
       nodes,
       start.id,
       destination.id,
-      Math.max(1, baseWeight + winnerBonus),
+      Math.min(phase.weights.max, Math.max(phase.weights.min, baseWeight + winnerBonus)),
       phase.directed
     ));
   });
@@ -116,7 +123,7 @@ function buildCandidateGraph(phase, seed) {
       nodes,
       from,
       to,
-      randomInt(random, phase.weights.min + 1, phase.weights.max + 5),
+      randomInt(random, phase.weights.min, phase.weights.max),
       phase.directed
     );
   });
@@ -130,7 +137,7 @@ function buildCandidateGraph(phase, seed) {
       challengeType: phase.challengeType,
       objective: phase.objective,
       directed: phase.directed,
-      islandCount: phase.islandCount,
+      islandCount,
       score: phase.score,
       hints: phase.hints,
       generator: 'graphology-erdos-renyi'
@@ -159,29 +166,30 @@ function connectRandomBackbone(edges, nodes, intermediateNodes, phase, random) {
   });
 }
 
-function createIntermediateNodes(phase, random) {
+function createIntermediateNodes(islandCount, random) {
   const profile = islandPlacement.profiles[islandPlacement.activeProfile];
+  const minimumDistanceX = islandCount >= 15 ? 17 : 23;
   const availableSlots = profile.gridPatterns.flatMap((pattern) =>
     pattern.x.map((x) => ({ x, y: pattern.y }))
-  );
+  ).filter((slot) => slot.y >= 26);
   let selectedSlots = [];
 
-  for (let attempt = 0; attempt < 80 && selectedSlots.length < phase.islandCount; attempt += 1) {
+  for (let attempt = 0; attempt < 80 && selectedSlots.length < islandCount; attempt += 1) {
     selectedSlots = [];
 
     shuffle(random, availableSlots).some((slot) => {
       const isFree = selectedSlots.every((selected) => {
-        const deltaX = (slot.x - selected.x) / 23;
+        const deltaX = (slot.x - selected.x) / minimumDistanceX;
         const deltaY = (slot.y - selected.y) / 10;
         return deltaX ** 2 + deltaY ** 2 >= 1;
       });
 
       if (isFree) selectedSlots.push(slot);
-      return selectedSlots.length === phase.islandCount;
+      return selectedSlots.length === islandCount;
     });
   }
 
-  if (selectedSlots.length < phase.islandCount) {
+  if (selectedSlots.length < islandCount) {
     throw new Error(`O perfil ${islandPlacement.activeProfile} não possui posições sem sobreposição suficientes.`);
   }
 
@@ -193,6 +201,15 @@ function createIntermediateNodes(phase, random) {
       x: Math.round(position.x * 10),
       y: Math.round(position.y * 6.5)
     }));
+}
+
+function getIslandCount(configuredCount, random) {
+  if (Number.isInteger(configuredCount)) return configuredCount;
+
+  // A primeira amostra do LCG varia pouco entre seeds próximas; a segunda
+  // distribui corretamente a quantidade ao regenerar mapas em sequência.
+  random();
+  return randomInt(random, configuredCount.min, configuredCount.max);
 }
 
 function createRandomIslandSprite(random) {
@@ -227,6 +244,8 @@ function distance(first, second) {
 function addEdge(edges, nodes, from, to, weight, directed) {
   const fromNode = nodes.find((node) => node.id === from);
   const toNode = nodes.find((node) => node.id === to);
+  const isDense = nodes.filter((node) => node.type === 'intermediate').length >= 15;
+  const hasVisibleSpace = hasEnoughVisibleRoute(fromNode, toNode, nodes);
   const exists = edges.some((edge) =>
     (edge.from === from && edge.to === to) ||
     (!directed && edge.from === to && edge.to === from)
@@ -248,10 +267,10 @@ function addEdge(edges, nodes, from, to, weight, directed) {
       return false;
     }
 
-    return segmentTouchesNode(fromNode, toNode, node);
+    return segmentTouchesNode(fromNode, toNode, node, isDense);
   });
 
-  if (!exists && !crossesAnotherRoute && !overlapsAnotherNode) {
+  if (hasVisibleSpace && !exists && !crossesAnotherRoute && !overlapsAnotherNode) {
     edges.push({
       from,
       to,
@@ -263,8 +282,39 @@ function addEdge(edges, nodes, from, to, weight, directed) {
   return false;
 }
 
-function segmentTouchesNode(from, to, node) {
-  const radius = getNodeClearance(node);
+function hasEnoughVisibleRoute(from, to, nodes) {
+  const isDense = nodes.filter((node) => node.type === 'intermediate').length >= 15;
+  const start = getRouteBoundary(from, to, isDense);
+  const end = getRouteBoundary(to, from, isDense);
+  const directionX = to.x - from.x;
+  const directionY = to.y - from.y;
+  const travelsForward = (end.x - start.x) * directionX + (end.y - start.y) * directionY > 0;
+  const visibleLength = Math.hypot(
+    (end.x - start.x) / 10,
+    (end.y - start.y) / 6.5
+  );
+
+  return travelsForward && visibleLength >= 8;
+}
+
+function getRouteBoundary(node, otherNode, isDense) {
+  const deltaX = otherNode.x - node.x;
+  const deltaY = otherNode.y - node.y;
+  const radii = node.type === 'start'
+    ? { x: 105, y: 46 }
+    : node.type === 'finish'
+      ? { x: 55, y: 12 }
+      : isDense ? { x: 78, y: 25 } : { x: 88, y: 28 };
+  const scale = 1 / Math.sqrt((deltaX / radii.x) ** 2 + (deltaY / radii.y) ** 2);
+
+  return {
+    x: node.x + deltaX * scale,
+    y: node.y + deltaY * scale
+  };
+}
+
+function segmentTouchesNode(from, to, node, isDense) {
+  const radius = getNodeClearance(node, isDense);
   const fromX = (from.x - node.x) / radius.x;
   const fromY = (from.y - node.y) / radius.y;
   const toX = (to.x - node.x) / radius.x;
@@ -281,10 +331,10 @@ function segmentTouchesNode(from, to, node) {
   return closestX ** 2 + closestY ** 2 < 1;
 }
 
-function getNodeClearance(node) {
+function getNodeClearance(node, isDense) {
   if (node.type === 'finish') return { x: 180, y: 82 };
   if (node.type === 'start') return { x: 120, y: 52 };
-  return { x: 112, y: 42 };
+  return isDense ? { x: 85, y: 30 } : { x: 112, y: 42 };
 }
 
 function segmentsCross(pointA, pointB, pointC, pointD) {

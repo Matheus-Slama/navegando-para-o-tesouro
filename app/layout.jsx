@@ -1,4 +1,11 @@
 import './globals.css';
+import { Pirata_One } from 'next/font/google';
+
+const pirataOne = Pirata_One({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-pirate'
+});
 
 export const metadata = {
   title: 'Caminho ao Tesouro',
@@ -7,7 +14,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={pirataOne.variable}>
       <body>{children}</body>
     </html>
   );

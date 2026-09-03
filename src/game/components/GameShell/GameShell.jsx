@@ -18,6 +18,7 @@ export function GameShell() {
   const [devMode, setDevMode] = useState(false);
   const [hintOpen, setHintOpen] = useState(false);
   const [hintIndex, setHintIndex] = useState(0);
+  const [routeStyle, setRouteStyle] = useState('chevrons');
   const phase = PHASES[phaseIndex];
 
   const graph = useMemo(() => {
@@ -119,6 +120,8 @@ export function GameShell() {
         onOpenHint={() => setHintOpen(true)}
         onCloseHint={() => setHintOpen(false)}
         onNextHint={() => setHintIndex((value) => (value + 1) % phase.hints.length)}
+        routeStyle={routeStyle}
+        onChangeRouteStyle={setRouteStyle}
       />
     </main>
   );

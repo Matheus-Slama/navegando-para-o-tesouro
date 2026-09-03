@@ -1,84 +1,194 @@
 .tutorial-screen {
-  min-height: 100svh;
-  display: grid;
-  place-items: center;
-  padding: 1.375rem;
-  background:
-    radial-gradient(circle at center, rgba(250, 194, 79, 0.14), transparent 50%),
-    linear-gradient(135deg, #1a0e07, #452711);
+  position: relative;
+  isolation: isolate;
+  container-type: size;
+  width: min(100vw, 30rem, calc(100svh * 390 / 844));
+  height: 100svh;
+  min-height: 35rem;
+  margin-inline: auto;
+  overflow: hidden;
+  background: #42afe2;
+}
+
+.tutorial-screen__background,
+.tutorial-screen__background img,
+.tutorial-screen__map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.tutorial-screen__background {
+  z-index: -1;
+}
+
+.tutorial-screen__background img {
+  top: -0.5rem;
+  bottom: -0.5rem;
+  height: calc(100% + 1rem);
+  object-fit: cover;
+  object-position: center;
+}
+
+.tutorial-screen__map {
+  pointer-events: auto;
+}
+
+.tutorial-screen__map .boat-dock__boat {
+  pointer-events: none;
+}
+
+.tutorial-screen[data-step='3'] .boat-dock__boat {
+  pointer-events: auto;
+}
+
+.tutorial-screen__map .map-graph__route-direction {
+  stroke: #ffffff;
+  stroke-width: 7;
+  marker-mid: none;
+  marker-end: none;
+  filter: drop-shadow(0 0.12rem 0 #159edc);
+}
+
+.tutorial-screen__map .map-graph__weight {
+  opacity: 0.38;
+}
+
+.tutorial-screen__map .map-graph__island,
+.tutorial-screen__map .map-graph__weight,
+.tutorial-screen__map .boat-dock__boat,
+.tutorial-screen__map .treasure-anchor,
+.tutorial-screen__hint-icon {
+  transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease;
+}
+
+.tutorial-screen__hint-icon {
+  position: absolute;
+  z-index: 21;
+  top: max(0.45rem, env(safe-area-inset-top));
+  right: 0.45rem;
+  width: clamp(3.25rem, 14cqw, 4.25rem);
+  aspect-ratio: 1;
+  opacity: 0.42;
+}
+
+.tutorial-screen__hint-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.tutorial-screen[data-step='1'] .map-graph__island,
+.tutorial-screen[data-step='1'] .map-graph__canvas,
+.tutorial-screen[data-step='2'] .map-graph__weight,
+.tutorial-screen[data-step='3'] .boat-dock__boat,
+.tutorial-screen[data-step='4'] .tutorial-screen__hint-icon {
+  filter: drop-shadow(0 0 0.7rem #fff2a8) brightness(1.2);
+}
+
+.tutorial-screen[data-step='2'] .map-graph__weight {
+  opacity: 1;
+}
+
+.tutorial-screen[data-step='2'] .map-graph__weight,
+.tutorial-screen[data-step='3'] .boat-dock__boat,
+.tutorial-screen[data-step='4'] .tutorial-screen__hint-icon {
+  transform: scale(1.12);
+}
+
+.tutorial-screen[data-step='4'] .tutorial-screen__hint-icon {
+  opacity: 1;
+}
+
+.tutorial-screen__backdrop {
+  position: absolute;
+  z-index: 30;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0.5rem;
+  background: transparent;
+  pointer-events: none;
 }
 
 .tutorial-screen__card {
-  width: min(45rem, 100%);
-  border: 0.125rem solid rgba(255, 219, 134, 0.35);
-  border-radius: var(--radius);
-  padding: clamp(1.625rem, 5vw, 3.25rem);
-  background:
-    linear-gradient(180deg, rgba(75, 42, 17, 0.94), rgba(26, 15, 7, 0.95));
-  box-shadow: 0 1.75rem 5.625rem rgba(0, 0, 0, 0.45);
-}
-
-.tutorial-screen__eyebrow {
-  display: inline-flex;
-  border: 0.0625rem solid rgba(255, 224, 138, 0.35);
-  border-radius: 62.4375rem;
-  padding: 0.5rem 0.75rem;
-  color: var(--gold-light);
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
+  display: flex;
+  flex-direction: column;
+  width: min(27rem, 100%);
+  min-height: 14.5rem;
+  border: 0;
+  padding: 2.9rem 3.25rem 2.65rem;
+  background: url('/assets/game/ui/hint-modal-parchment.png') center / 100% 100% no-repeat;
+  color: #2e1a09;
+  filter: drop-shadow(0 0.8rem 0.75rem rgba(1, 12, 20, 0.55));
+  font-family: var(--font-pirate), Georgia, serif;
+  pointer-events: auto;
 }
 
 .tutorial-screen h1 {
-  margin: 1.125rem 0 0;
-  font-family: var(--font-title);
-  font-size: clamp(2.125rem, 6vw, 4rem);
-  color: var(--gold-light);
+  margin: 0;
+  color: #492508;
+  font-family: var(--font-pirate), Georgia, serif;
+  font-size: clamp(1.35rem, 6cqw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.tutorial-screen__copy {
+  padding: 1.4rem 0.75rem 0.65rem;
 }
 
 .tutorial-screen p {
-  color: rgba(255, 248, 223, 0.86);
-  font-size: clamp(1.125rem, 2.4vw, 1.4375rem);
-  line-height: 1.65;
-}
-
-.tutorial-screen__progress {
-  display: flex;
-  gap: 0.5625rem;
-  margin-top: 1.75rem;
-}
-
-.tutorial-screen__progress span {
-  width: 2.375rem;
-  height: 0.5rem;
-  border-radius: 62.4375rem;
-  background: rgba(255, 248, 223, 0.18);
-}
-
-.tutorial-screen__progress .is-active {
-  background: var(--gold);
+  margin: 0.65rem 0 0;
+  color: #2e1a09;
+  font-size: clamp(0.84rem, 3.6cqw, 1rem);
+  line-height: 1.25;
+  letter-spacing: 0.02em;
 }
 
 .tutorial-screen__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 2.125rem;
-  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
 }
 
-.tutorial-screen button {
-  border: 0;
-  border-radius: 62.4375rem;
-  padding: 0.875rem 1.25rem;
-  background: linear-gradient(180deg, var(--gold-light), var(--gold));
-  color: var(--ink);
-  font-weight: 900;
+.tutorial-screen__card button {
+  border: 0.125rem solid #482608;
+  border-radius: 0.55rem;
+  padding: 0.45rem 0.7rem;
+  background: #7c430f;
+  color: #fff8db;
+  font-family: var(--font-pirate), Georgia, serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.tutorial-screen__card button:hover {
+  background: #9d5a19;
 }
 
 .tutorial-screen__secondary {
-  background: rgba(255, 248, 223, 0.12) !important;
-  color: var(--white) !important;
-  border: 0.0625rem solid rgba(255, 248, 223, 0.18) !important;
+  background: rgba(124, 67, 15, 0.14) !important;
+  color: #492508 !important;
+}
+
+@media (max-height: 43rem) {
+  .tutorial-screen__backdrop {
+    padding: 0.35rem;
+  }
+
+  .tutorial-screen__card {
+    min-height: 13rem;
+    padding: 2.55rem 2.8rem 2.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tutorial-screen__map * {
+    transition: none !important;
+  }
 }

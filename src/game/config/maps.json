@@ -10,19 +10,21 @@
   ],
   "finish": { "id": "finish", "label": "Ilha do Tesouro", "x": 500, "y": 55 },
   "gameDesign": {
-    "story": "O jogador participa de uma aventura marítima em busca de um tesouro e precisa descobrir qual ilha inicial possui o melhor caminho até o destino.",
+    "story": "O jogador participa de uma aventura marítima em busca de um tesouro e precisa descobrir qual barco possui o caminho de menor custo até o destino.",
     "gameplay": "O jogador analisa o mapa, observa as ilhas e rotas, escolhe um navio e acompanha a corrida até o tesouro.",
-    "mechanics": "Ilhas representam vértices, rotas representam arestas e, nas fases avançadas, as rotas possuem pesos.",
+    "mechanics": "Ilhas representam vértices, rotas representam arestas e todas as rotas possuem pesos desde a primeira fase.",
     "rules": {
       "startCount": 4,
       "finishCount": 1,
       "selectionCount": 1,
+      "weightedRoutes": true,
+      "weightDisplay": "always",
       "raceMode": "all-boats-simultaneously",
       "winCondition": "Escolher o barco cujo caminho possui o menor custo até o tesouro.",
       "uniqueWinner": true
     },
     "reward": "Ao acertar, o jogador recebe feedback positivo, registra sua pontuação e avança para a próxima fase.",
-    "progression": "As fases adicionam gradualmente ilhas, caminhos alternativos, pesos e o algoritmo de Dijkstra.",
+    "progression": "As fases aumentam gradualmente a quantidade de ilhas, os caminhos alternativos e a complexidade dos custos até o algoritmo de Dijkstra.",
     "maps": "Cada fase varia a posição das ilhas, suas conexões e os custos das rotas dentro da ambientação marítima.",
     "characters": "Os quatro barcos representam as opções iniciais; dicas e mensagens educativas orientam o jogador.",
     "narrative": "A jornada até o tesouro apresenta grafo, caminho, peso, caminho mínimo e algoritmo de Dijkstra.",
@@ -41,65 +43,65 @@
     "difficulty": "guiado",
     "generation": "fixed",
     "challengeType": "introduction",
-    "objective": "Apresentar ilha, vértice, caminho, aresta, objetivo e movimentação.",
+    "objective": "Apresentar ilha, vértice, caminho, aresta, peso, custo, objetivo e movimentação.",
     "islandCount": 3,
-    "weights": { "min": 1, "max": 1, "visible": true },
+    "weights": { "min": 1, "max": 3 },
     "score": { "maxScore": 0, "targetTimeSeconds": 0 },
     "hints": [
       "Comece identificando onde o barco está e onde está o tesouro.",
       "Veja quais ilhas estão diretamente conectadas à posição atual.",
       "Escolha apenas uma ilha que possua um caminho ligado ao barco.",
       "Siga as conexões em direção ao tesouro, evitando voltar para uma ilha já visitada.",
-      "Observe o caminho destacado: vá da ilha inicial para a ilha conectada seguinte até chegar ao tesouro."
+      "Observe o caminho destacado: siga da posição do barco para a ilha conectada seguinte até chegar ao tesouro."
     ]
   },
   "phases": [
     {
-      "id": 1, "name": "Primeiros caminhos", "difficulty": "fácil", "generation": "random", "challengeType": "paths",
-      "objective": "Entender o caminho entre os vértices.", "islandCount": 5, "extraRouteCount": 1,
-      "weights": { "min": 1, "max": 3, "visible": true }, "directed": false, "uniqueWinnerGap": 1,
+      "id": 1, "name": "Primeiros custos", "difficulty": "fácil", "generation": "random", "challengeType": "weighted-paths",
+      "objective": "Entender caminhos e comparar seus custos pelos pesos das rotas.", "islandCount": 5, "extraRouteCount": 1,
+      "weights": { "min": 1, "max": 2 }, "directed": false, "uniqueWinnerGap": 1,
       "score": { "maxScore": 1000, "targetTimeSeconds": 20 },
       "hints": [
         "Antes de mover o barco, tente visualizar uma rota completa até o tesouro.",
         "Evite caminhos que terminam sem conexão com o objetivo.",
-        "Compare quantas ilhas você precisa visitar em cada rota possível.",
-        "Dê preferência à rota que chega ao tesouro passando por menos ilhas intermediárias.",
-        "Conte as conexões de cada caminho do início ao tesouro e escolha aquele que utiliza menos etapas."
+        "Observe o peso mostrado em cada conexão da rota.",
+        "Some os pesos de todas as conexões até o tesouro.",
+        "Escolha o caminho cuja soma dos pesos é a menor."
       ]
     },
     {
-      "id": 2, "name": "Comparando caminhos", "difficulty": "fácil", "generation": "random", "challengeType": "stops",
-      "objective": "Comparar caminhos pela quantidade de paradas intermediárias.", "islandCount": 5, "extraRouteCount": 3,
-      "weights": { "min": 1, "max": 4, "visible": true }, "directed": false, "uniqueWinnerGap": 1,
+      "id": 2, "name": "Comparando custos", "difficulty": "fácil", "generation": "random", "challengeType": "weighted-comparison",
+      "objective": "Comparar o custo total de diferentes caminhos.", "islandCount": 5, "extraRouteCount": 3,
+      "weights": { "min": 1, "max": 3 }, "directed": false, "uniqueWinnerGap": 1,
       "score": { "maxScore": 1500, "targetTimeSeconds": 30 },
       "hints": [
         "Existem vários caminhos possíveis. Não escolha o primeiro que encontrar.",
-        "Conte todas as paradas necessárias até chegar ao tesouro.",
-        "Uma rota que começa curta pode ficar maior depois. Analise até o final.",
-        "Compare duas rotas completas e descarte aquela que possui mais paradas.",
-        "Procure o caminho com a menor quantidade total de ilhas intermediárias antes de movimentar o barco."
+        "Some todos os pesos necessários para chegar ao tesouro.",
+        "Uma rota que começa barata pode ficar mais cara depois. Analise até o final.",
+        "Compare duas rotas completas e descarte aquela com maior custo.",
+        "O caminho com menos ilhas nem sempre possui a menor soma de pesos."
       ]
     },
     {
-      "id": 3, "name": "Caminhos enganosos", "difficulty": "média", "generation": "random", "challengeType": "full-path",
-      "objective": "Analisar o caminho completo e não somente seu começo.", "islandCount": 7, "extraRouteCount": 6,
-      "weights": { "min": 1, "max": 6, "visible": true }, "directed": false, "uniqueWinnerGap": 2,
+      "id": 3, "name": "Custos enganosos", "difficulty": "média", "generation": "random", "challengeType": "weighted-full-path",
+      "objective": "Analisar o custo do caminho completo e não somente seu primeiro peso.", "islandCount": 7, "extraRouteCount": 6,
+      "weights": { "min": 1, "max": 6 }, "directed": false, "uniqueWinnerGap": 2,
       "score": { "maxScore": 2250, "targetTimeSeconds": 45 },
       "hints": [
-        "Não escolha apenas olhando a próxima ilha.",
-        "Veja para onde cada ilha leva antes de decidir.",
-        "Alguns caminhos parecem mais rápidos no começo, mas exigem muitas conexões depois.",
-        "Compare o tamanho completo de pelo menos duas rotas antes de escolher.",
-        "A melhor escolha é aquela que deixa você mais próximo do tesouro sem obrigar a passar por muitas outras ilhas depois."
+        "Não escolha apenas olhando o peso da primeira conexão.",
+        "Veja os pesos das conexões seguintes antes de decidir.",
+        "Alguns caminhos parecem baratos no começo, mas acumulam custos maiores depois.",
+        "Compare a soma completa de pelo menos duas rotas antes de escolher.",
+        "A melhor escolha é a rota com o menor custo total até o tesouro."
       ]
     },
     {
-      "id": 4, "name": "Introdução aos pesos", "difficulty": "média", "generation": "random", "challengeType": "weighted-sum",
-      "objective": "Entender grafos ponderados e somar os pesos das arestas.", "islandCount": 7, "extraRouteCount": 6,
-      "weights": { "min": 1, "max": 5, "visible": true }, "directed": false, "uniqueWinnerGap": 2,
+      "id": 4, "name": "Somas estratégicas", "difficulty": "média", "generation": "random", "challengeType": "weighted-sum",
+      "objective": "Aprofundar a soma dos pesos em grafos com mais caminhos alternativos.", "islandCount": 7, "extraRouteCount": 6,
+      "weights": { "min": 1, "max": 5 }, "directed": false, "uniqueWinnerGap": 2,
       "score": { "maxScore": 3000, "targetTimeSeconds": 60 },
       "hints": [
-        "Agora observe os números dos caminhos, não apenas a quantidade de ilhas.",
+        "Observe os números dos caminhos, não apenas a quantidade de ilhas.",
         "Um caminho com mais ilhas pode custar menos se seus pesos forem menores.",
         "Some mentalmente os pesos das conexões de cada rota.",
         "Compare o custo total das duas rotas que parecem mais promissoras.",
@@ -109,8 +111,8 @@
     },
     {
       "id": 5, "name": "Custo acumulado", "difficulty": "difícil", "generation": "random", "challengeType": "accumulated-cost",
-      "objective": "Usar o custo acumulado como preparação para Dijkstra.", "islandCount": 9, "extraRouteCount": 9,
-      "weights": { "min": 2, "max": 9, "visible": true }, "directed": false, "uniqueWinnerGap": 1,
+      "objective": "Usar o custo acumulado como preparação para Dijkstra.",  "islandCount": { "min": 10, "max": 17 }, "extraRouteCount": 9,
+      "weights": { "min": 2, "max": 9 }, "directed": false, "uniqueWinnerGap": 1,
       "score": { "maxScore": 4000, "targetTimeSeconds": 90 },
       "hints": [
         "Não tente escolher a rota completa de uma vez. Compare os custos para chegar às próximas ilhas.",
@@ -123,12 +125,12 @@
     },
     {
       "id": 6, "name": "Desafio final de Dijkstra", "difficulty": "difícil / final", "generation": "random", "challengeType": "dijkstra",
-      "objective": "Usar o algoritmo de Dijkstra para encontrar o caminho mínimo.", "islandCount": 12, "extraRouteCount": 24,
-      "weights": { "min": 1, "max": 20, "visible": true }, "directed": true, "uniqueWinnerGap": 1,
+      "objective": "Usar o algoritmo de Dijkstra para encontrar o caminho mínimo.", "islandCount": { "min": 15, "max": 20 }, "extraRouteCount": 20,
+      "weights": { "min": 1, "max": 20 }, "directed": true, "uniqueWinnerGap": 1,
       "minimumEdgeCount": 20, "minimumWinnerPathNodes": 5,
       "score": { "maxScore": 6000, "targetTimeSeconds": 180 },
       "hints": [
-        "Comece atribuindo custo 0 à ilha inicial e considere as demais ainda sem custo conhecido.",
+        "Comece atribuindo custo 0 à posição inicial do barco e considere as ilhas ainda sem custo conhecido.",
         "Calcule o custo para chegar às ilhas vizinhas da posição inicial.",
         "Escolha o vértice não visitado com o menor custo acumulado.",
         "A partir dele, verifique se existe um caminho mais barato para seus vizinhos e atualize os valores.",

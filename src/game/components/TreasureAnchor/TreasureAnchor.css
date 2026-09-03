@@ -17,22 +17,10 @@
   filter: drop-shadow(0 0.6rem 0.45rem rgba(28, 13, 3, 0.38));
 }
 
-.treasure-anchor--small {
-  width: clamp(4rem, 18cqw, 5rem);
-}
-
-.treasure-anchor--medium {
-  width: clamp(5rem, 22cqw, 6.25rem);
-}
-
-.treasure-anchor--large {
-  width: clamp(6rem, 26cqw, 7.5rem);
-}
-
-.treasure-anchor--legendary {
-  width: clamp(7rem, 30cqw, 8.75rem);
-}
-
+.treasure-anchor--small,
+.treasure-anchor--medium,
+.treasure-anchor--large,
+.treasure-anchor--legendary,
 .treasure-anchor--final {
-  width: clamp(8rem, 34cqw, 10rem);
+  width: clamp(4rem, 18cqw, 5rem);
 }

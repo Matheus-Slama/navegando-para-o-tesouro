@@ -25,6 +25,11 @@
 }
 
 .game-board__background img {
+  top: -0.5rem;
+  bottom: -0.5rem;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 1rem);
   object-fit: cover;
   object-position: center;
 }

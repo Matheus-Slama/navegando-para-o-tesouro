@@ -7,14 +7,37 @@
 }
 
 .map-graph {
-  z-index: 1;
   pointer-events: none;
+}
+
+.map-graph__canvas {
+  z-index: 7;
 }
 
 .map-graph__route-direction {
   fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.map-graph__route-direction--chevrons {
   stroke: rgba(0, 0, 0, 0.001);
   stroke-width: 1;
+}
+
+.map-graph__route-direction--arrows-white,
+.map-graph__route-direction--arrows-black {
+  stroke-width: 5;
+}
+
+.map-graph__route-direction--arrows-white {
+  stroke: #fff;
+  filter: drop-shadow(0 0.1rem 0.08rem rgba(8, 54, 77, 0.8));
+}
+
+.map-graph__route-direction--arrows-black {
+  stroke: #080d12;
+  filter: drop-shadow(0 0.1rem 0.08rem rgba(255, 255, 255, 0.55));
 }
 
 .map-graph__chevron {
@@ -26,6 +49,29 @@
   shape-rendering: geometricPrecision;
 }
 
+.map-graph__arrow {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.map-graph__arrow--white {
+  stroke: #fff;
+}
+
+.map-graph__arrow--black {
+  stroke: #080d12;
+}
+
+.map-graph__weight-connector {
+  stroke: rgba(23, 17, 11, 0.9);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 4 3;
+  filter: drop-shadow(0 1px 0 rgba(255, 248, 214, 0.75));
+}
+
 .map-graph__island,
 .map-graph__weight {
   position: absolute;
@@ -33,9 +79,28 @@
 }
 
 .map-graph__island {
+  z-index: 2;
   display: grid;
   justify-items: center;
   width: clamp(4.8rem, 21cqw, 7rem);
+}
+
+.map-graph--dense .map-graph__island {
+  width: clamp(3.6rem, 16cqw, 5.4rem);
+}
+
+.map-graph--dense .map-graph__weight {
+  min-width: 1.55rem;
+  min-height: 1.1rem;
+  padding: 0.08rem 0.18rem;
+  border-width: 1px;
+  border-radius: 0.38rem;
+  font-size: clamp(0.6rem, 2.6cqw, 0.75rem);
+}
+
+.map-graph--dense .map-graph__weight-connector {
+  stroke-width: 1.25;
+  stroke-dasharray: 2 2;
 }
 
 .map-graph__island-sprite {
@@ -55,7 +120,7 @@
 }
 
 .map-graph__weight {
-  z-index: 8;
+  z-index: 15;
   display: inline-flex;
   align-items: center;
   gap: 0.06rem;
@@ -71,12 +136,4 @@
   font: 900 clamp(0.75rem, 3.3cqw, 0.95rem)/1 system-ui, sans-serif;
   text-align: center;
   text-shadow: 0 1px 0 #fff4c7, 1px 0 0 #fff4c7, 0 -1px 0 #fff4c7, -1px 0 0 #fff4c7;
-}
-
-.map-graph__weight-icon {
-  width: 1.45em;
-  height: 1.45em;
-  object-fit: contain;
-  image-rendering: pixelated;
-  filter: drop-shadow(0 0.08rem 0.08rem rgba(36, 18, 6, 0.5));
 }

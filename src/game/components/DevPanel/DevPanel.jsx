@@ -15,7 +15,9 @@ export function DevPanel({
   phases,
   onToggle,
   onSelectPhase,
-  onRegenerateMap
+  onRegenerateMap,
+  routeStyle,
+  onChangeRouteStyle
 }) {
   const islandCount = graph.nodes.filter((node) => node.type === 'intermediate').length;
   const winner = graph.nodes.find((node) => node.id === graph.results.winner.startId);
@@ -42,6 +44,14 @@ export function DevPanel({
                   {availablePhase.id}. {availablePhase.name} — {availablePhase.difficulty}
                 </option>
               ))}
+            </select>
+          </label>
+          <label className="dev-panel__phase">
+            <span>Estilo das ligações</span>
+            <select value={routeStyle} onChange={(event) => onChangeRouteStyle(event.target.value)}>
+              <option value="chevrons">Chevrons</option>
+              <option value="arrows-white">Linha branca com setas</option>
+              <option value="arrows-black">Linha preta com setas</option>
             </select>
           </label>
           <dl>

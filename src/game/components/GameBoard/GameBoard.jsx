@@ -26,7 +26,9 @@ export function GameBoard({
   hint,
   onOpenHint,
   onCloseHint,
-  onNextHint
+  onNextHint,
+  routeStyle,
+  onChangeRouteStyle
 }) {
   const treasure = graph.nodes.find((node) => node.type === 'finish');
   const boats = graph.nodes.filter((node) => node.type === 'start');
@@ -79,9 +81,11 @@ export function GameBoard({
         onToggle={onToggleDevMode}
         onSelectPhase={onSelectPhase}
         onRegenerateMap={onRegenerateMap}
+        routeStyle={routeStyle}
+        onChangeRouteStyle={onChangeRouteStyle}
       />
 
-      <MapGraph graph={graph} phase={phase} selectedStartId={selectedStartId} animationKey={animationKey} onWinnerArrive={onWinnerArrive} />
+      <MapGraph graph={graph} phase={phase} selectedStartId={selectedStartId} animationKey={animationKey} onWinnerArrive={onWinnerArrive} routeStyle={routeStyle} />
 
       <TreasureAnchor
         node={treasure}
