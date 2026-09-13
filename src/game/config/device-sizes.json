@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "defaultDevice": "mobile",
+  "fallbackViewport": { "width": 390, "height": 844 },
+  "selectionOrder": ["wideCompact", "wide", "tablet", "mobile"],
+  "defaults": {
+    "sizes": {
+      "screen-width": "100%",
+      "screen-height": "100svh",
+      "island-width": "min(21cqw, 16cqh, 8rem)",
+      "dense-island-width": "min(16cqw, 12cqh, 6rem)",
+      "boat-width": "min(21cqw, 14cqh, 9rem)",
+      "treasure-width": "min(18cqw, 14cqh, 7rem)",
+      "hint-button-size": "clamp(3.25rem, 14cqw, 4.25rem)",
+      "weight-font-size": "clamp(0.75rem, 3.3cqw, 0.95rem)",
+      "dense-weight-font-size": "clamp(0.6rem, 2.6cqw, 0.75rem)",
+      "weight-min-width": "2.15rem",
+      "dense-weight-min-width": "1.55rem",
+      "control-min-height": "2.75rem",
+      "tutorial-width": "min(27rem, 100%)",
+      "tutorial-min-height": "14.5rem",
+      "tutorial-padding": "2.9rem clamp(2rem, 12cqw, 3.75rem) 4.15rem",
+      "tutorial-copy-padding": "1.4rem 0.75rem 0.65rem",
+      "tutorial-actions-padding": "0.75rem",
+      "tutorial-backdrop-padding": "0.5rem",
+      "tutorial-backdrop-align": "center",
+      "tutorial-title-size": "clamp(1.35rem, 6cqw, 1.8rem)",
+      "tutorial-text-size": "clamp(0.84rem, 3.6cqw, 1rem)",
+      "hint-width": "min(27rem, 100%)",
+      "hint-min-height": "17rem",
+      "hint-padding": "2.5rem clamp(1.75rem, 10cqw, 3.75rem) 2.25rem",
+      "hint-text-size": "clamp(0.84rem, 3.6cqw, 1rem)",
+      "result-width": "min(27rem, 100%)",
+      "result-min-height": "17rem",
+      "result-padding": "3.5rem clamp(1.75rem, 10cqw, 3.75rem) 3.25rem",
+      "result-title-size": "clamp(1.35rem, 6cqw, 1.85rem)",
+      "result-text-size": "clamp(0.9rem, 3.8cqw, 1.05rem)",
+      "start-image-fit": "cover",
+      "start-content-top": "64%",
+      "start-content-width": "72vw",
+      "start-content-columns": "minmax(0, 1fr)",
+      "start-content-gap": "clamp(1rem, 2.4vh, 1.625rem)",
+      "start-button-width": "min(18.125rem, 100%)",
+      "start-button-padding": "clamp(0.8125rem, 1.5vw, 1.125rem) clamp(1.5rem, 3vw, 2.375rem)",
+      "start-button-font-size": "clamp(1.125rem, 1.8vw, 1.5625rem)"
+    },
+    "map": {
+      "placementProfile": "mobile",
+      "denseThreshold": 15,
+      "minimumDistanceX": { "regular": 23, "dense": 17 },
+      "minimumDistanceY": 10,
+      "minimumVisibleRoute": 8,
+      "islandRangeY": { "min": 26, "max": 80 },
+      "radiiScale": { "x": 1, "y": 1 },
+      "routeRadii": {
+        "start": { "x": 105, "y": 46 },
+        "finish": { "x": 55, "y": 12 },
+        "intermediate": { "x": 88, "y": 28 },
+        "denseIntermediate": { "x": 78, "y": 25 }
+      },
+      "clearanceRadii": {
+        "start": { "x": 120, "y": 52 },
+        "finish": { "x": 180, "y": 82 },
+        "intermediate": { "x": 112, "y": 42 },
+        "denseIntermediate": { "x": 85, "y": 30 }
+      }
+    }
+  },
+  "devices": {
+    "mobile": {
+      "label": "Celular em pé",
+      "layout": "mobile",
+      "match": {},
+      "assets": { "startBackground": "/assets/game/backgrounds/start-screen-tall.png" }
+    },
+    "tablet": {
+      "label": "Tablet em pé",
+      "layout": "tablet",
+      "match": { "minWidth": 600 },
+      "assets": { "startBackground": "/assets/game/backgrounds/start-screen-portrait.png" },
+      "sizes": {
+        "island-width": "min(14cqw, 16cqh, 10rem)",
+        "dense-island-width": "min(11cqw, 12cqh, 8rem)",
+        "weight-font-size": "clamp(0.875rem, 2.4cqh, 1.15rem)",
+        "dense-weight-font-size": "clamp(0.875rem, 2.4cqh, 1.15rem)",
+        "weight-min-width": "1.75rem",
+        "dense-weight-min-width": "1.75rem",
+        "start-content-top": "65%",
+        "start-content-width": "min(38.75rem, 68vw)"
+      },
+      "map": {
+        "placementProfile": "tablet",
+        "minimumDistanceX": { "regular": 20, "dense": 14 },
+        "radiiScale": { "x": 0.7, "y": 1 }
+      }
+    },
+    "wide": {
+      "label": "Desktop, tablet deitado e widescreen",
+      "layout": "wide",
+      "match": { "minAspectRatio": 1 },
+      "assets": { "startBackground": "/assets/game/backgrounds/start-screen-wide.png" },
+      "sizes": {
+        "island-width": "min(8cqw, 13cqh, 10rem)",
+        "dense-island-width": "min(7cqw, 11cqh, 8rem)",
+        "weight-font-size": "clamp(0.875rem, 2.4cqh, 1.15rem)",
+        "dense-weight-font-size": "clamp(0.875rem, 2.4cqh, 1.15rem)",
+        "weight-min-width": "1.75rem",
+        "dense-weight-min-width": "1.75rem",
+        "tutorial-width": "min(24rem, 31cqw)",
+        "tutorial-padding": "2.25rem clamp(1.5rem, 3cqw, 3rem) 2.75rem",
+        "tutorial-copy-padding": "0.5rem 0 1rem",
+        "tutorial-actions-padding": "0",
+        "tutorial-backdrop-padding": "1rem",
+        "tutorial-backdrop-align": "flex-start",
+        "tutorial-title-size": "clamp(1.2rem, 2.6cqh, 1.8rem)",
+        "tutorial-text-size": "clamp(0.9rem, 2cqh, 1.1rem)",
+        "start-image-fit": "fill",
+        "start-content-top": "79%",
+        "start-content-width": "min(48%, calc(100svh * 1672 / 941 * 0.48))",
+        "start-content-columns": "repeat(2, minmax(0, 1fr))",
+        "start-content-gap": "2cqw",
+        "start-button-width": "100%",
+        "start-button-padding": "0.8cqw 1.2cqw",
+        "start-button-font-size": "clamp(1rem, 1.8cqw, 1.875rem)"
+      },
+      "map": {
+        "placementProfile": "tv",
+        "minimumDistanceX": { "regular": 14, "dense": 9 },
+        "radiiScale": { "x": 0.45, "y": 1.3 }
+      }
+    },
+    "wideCompact": {
+      "label": "Celular deitado ou janela baixa",
+      "extends": "wide",
+      "match": { "minAspectRatio": 1, "maxHeight": 500 },
+      "sizes": {
+        "tutorial-width": "min(22rem, 36cqw)",
+        "tutorial-padding": "1.75rem 1.5rem 2rem"
+      }
+    }
+  }
+}

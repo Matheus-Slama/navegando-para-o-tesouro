@@ -8,10 +8,12 @@ import { MapGraph } from '@/game/components/MapGraph/MapGraph';
 import { TreasureAnchor } from '@/game/components/TreasureAnchor/TreasureAnchor';
 import { BoatDock } from '@/game/components/BoatDock/BoatDock';
 import './TutorialScreen.css';
+import { getMapProfile } from '@/game/core/map-layout';
 
 const TUTORIAL_PHASE = PHASES[0];
 
-export function TutorialScreen({ steps, onFinish }) {
+export function TutorialScreen({ steps, onFinish, layout = 'mobile' }) {
+  const graph = { ...TUTORIAL_GRAPH, metadata: { ...TUTORIAL_GRAPH.metadata, layout } };
   const [index, setIndex] = useState(0);
   const current = steps[index];
   const isLast = index === steps.length - 1;
@@ -28,13 +30,13 @@ export function TutorialScreen({ steps, onFinish }) {
   }
 
   return (
-    <section className="tutorial-screen" data-step={index}>
+    <section className="tutorial-screen" data-step={index} data-layout={layout}>
       <picture className="tutorial-screen__background">
-        <img src="/assets/game/backgrounds/game-map-mobile.png" alt="" />
+        <img src={getMapProfile(layout).asset} alt="" />
       </picture>
 
       <div className="tutorial-screen__map" inert>
-        <MapGraph graph={TUTORIAL_GRAPH} phase={TUTORIAL_PHASE} selectedStartId={null} animationKey={1} onWinnerArrive={() => {}} routeStyle="arrows-white" />
+        <MapGraph graph={graph} phase={TUTORIAL_PHASE} selectedStartId={null} animationKey={1} onWinnerArrive={() => {}} routeStyle="arrows-white" />
         <TreasureAnchor node={treasure} phaseIndex={0} totalPhases={steps.length} />
         <BoatDock
           boats={boats}

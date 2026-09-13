@@ -6,7 +6,7 @@ export function StartScreen({ onStart, onTutorial }) {
       <div className="start-screen__frame">
       <picture className="start-screen__art">
         <source
-          media="(min-width: 64rem) and (orientation: landscape)"
+          media="(min-aspect-ratio: 1/1)"
           srcSet="/assets/game/backgrounds/start-screen-wide.png"
         />
         <source

@@ -41,8 +41,8 @@ function RacingBoat({ graph, boat, result, winnerDistance, isWinner, onWinnerArr
     if (!track || !element || pathNodes.length < 2) return undefined;
 
     const points = pathNodes.map((node) => ({
-      x: (node.x / 1000) * track.clientWidth,
-      y: (node.y / 650) * track.clientHeight
+      x: node.x / 10,
+      y: node.y / 6.5
     }));
     const segmentWeights = result.path.slice(1).map((nodeId, index) => {
       const previousId = result.path[index];
@@ -61,7 +61,8 @@ function RacingBoat({ graph, boat, result, winnerDistance, isWinner, onWinnerArr
       if (index > 0) accumulatedCost += segmentWeights[index - 1];
 
       return {
-        transform: `translate3d(${point.x}px, ${point.y}px, 0) translate(-50%, -50%)`,
+        left: `${point.x}%`,
+        top: `${point.y}%`,
         offset: index === points.length - 1
           ? 1
           : Math.min(1, Math.max(0, pathCost ? accumulatedCost / pathCost : 0))

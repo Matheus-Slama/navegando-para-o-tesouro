@@ -1,0 +1,107 @@
+.game-board,
+.tutorial-screen {
+  --island-width: min(21cqw, 16cqh, 8rem);
+  --dense-island-width: min(16cqw, 12cqh, 6rem);
+}
+
+[data-layout='tablet'] {
+  --island-width: min(14cqw, 16cqh, 10rem);
+  --dense-island-width: min(11cqw, 12cqh, 8rem);
+}
+
+[data-layout='wide'] {
+  --island-width: min(8cqw, 13cqh, 10rem);
+  --dense-island-width: min(7cqw, 11cqh, 8rem);
+}
+
+.game-board .map-graph__island,
+.tutorial-screen .map-graph__island {
+  width: var(--island-width);
+}
+
+.game-board .map-graph--dense .map-graph__island,
+.tutorial-screen .map-graph--dense .map-graph__island {
+  width: var(--dense-island-width);
+}
+
+[data-layout='wide'] .map-graph__weight,
+[data-layout='tablet'] .map-graph__weight {
+  font-size: clamp(0.875rem, 2.4cqh, 1.15rem);
+  min-width: 1.75rem;
+}
+
+.tutorial-screen__backdrop,
+.game-board__hint-backdrop,
+.race-result {
+  overflow-y: auto;
+}
+
+.tutorial-screen .tutorial-screen__card {
+  flex-shrink: 0;
+  padding-inline: clamp(2rem, 12cqw, 3.75rem);
+}
+
+.tutorial-screen .tutorial-screen__actions {
+  flex-wrap: wrap;
+  row-gap: 0.75rem;
+}
+
+.tutorial-screen .tutorial-screen__actions button,
+.game-board .game-board__hint-actions button,
+.race-result button {
+  min-height: 2.75rem;
+}
+
+.game-board .game-board__hint-modal,
+.game-board .race-result__card {
+  min-width: 0;
+  padding-inline: clamp(1.75rem, 10cqw, 3.75rem);
+}
+
+.game-board .game-board__hint-actions {
+  flex-wrap: wrap;
+}
+
+.game-board .game-board__hint-close {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.dev-panel__content {
+  max-height: calc(100svh - 5rem);
+  overflow-y: auto;
+}
+
+/* No modo paisagem, deixa o centro do mapa livre durante o tutorial. */
+[data-layout='wide'] .tutorial-screen__backdrop {
+  justify-content: flex-start;
+  padding: 1rem;
+}
+
+[data-layout='wide'] .tutorial-screen__card {
+  width: min(24rem, 31cqw);
+  padding: 2.25rem clamp(1.5rem, 3cqw, 3rem) 2.75rem;
+}
+
+[data-layout='wide'] .tutorial-screen__copy {
+  padding: 0.5rem 0 1rem;
+}
+
+[data-layout='wide'] .tutorial-screen__actions {
+  padding-inline: 0;
+}
+
+[data-layout='wide'] .tutorial-screen__card h1 {
+  font-size: clamp(1.2rem, 2.6cqh, 1.8rem);
+}
+
+[data-layout='wide'] .tutorial-screen__card p {
+  font-size: clamp(0.9rem, 2cqh, 1.1rem);
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  [data-layout='wide'] .tutorial-screen__card {
+    width: min(22rem, 36cqw);
+    padding: 1.75rem 1.5rem 2rem;
+  }
+}

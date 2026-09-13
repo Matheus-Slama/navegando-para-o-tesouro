@@ -10,9 +10,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: clamp(4rem, 19cqw, 5.5rem);
+  width: min(21cqw, 14cqh, 9rem);
+  transform: translate(-50%, -50%);
   height: auto;
   image-rendering: pixelated;
   filter: drop-shadow(0 0.5rem 0.3rem rgba(18, 9, 3, 0.5));
-  will-change: transform;
+  will-change: left, top;
 }

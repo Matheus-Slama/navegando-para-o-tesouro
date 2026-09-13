@@ -17,6 +17,7 @@ export function BoatDock({ boats, selectedStartId, onSelect }) {
             data-graph-node-id={boat.id}
             data-graph-node-type="start"
             data-boat={boat.boat}
+            style={{ left: `${boat.x / 10}%`, top: `${boat.y / 6.5}%` }}
             aria-label={`Selecionar ${boat.label}`}
             aria-pressed={selected}
             onClick={() => onSelect(boat.id)}

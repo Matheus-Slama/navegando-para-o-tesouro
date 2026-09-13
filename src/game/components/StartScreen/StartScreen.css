@@ -42,7 +42,8 @@
 }
 
 .start-screen__content button {
-  min-width: min(18.125rem, 75vw);
+  width: min(18.125rem, 100%);
+  min-width: 0;
   border: 0.1875rem solid #55300f;
   border-radius: 62.4375rem;
   padding: clamp(0.8125rem, 1.5vw, 1.125rem) clamp(1.5rem, 3vw, 2.375rem);
@@ -85,7 +86,7 @@
 
 }
 
-@media (min-width: 64rem) and (orientation: landscape) {
+@media (min-aspect-ratio: 1/1) {
   .start-screen {
     height: 100svh;
     display: grid;

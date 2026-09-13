@@ -3,7 +3,7 @@
   z-index: 4;
   top: max(0.25rem, env(safe-area-inset-top));
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   pointer-events: none;
   user-select: none;
 }
@@ -22,5 +22,5 @@
 .treasure-anchor--large,
 .treasure-anchor--legendary,
 .treasure-anchor--final {
-  width: clamp(4rem, 18cqw, 5rem);
+  width: min(18cqw, 14cqh, 7rem);
 }

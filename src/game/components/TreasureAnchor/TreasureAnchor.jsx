@@ -13,6 +13,7 @@ export function TreasureAnchor({ node, phaseIndex, totalPhases }) {
       className={`treasure-anchor treasure-anchor--${level}${isFinalPhase ? ' treasure-anchor--final' : ''}`}
       data-graph-node-id={node.id}
       data-graph-node-type="finish"
+      style={{ left: `${node.x / 10}%`, top: `${node.y / 6.5}%` }}
       role="img"
       aria-label={`${node.label}: destino final da fase ${phaseIndex + 1}`}
     >

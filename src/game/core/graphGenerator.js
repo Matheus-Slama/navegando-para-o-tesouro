@@ -1,11 +1,11 @@
 import { completeIslandConnections, isValidGraph, removeInvalidIslands } from '@/game/core/map-rules';
 import { FINISH_ISLAND, START_ISLANDS } from '@/game/config/phases';
 import { GAME_ASSETS } from '@/game/config/gameAssets';
-import islandPlacement from '@/game/config/islandPlacement.json';
+import { getMapProfile, getNodeRadii, getRouteBoundary, getWaterBounds } from '@/game/core/map-layout';
 import { createSeededRandom, randomInt, shuffle } from '@/game/core/random';
 import { getPhaseResults } from '@/game/core/dijkstra';
 import { DirectedGraph, UndirectedGraph } from 'graphology';
-import erdosRenyi from 'graphology-generators/random/erdos-renyi';
+import erdosRenyi from 'graphology-generators/random/erdos-renyi.js';
 
 /**
  * Gera um grafo jogável com vencedor único.
@@ -17,12 +17,12 @@ import erdosRenyi from 'graphology-generators/random/erdos-renyi';
  * - rotas extras são adicionadas;
  * - Dijkstra valida se existe um único vencedor.
  */
-export function generateGraphForPhase(phase, seed = Date.now()) {
+export function generateGraphForPhase(phase, seed = Date.now(), layout = 'mobile') {
   let attempt = 0;
 
-  while (true) {
+  while (attempt < 2000) {
     // Se o mapa for rejeitado, muda a seed para tentar outra combinação.
-    const graph = buildCandidateGraph(phase, seed + attempt * 97);
+    const graph = buildCandidateGraph(phase, seed + attempt * 97, layout);
     const results = getPhaseResults(graph, phase);
 
     if (isValidGraph(graph, results, phase)) {
@@ -35,14 +35,16 @@ export function generateGraphForPhase(phase, seed = Date.now()) {
 
     attempt += 1;
   }
+
+  throw new Error('Não foi possível gerar um mapa válido para este perfil.');
 }
 
-function buildCandidateGraph(phase, seed) {
+function buildCandidateGraph(phase, seed, layout) {
   const random = createSeededRandom(seed);
   const islandCount = getIslandCount(phase.islandCount, random);
   let nodes = [
     ...START_ISLANDS.map((start) => ({ ...start, type: 'start' })),
-    ...createIntermediateNodes(islandCount, random),
+    ...createIntermediateNodes(islandCount, random, layout),
     { ...FINISH_ISLAND, type: 'finish' }
   ];
   let edges = [];
@@ -61,7 +63,8 @@ function buildCandidateGraph(phase, seed) {
     rng: random
   });
 
-  connectRandomBackbone(edges, nodes, intermediateNodes, phase, random);
+  const addLayoutEdge = (...args) => addEdge(...args, layout);
+  connectRandomBackbone(edges, nodes, intermediateNodes, phase, random, addLayoutEdge);
 
   // Dá uma vantagem inicial a um barco, mas a vitória depende do caminho completo.
   START_ISLANDS.forEach((start, index) => {
@@ -74,7 +77,7 @@ function buildCandidateGraph(phase, seed) {
       intermediateNodes.filter((node) => node.y >= 260)
     ).sort((first, second) => distance(start, first) - distance(start, second));
 
-    destinations.some((destination) => addEdge(
+    destinations.some((destination) => addLayoutEdge(
       edges,
       nodes,
       start.id,
@@ -97,10 +100,10 @@ function buildCandidateGraph(phase, seed) {
   });
 
   // Prioriza as conexões que faltam antes de ocupar espaço com rotas extras.
-  completeIslandConnections(edges, nodes, intermediateNodes, phase, random, addEdge);
+  completeIslandConnections(edges, nodes, intermediateNodes, phase, random, addLayoutEdge);
 
   shuffle(random, randomEdges).forEach(([from, to]) => {
-    addEdge(
+    addLayoutEdge(
       edges,
       nodes,
       from,
@@ -116,6 +119,8 @@ function buildCandidateGraph(phase, seed) {
     nodes,
     edges: edges.map((edge, index) => ({ ...edge, id: `edge-${index}` })),
     metadata: {
+      layout,
+      dense: islandCount >= 15,
       phaseId: phase.id,
       difficulty: phase.difficulty,
       challengeType: phase.challengeType,
@@ -129,7 +134,7 @@ function buildCandidateGraph(phase, seed) {
   };
 }
 
-function connectRandomBackbone(edges, nodes, intermediateNodes, phase, random) {
+function connectRandomBackbone(edges, nodes, intermediateNodes, phase, random, addLayoutEdge) {
   // Começa pelo tesouro e tenta ligar cada ilha a uma que já chega até ele.
   const ordered = [...intermediateNodes].sort((first, second) => first.y - second.y);
   const connected = [nodes.find((node) => node.type === 'finish')];
@@ -138,7 +143,7 @@ function connectRandomBackbone(edges, nodes, intermediateNodes, phase, random) {
     const candidates = shuffle(random, connected)
       .filter((candidate) => candidate.y < node.y)
       .sort((first, second) => distance(node, first) - distance(node, second));
-    const wasConnected = candidates.some((parent) => addEdge(
+    const wasConnected = candidates.some((parent) => addLayoutEdge(
       edges,
       nodes,
       node.id,
@@ -151,12 +156,18 @@ function connectRandomBackbone(edges, nodes, intermediateNodes, phase, random) {
   });
 }
 
-function createIntermediateNodes(islandCount, random) {
-  const profile = islandPlacement.profiles[islandPlacement.activeProfile];
-  const minimumDistanceX = islandCount >= 15 ? 17 : 23;
+function createIntermediateNodes(islandCount, random, layout) {
+  const profile = getMapProfile(layout);
+  const isDense = islandCount >= 15;
+  const minimumDistanceX = layout === 'wide' ? (isDense ? 9 : 14)
+    : layout === 'tablet' ? (isDense ? 14 : 20) : (isDense ? 17 : 23);
   const availableSlots = profile.gridPatterns.flatMap((pattern) =>
     pattern.x.map((x) => ({ x, y: pattern.y }))
-  ).filter((slot) => slot.y >= 26);
+  ).filter((slot) => {
+    const water = getWaterBounds(profile, slot.y);
+    const margin = getNodeRadii({ type: 'intermediate' }, isDense, layout).x / 10;
+    return slot.y >= 26 && slot.x - margin >= water.left && slot.x + margin <= water.right;
+  });
   let selectedSlots = [];
 
   // Uma escolha de posições pode bloquear as seguintes; nesse caso, sorteia de novo.
@@ -176,7 +187,7 @@ function createIntermediateNodes(islandCount, random) {
   }
 
   if (selectedSlots.length < islandCount) {
-    throw new Error(`O perfil ${islandPlacement.activeProfile} não possui posições sem sobreposição suficientes.`);
+    throw new Error(`O perfil ${layout} não possui posições sem sobreposição suficientes.`);
   }
 
   return selectedSlots.map((position, index) => ({
@@ -227,12 +238,12 @@ function distance(first, second) {
   return Math.hypot(first.x - second.x, first.y - second.y);
 }
 
-function addEdge(edges, nodes, from, to, weight, directed) {
+function addEdge(edges, nodes, from, to, weight, directed, layout) {
   // A rota precisa ficar visível, sem duplicatas, cruzamentos ou ilhas no meio.
   const fromNode = nodes.find((node) => node.id === from);
   const toNode = nodes.find((node) => node.id === to);
   const isDense = nodes.filter((node) => node.type === 'intermediate').length >= 15;
-  const hasVisibleSpace = hasEnoughVisibleRoute(fromNode, toNode, nodes);
+  const hasVisibleSpace = hasEnoughVisibleRoute(fromNode, toNode, nodes, layout);
   const exists = edges.some((edge) =>
     (edge.from === from && edge.to === to) ||
     (!directed && edge.from === to && edge.to === from)
@@ -254,7 +265,7 @@ function addEdge(edges, nodes, from, to, weight, directed) {
       return false;
     }
 
-    return segmentTouchesNode(fromNode, toNode, node, isDense);
+    return segmentTouchesNode(fromNode, toNode, node, isDense, layout);
   });
 
   if (hasVisibleSpace && !exists && !crossesAnotherRoute && !overlapsAnotherNode) {
@@ -269,11 +280,11 @@ function addEdge(edges, nodes, from, to, weight, directed) {
   return false;
 }
 
-function hasEnoughVisibleRoute(from, to, nodes) {
+function hasEnoughVisibleRoute(from, to, nodes, layout) {
   // Mede o trecho entre as bordas das ilhas, descontando a parte coberta pelos sprites.
   const isDense = nodes.filter((node) => node.type === 'intermediate').length >= 15;
-  const start = getRouteBoundary(from, to, isDense);
-  const end = getRouteBoundary(to, from, isDense);
+  const start = getRouteBoundary(from, to, isDense, layout);
+  const end = getRouteBoundary(to, from, isDense, layout);
   const directionX = to.x - from.x;
   const directionY = to.y - from.y;
   const travelsForward = (end.x - start.x) * directionX + (end.y - start.y) * directionY > 0;
@@ -285,24 +296,8 @@ function hasEnoughVisibleRoute(from, to, nodes) {
   return travelsForward && visibleLength >= 8;
 }
 
-function getRouteBoundary(node, otherNode, isDense) {
-  const deltaX = otherNode.x - node.x;
-  const deltaY = otherNode.y - node.y;
-  const radii = node.type === 'start'
-    ? { x: 105, y: 46 }
-    : node.type === 'finish'
-      ? { x: 55, y: 12 }
-      : isDense ? { x: 78, y: 25 } : { x: 88, y: 28 };
-  const scale = 1 / Math.sqrt((deltaX / radii.x) ** 2 + (deltaY / radii.y) ** 2);
-
-  return {
-    x: node.x + deltaX * scale,
-    y: node.y + deltaY * scale
-  };
-}
-
-function segmentTouchesNode(from, to, node, isDense) {
-  const margemDaIlha = getNodeClearance(node, isDense);
+function segmentTouchesNode(from, to, node, isDense, layout) {
+  const margemDaIlha = getNodeRadii(node, isDense, layout, true);
 
   // Coloca a ilha no centro (0, 0) e transforma sua margem em um círculo de raio 1.
   const inicioX = (from.x - node.x) / margemDaIlha.x;
@@ -328,14 +323,6 @@ function segmentTouchesNode(from, to, node, isDense) {
 
   // Menos de 1 significa que a rota entrou na margem da ilha.
   return distanciaAoQuadrado < 1;
-}
-
-function getNodeClearance(node, isDense) {
-  if (node.type === 'finish') return { x: 180, y: 82 };
-  if (node.type === 'start') return { x: 120, y: 52 };
-  // Mapas com mais ilhas usam uma margem menor para caberem mais rotas.
-  if (isDense) return { x: 85, y: 30 };
-  return { x: 112, y: 42 };
 }
 
 function segmentsCross(pointA, pointB, pointC, pointD) {

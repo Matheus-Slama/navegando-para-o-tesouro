@@ -1,5 +1,6 @@
 import { FINISH_ISLAND, START_ISLANDS } from '@/game/config/phases';
 import { randomInt, shuffle } from '@/game/core/random';
+import { getMapProfile, getNodeRadii, getWaterBounds } from '@/game/core/map-layout';
 
 /**
  * Regras das ilhas intermediárias:
@@ -8,6 +9,7 @@ import { randomInt, shuffle } from '@/game/core/random';
  * 3. Devem ter pelo menos duas conexões.
  * 4. Só pode existir uma rota com o peso mínimo vencedor, mesmo entre
  *    caminhos diferentes que saem do mesmo barco.
+ * 5. As ilhas devem caber na água do perfil escolhido para a tela.
  * Nas fases direcionadas, os caminhos respeitam o sentido das setas.
  * As partidas e o tesouro não precisam ter entrada e saída.
  *
@@ -66,6 +68,8 @@ export function isValidGraph(graph, results, phase) {
     return false;
   }
 
+  if (!isInsideMapWater(graph)) return false;
+
   if (results.ordered.length !== START_ISLANDS.length || !results.hasUniqueWinner) {
     return false;
   }
@@ -96,6 +100,20 @@ export function isValidGraph(graph, results, phase) {
   }
 
   return second.distance - winner.distance >= phase.uniqueWinnerGap;
+}
+
+export function isInsideMapWater(graph) {
+  const layout = graph.metadata?.layout ?? 'mobile';
+  const profile = getMapProfile(layout);
+  const islands = graph.nodes.filter((node) => node.type === 'intermediate');
+  const dense = graph.metadata?.dense ?? islands.length >= 15;
+  return islands.every((node) => {
+    const x = node.x / 10;
+    const y = node.y / 6.5;
+    const water = getWaterBounds(profile, y);
+    const margin = getNodeRadii(node, dense, layout).x / 10;
+    return y >= 26 && y <= 80 && x - margin >= water.left && x + margin <= water.right;
+  });
 }
 
 function getReachableNodes(graph, startingIds, directed, reverse = false) {

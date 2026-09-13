@@ -1,11 +1,13 @@
+import { getNodeRadii, getRouteBoundary } from '@/game/core/map-layout';
 import './MapGraph.css';
 import { AnimatedBoats } from '@/game/components/AnimatedBoat/AnimatedBoat';
 import { GAME_ASSETS } from '@/game/config/gameAssets';
 
 export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinnerArrive, routeStyle = 'chevrons' }) {
+  const layout = graph.metadata.layout ?? 'mobile';
   const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const islands = graph.nodes.filter((node) => node.type === 'intermediate');
-  const isDense = islands.length >= 15;
+  const isDense = graph.metadata.dense ?? islands.length >= 15;
   const weightPositions = getWeightPositions(graph, nodesById, isDense);
   const usesChevrons = routeStyle === 'chevrons';
   const arrowMarkerId = routeStyle === 'arrows-white' ? 'route-arrow-white' : 'route-arrow-black';
@@ -28,7 +30,7 @@ export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinner
         {graph.edges.map((edge) => {
           const from = nodesById.get(edge.from);
           const to = nodesById.get(edge.to);
-          const route = getVisibleRoute(from, to, isDense);
+          const route = getVisibleRoute(from, to, isDense, layout);
 
           return (
             <g key={edge.id}>
@@ -165,7 +167,7 @@ function getWeightPositions(graph, nodesById, isDense) {
     });
 
     const position = candidates.find((candidate) =>
-      isWeightPositionFree(candidate, graph.nodes, occupied, isDense)
+      isWeightPositionFree(candidate, graph.nodes, occupied, isDense, graph.metadata.layout)
     ) ?? getBestAvailableWeightPosition(candidates, graph.nodes, occupied);
 
     positions.set(edge.id, position);
@@ -175,21 +177,18 @@ function getWeightPositions(graph, nodesById, isDense) {
   return positions;
 }
 
-function isWeightPositionFree(position, nodes, occupied, isDense) {
+function isWeightPositionFree(position, nodes, occupied, isDense, layout) {
   const insideMap = isInsideWeightArea(position);
   const touchesNode = nodes.some((node) => {
-    const radii = node.type === 'finish'
-      ? { x: 19, y: 11 }
-      : node.type === 'start'
-        ? { x: 13, y: 7 }
-        : isDense ? { x: 9.5, y: 4.5 } : { x: 11, y: 5.5 };
+    const nodeRadius = getNodeRadii(node, isDense, layout, true);
+    const radii = { x: nodeRadius.x / 10 + 2, y: nodeRadius.y / 6.5 + 1.5 };
     const deltaX = (position.x - node.x / 10) / radii.x;
     const deltaY = (position.y - node.y / 6.5) / radii.y;
 
     return deltaX ** 2 + deltaY ** 2 < 1;
   });
   const touchesWeight = occupied.some((other) =>
-    Math.abs(position.x - other.x) < (isDense ? 7 : 10) &&
+    Math.abs(position.x - other.x) < (layout === 'wide' ? 4 : isDense ? 7 : 10) &&
     Math.abs(position.y - other.y) < (isDense ? 3.25 : 4.5)
   );
 
@@ -199,7 +198,7 @@ function isWeightPositionFree(position, nodes, occupied, isDense) {
 function getBestAvailableWeightPosition(candidates, nodes, occupied) {
   const insideCandidates = candidates.filter(isInsideWeightArea);
 
-  return insideCandidates.reduce((best, candidate) =>
+  return (insideCandidates.length ? insideCandidates : candidates).reduce((best, candidate) =>
     getWeightPositionScore(candidate, nodes, occupied) > getWeightPositionScore(best, nodes, occupied)
       ? candidate
       : best
@@ -223,9 +222,9 @@ function isInsideWeightArea(position) {
   return position.x > 7 && position.x < 93 && position.y > 9 && position.y < 86;
 }
 
-function getVisibleRoute(from, to, isDense) {
-  const start = getNodeBoundary(from, to, isDense);
-  const end = getNodeBoundary(to, from, isDense);
+function getVisibleRoute(from, to, isDense, layout) {
+  const start = getRouteBoundary(from, to, isDense, layout);
+  const end = getRouteBoundary(to, from, isDense, layout);
 
   return { x1: start.x, y1: start.y, x2: end.x, y2: end.y };
 }
@@ -240,22 +239,4 @@ function getDirectionPoints(route) {
     const y = route.y1 + (route.y2 - route.y1) * progress;
     return `${x},${y}`;
   }).join(' ');
-}
-
-function getNodeBoundary(node, otherNode, isDense) {
-  const deltaX = otherNode.x - node.x;
-  const deltaY = otherNode.y - node.y;
-  const radii = {
-    start: { x: 105, y: 46 },
-    intermediate: isDense ? { x: 78, y: 25 } : { x: 88, y: 28 },
-    finish: { x: 55, y: 12 }
-  }[node.type];
-  const radiusX = radii.x;
-  const radiusY = radii.y;
-  const scale = 1 / Math.sqrt((deltaX / radiusX) ** 2 + (deltaY / radiusY) ** 2);
-
-  return {
-    x: node.x + deltaX * scale,
-    y: node.y + deltaY * scale
-  };
 }

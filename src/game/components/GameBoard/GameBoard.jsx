@@ -5,6 +5,7 @@ import { MapGraph } from '@/game/components/MapGraph/MapGraph';
 import { RaceResult } from '@/game/components/RaceResult/RaceResult';
 import { DevPanel } from '@/game/components/DevPanel/DevPanel';
 import './GameBoard.css';
+import { getMapProfile } from '@/game/core/map-layout';
 
 export function GameBoard({
   graph,
@@ -34,10 +35,10 @@ export function GameBoard({
   const boats = graph.nodes.filter((node) => node.type === 'start');
 
   return (
-    <section className="game-board">
+    <section className="game-board" data-layout={graph.metadata.layout}>
       <picture className="game-board__background">
         <img
-          src="/assets/game/backgrounds/game-map-mobile.png"
+          src={getMapProfile(graph.metadata.layout).asset}
           alt=""
           fetchPriority="high"
         />

@@ -7,8 +7,12 @@ import { generateGraphForPhase } from '@/game/core/graphGenerator';
 import { StartScreen } from '@/game/components/StartScreen/StartScreen';
 import { TutorialScreen } from '@/game/components/TutorialScreen/TutorialScreen';
 import { GameBoard } from '@/game/components/GameBoard/GameBoard';
+import { useMapLayout } from '@/game/hooks/useMapLayout';
+import './GameShell.css';
 
 export function GameShell() {
+  const layout = useMapLayout();
+  const [previousLayout, setPreviousLayout] = useState(layout);
   const [screen, setScreen] = useState('start');
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [seedNonce, setSeedNonce] = useState(1);
@@ -21,10 +25,18 @@ export function GameShell() {
   const [routeStyle, setRouteStyle] = useState('chevrons');
   const phase = PHASES[phaseIndex];
 
+  // Ao girar a tela, mantém a fase e pede uma nova escolha no mapa adaptado.
+  if (previousLayout !== layout) {
+    setPreviousLayout(layout);
+    setSelectedStartId(null);
+    setRaceResult(null);
+    setHintOpen(false);
+  }
+
   const graph = useMemo(() => {
     const baseSeed = phase.id * 1000 + seedNonce * 101;
-    return generateGraphForPhase(phase, baseSeed);
-  }, [phase, seedNonce]);
+    return generateGraphForPhase(phase, baseSeed, layout);
+  }, [phase, seedNonce, layout]);
 
   function startGame() {
     setPhaseIndex(0);
@@ -94,7 +106,7 @@ export function GameShell() {
   }
 
   if (screen === 'tutorial') {
-    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} /></main>;
+    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} layout={layout} /></main>;
   }
 
   return (
