@@ -1,14 +1,17 @@
 export function dijkstra(nodes, edges, startId, finishId, directed = true) {
   const distances = {};
   const previous = {};
+  const pathCounts = {};
   const visited = new Set();
 
   nodes.forEach((node) => {
     distances[node.id] = Number.POSITIVE_INFINITY;
     previous[node.id] = null;
+    pathCounts[node.id] = 0;
   });
 
   distances[startId] = 0;
+  pathCounts[startId] = 1;
 
   while (visited.size < nodes.length) {
     const currentId = getUnvisitedNodeWithSmallestDistance(distances, visited);
@@ -35,6 +38,11 @@ export function dijkstra(nodes, edges, startId, finishId, directed = true) {
       if (possibleDistance < distances[target]) {
         distances[target] = possibleDistance;
         previous[target] = currentId;
+        pathCounts[target] = pathCounts[currentId];
+      } else if (possibleDistance === distances[target]) {
+        // Com pesos positivos, todos os predecessores chegam antes do destino.
+        // Basta distinguir uma rota de duas ou mais rotas mínimas.
+        pathCounts[target] = Math.min(2, pathCounts[target] + pathCounts[currentId]);
       }
     });
   }
@@ -43,7 +51,8 @@ export function dijkstra(nodes, edges, startId, finishId, directed = true) {
 
   return {
     distance: distances[finishId],
-    path
+    path,
+    shortestPathCount: pathCounts[finishId] ?? 0
   };
 }
 

@@ -13,7 +13,6 @@ const TUTORIAL_PHASE = PHASES[0];
 
 export function TutorialScreen({ steps, onFinish }) {
   const [index, setIndex] = useState(0);
-  const [selectedBoatId, setSelectedBoatId] = useState(null);
   const current = steps[index];
   const isLast = index === steps.length - 1;
   const treasure = TUTORIAL_GRAPH.nodes.find((node) => node.type === 'finish');
@@ -34,15 +33,13 @@ export function TutorialScreen({ steps, onFinish }) {
         <img src="/assets/game/backgrounds/game-map-mobile.png" alt="" />
       </picture>
 
-      <div className="tutorial-screen__map" inert={index !== 3}>
-        <MapGraph graph={TUTORIAL_GRAPH} phase={TUTORIAL_PHASE} selectedStartId={selectedBoatId} animationKey={1} onWinnerArrive={() => {}} />
+      <div className="tutorial-screen__map" inert>
+        <MapGraph graph={TUTORIAL_GRAPH} phase={TUTORIAL_PHASE} selectedStartId={null} animationKey={1} onWinnerArrive={() => {}} routeStyle="arrows-white" />
         <TreasureAnchor node={treasure} phaseIndex={0} totalPhases={steps.length} />
         <BoatDock
           boats={boats}
-          selectedStartId={selectedBoatId}
-          onSelect={(boatId) => {
-            if (index === 3 && !selectedBoatId) setSelectedBoatId(boatId);
-          }}
+          selectedStartId={null}
+          onSelect={() => {}}
         />
         <span className="tutorial-screen__hint-icon">
           <Image src="/assets/game/ui/hint-lantern.png" alt="" width={1254} height={1254} sizes="64px" />

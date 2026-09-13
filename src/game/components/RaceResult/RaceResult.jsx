@@ -24,7 +24,7 @@ export function RaceResult({ result, selectedBoat, winner, isFinalPhase, onConti
         <p>
           {result === 'victory'
             ? isFinalPhase
-              ? 'Parabéns! O verdadeiro tesouro é aprender o melhor caminho.'
+              ? 'O verdadeiro tesouro é aprender o conceito de melhor caminho em grafos.'
               : 'Siga para a próxima fase.'
             : `O ${winnerBoatName} chegou ao tesouro antes do ${selectedBoatName}.`}
         </p>

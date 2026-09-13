@@ -3,14 +3,11 @@ import './StartScreen.css';
 export function StartScreen({ onStart, onTutorial }) {
   return (
     <section className="start-screen" aria-labelledby="start-screen-title">
+      <div className="start-screen__frame">
       <picture className="start-screen__art">
         <source
-          media="(min-width: 120rem)"
+          media="(min-width: 64rem) and (orientation: landscape)"
           srcSet="/assets/game/backgrounds/start-screen-wide.png"
-        />
-        <source
-          media="(min-width: 64rem)"
-          srcSet="/assets/game/backgrounds/start-screen-landscape.png"
         />
         <source
           media="(min-width: 37.5625rem)"
@@ -35,6 +32,7 @@ export function StartScreen({ onStart, onTutorial }) {
         <button type="button" onClick={onStart}>
           Iniciar jornada
         </button>
+      </div>
       </div>
     </section>
   );

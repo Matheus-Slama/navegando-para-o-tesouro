@@ -1,3 +1,4 @@
+import { completeIslandConnections, isValidGraph, removeInvalidIslands } from '@/game/core/map-rules';
 import { FINISH_ISLAND, START_ISLANDS } from '@/game/config/phases';
 import { GAME_ASSETS } from '@/game/config/gameAssets';
 import islandPlacement from '@/game/config/islandPlacement.json';
@@ -20,6 +21,7 @@ export function generateGraphForPhase(phase, seed = Date.now()) {
   let attempt = 0;
 
   while (true) {
+    // Se o mapa for rejeitado, muda a seed para tentar outra combinação.
     const graph = buildCandidateGraph(phase, seed + attempt * 97);
     const results = getPhaseResults(graph, phase);
 
@@ -35,41 +37,15 @@ export function generateGraphForPhase(phase, seed = Date.now()) {
   }
 }
 
-function isValidGraph(graph, results, phase) {
-  const allEdgesHaveWeights = graph.edges.every((edge) =>
-    Number.isFinite(edge.weight) && edge.weight > 0
-  );
-
-  if (!allEdgesHaveWeights) {
-    return false;
-  }
-
-  if (results.ordered.length !== START_ISLANDS.length || !results.hasUniqueWinner) {
-    return false;
-  }
-
-  const [winner, second] = results.ordered;
-
-  if (phase.minimumEdgeCount && graph.edges.length < phase.minimumEdgeCount) {
-    return false;
-  }
-
-  if (phase.minimumWinnerPathNodes && winner.path.length < phase.minimumWinnerPathNodes) {
-    return false;
-  }
-
-  return second.distance - winner.distance >= phase.uniqueWinnerGap;
-}
-
 function buildCandidateGraph(phase, seed) {
   const random = createSeededRandom(seed);
   const islandCount = getIslandCount(phase.islandCount, random);
-  const nodes = [
+  let nodes = [
     ...START_ISLANDS.map((start) => ({ ...start, type: 'start' })),
     ...createIntermediateNodes(islandCount, random),
     { ...FINISH_ISLAND, type: 'finish' }
   ];
-  const edges = [];
+  let edges = [];
   const intermediateNodes = nodes.filter((node) => node.type === 'intermediate');
   const forcedWinnerIndex = randomInt(random, 0, START_ISLANDS.length - 1);
   const GraphClass = phase.directed ? DirectedGraph : UndirectedGraph;
@@ -87,6 +63,7 @@ function buildCandidateGraph(phase, seed) {
 
   connectRandomBackbone(edges, nodes, intermediateNodes, phase, random);
 
+  // Dá uma vantagem inicial a um barco, mas a vitória depende do caminho completo.
   START_ISLANDS.forEach((start, index) => {
     const baseWeight = randomInt(random, phase.weights.min, phase.weights.max);
     const winnerBonus = index === forcedWinnerIndex
@@ -108,14 +85,19 @@ function buildCandidateGraph(phase, seed) {
   });
 
   const randomEdges = [];
+  // As arestas sorteadas ainda precisam caber no desenho do mapa.
   topology.forEachEdge((edge, attributes, source, target) => {
     const first = intermediateNodes[Number(source)];
     const second = intermediateNodes[Number(target)];
+    // Nas fases com setas, as rotas seguem de baixo para cima.
     const [from, to] = phase.directed && first.y < second.y
       ? [second, first]
       : [first, second];
     randomEdges.push([from.id, to.id]);
   });
+
+  // Prioriza as conexões que faltam antes de ocupar espaço com rotas extras.
+  completeIslandConnections(edges, nodes, intermediateNodes, phase, random, addEdge);
 
   shuffle(random, randomEdges).forEach(([from, to]) => {
     addEdge(
@@ -128,6 +110,8 @@ function buildCandidateGraph(phase, seed) {
     );
   });
 
+  ({ nodes, edges } = removeInvalidIslands({ nodes, edges }, phase));
+
   return {
     nodes,
     edges: edges.map((edge, index) => ({ ...edge, id: `edge-${index}` })),
@@ -137,7 +121,7 @@ function buildCandidateGraph(phase, seed) {
       challengeType: phase.challengeType,
       objective: phase.objective,
       directed: phase.directed,
-      islandCount,
+      islandCount: nodes.filter((node) => node.type === 'intermediate').length,
       score: phase.score,
       hints: phase.hints,
       generator: 'graphology-erdos-renyi'
@@ -146,6 +130,7 @@ function buildCandidateGraph(phase, seed) {
 }
 
 function connectRandomBackbone(edges, nodes, intermediateNodes, phase, random) {
+  // Começa pelo tesouro e tenta ligar cada ilha a uma que já chega até ele.
   const ordered = [...intermediateNodes].sort((first, second) => first.y - second.y);
   const connected = [nodes.find((node) => node.type === 'finish')];
 
@@ -174,6 +159,7 @@ function createIntermediateNodes(islandCount, random) {
   ).filter((slot) => slot.y >= 26);
   let selectedSlots = [];
 
+  // Uma escolha de posições pode bloquear as seguintes; nesse caso, sorteia de novo.
   for (let attempt = 0; attempt < 80 && selectedSlots.length < islandCount; attempt += 1) {
     selectedSlots = [];
 
@@ -242,6 +228,7 @@ function distance(first, second) {
 }
 
 function addEdge(edges, nodes, from, to, weight, directed) {
+  // A rota precisa ficar visível, sem duplicatas, cruzamentos ou ilhas no meio.
   const fromNode = nodes.find((node) => node.id === from);
   const toNode = nodes.find((node) => node.id === to);
   const isDense = nodes.filter((node) => node.type === 'intermediate').length >= 15;
@@ -283,6 +270,7 @@ function addEdge(edges, nodes, from, to, weight, directed) {
 }
 
 function hasEnoughVisibleRoute(from, to, nodes) {
+  // Mede o trecho entre as bordas das ilhas, descontando a parte coberta pelos sprites.
   const isDense = nodes.filter((node) => node.type === 'intermediate').length >= 15;
   const start = getRouteBoundary(from, to, isDense);
   const end = getRouteBoundary(to, from, isDense);
@@ -314,38 +302,61 @@ function getRouteBoundary(node, otherNode, isDense) {
 }
 
 function segmentTouchesNode(from, to, node, isDense) {
-  const radius = getNodeClearance(node, isDense);
-  const fromX = (from.x - node.x) / radius.x;
-  const fromY = (from.y - node.y) / radius.y;
-  const toX = (to.x - node.x) / radius.x;
-  const toY = (to.y - node.y) / radius.y;
-  const deltaX = toX - fromX;
-  const deltaY = toY - fromY;
-  const lengthSquared = deltaX ** 2 + deltaY ** 2;
-  const projection = lengthSquared
-    ? Math.min(1, Math.max(0, -(fromX * deltaX + fromY * deltaY) / lengthSquared))
-    : 0;
-  const closestX = fromX + deltaX * projection;
-  const closestY = fromY + deltaY * projection;
+  const margemDaIlha = getNodeClearance(node, isDense);
 
-  return closestX ** 2 + closestY ** 2 < 1;
+  // Coloca a ilha no centro (0, 0) e transforma sua margem em um círculo de raio 1.
+  const inicioX = (from.x - node.x) / margemDaIlha.x;
+  const inicioY = (from.y - node.y) / margemDaIlha.y;
+  const fimX = (to.x - node.x) / margemDaIlha.x;
+  const fimY = (to.y - node.y) / margemDaIlha.y;
+  const direcaoX = fimX - inicioX;
+  const direcaoY = fimY - inicioY;
+  const comprimentoAoQuadrado = direcaoX ** 2 + direcaoY ** 2;
+
+  // Procura o ponto da rota mais próximo do centro da ilha.
+  let posicaoNaRota = 0;
+  if (comprimentoAoQuadrado > 0) {
+    const projecaoDoCentro = -(inicioX * direcaoX + inicioY * direcaoY);
+    posicaoNaRota = projecaoDoCentro / comprimentoAoQuadrado;
+    // 0 é o início e 1 é o fim: o ponto precisa ficar dentro desse trecho.
+    posicaoNaRota = Math.max(0, Math.min(1, posicaoNaRota));
+  }
+
+  const pontoMaisProximoX = inicioX + direcaoX * posicaoNaRota;
+  const pontoMaisProximoY = inicioY + direcaoY * posicaoNaRota;
+  const distanciaAoQuadrado = pontoMaisProximoX ** 2 + pontoMaisProximoY ** 2;
+
+  // Menos de 1 significa que a rota entrou na margem da ilha.
+  return distanciaAoQuadrado < 1;
 }
 
 function getNodeClearance(node, isDense) {
   if (node.type === 'finish') return { x: 180, y: 82 };
   if (node.type === 'start') return { x: 120, y: 52 };
-  return isDense ? { x: 85, y: 30 } : { x: 112, y: 42 };
+  // Mapas com mais ilhas usam uma margem menor para caberem mais rotas.
+  if (isDense) return { x: 85, y: 30 };
+  return { x: 112, y: 42 };
 }
 
 function segmentsCross(pointA, pointB, pointC, pointD) {
-  const orientation = (first, second, third) =>
-    (second.x - first.x) * (third.y - first.y) -
-    (second.y - first.y) * (third.x - first.x);
+  const ladoC = getSideOfLine(pointA, pointB, pointC);
+  const ladoD = getSideOfLine(pointA, pointB, pointD);
+  const ladoA = getSideOfLine(pointC, pointD, pointA);
+  const ladoB = getSideOfLine(pointC, pointD, pointB);
 
-  const abC = orientation(pointA, pointB, pointC);
-  const abD = orientation(pointA, pointB, pointD);
-  const cdA = orientation(pointC, pointD, pointA);
-  const cdB = orientation(pointC, pointD, pointB);
+  // Para haver cruzamento, cada rota precisa atravessar a linha da outra.
+  const primeiraRotaSeparaCD = ladoC * ladoD < 0;
+  const segundaRotaSeparaAB = ladoA * ladoB < 0;
+  // Encostar na ponta ou ficar na mesma linha não conta como cruzamento aqui.
+  return primeiraRotaSeparaCD && segundaRotaSeparaAB;
+}
 
-  return abC * abD < 0 && cdA * cdB < 0;
+function getSideOfLine(inicio, fim, ponto) {
+  const direcaoX = fim.x - inicio.x;
+  const direcaoY = fim.y - inicio.y;
+  const pontoX = ponto.x - inicio.x;
+  const pontoY = ponto.y - inicio.y;
+
+  // O sinal indica o lado da linha; zero indica que o ponto está sobre ela.
+  return direcaoX * pontoY - direcaoY * pontoX;
 }
