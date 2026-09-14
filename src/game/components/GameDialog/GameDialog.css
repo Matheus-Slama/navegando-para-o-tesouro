@@ -1,0 +1,26 @@
+.game-dialog {
+  width: min(42rem, calc(100vw - 1.5rem));
+  max-height: calc(100svh - 2rem);
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 2px solid #a97835;
+  border-radius: 1rem;
+  background: #f5e4bf;
+  color: #2e1a09;
+  overflow-y: auto;
+  font-family: system-ui, sans-serif;
+  box-shadow: 0 1rem 3rem #001e36aa;
+}
+
+.game-dialog::backdrop {
+  background: #04121cbb;
+  backdrop-filter: blur(2px);
+}
+
+.game-dialog button {
+  min-height: var(--control-min-height, 2.75rem);
+}
+
+.game-dialog :focus-visible {
+  outline: 3px solid #07567c;
+  outline-offset: 3px;
+}
