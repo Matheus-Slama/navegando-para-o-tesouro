@@ -7,9 +7,12 @@
 
 .boat-dock__boat {
   position: absolute;
+  display: grid;
+  place-items: center;
   width: min(21cqw, 14cqh, 9rem);
   translate: -50% -50%;
-  min-width: 0;
+  min-width: 44px;
+  min-height: 44px;
   border: 0;
   padding: 0;
   background: transparent;
@@ -20,7 +23,7 @@
 }
 
 .boat-dock__boat img {
-  width: 100%;
+  width: min(21cqw, 14cqh, 9rem);
   height: auto;
   object-fit: contain;
   image-rendering: pixelated;

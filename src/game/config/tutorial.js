@@ -9,7 +9,7 @@ export const TUTORIAL_STEPS = [
   },
   {
     title: 'Pesos',
-    text: 'Todas as rotas possuem pesos. O melhor caminho nem sempre é o mais curto visualmente, mas aquele com o menor custo total. Pense no peso como o nível de dificuldade do percurso.'
+    text: 'Todas as rotas possuem pesos. O melhor caminho nem sempre é o mais curto visualmente, mas aquele com o menor custo total. Pense no peso como o nível de dificuldade da rota.'
   },
   {
     title: 'Corrida dos barcos',

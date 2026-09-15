@@ -1,8 +1,14 @@
+'use client';
+
+import { useDeviceConfig } from '@/game/hooks/useDeviceConfig';
 import './StartScreen.css';
 
 export function StartScreen({ onStart, onTutorial }) {
+  const device = useDeviceConfig();
+  const isMobile = device.id === 'mobile' || device.id === 'wideCompact';
+
   return (
-    <section className="start-screen" aria-labelledby="start-screen-title">
+    <section className="start-screen" data-device={device.id} data-mobile={isMobile} aria-labelledby="start-screen-title">
       <div className="start-screen__frame">
       <picture className="start-screen__art">
         <source

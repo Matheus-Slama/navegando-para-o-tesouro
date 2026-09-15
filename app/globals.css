@@ -17,6 +17,16 @@
   --radius: 1.375rem;
   --font-title: var(--font-pirate), Georgia, serif;
   --font-ui: var(--font-pirate), Georgia, serif;
+  --control-min-height: 2.75rem;
+  --control-font-size: clamp(1rem, 0.9rem + 0.35vmin, 1.125rem);
+  --control-padding-block: clamp(0.5rem, 1.2svh, 0.75rem);
+  --control-padding-inline: clamp(0.75rem, 2vmin, 1.25rem);
+  --control-gap: clamp(0.5rem, 1.5vmin, 0.875rem);
+  --screen-gutter: clamp(0.5rem, 1.5vmin, 1rem);
+  --screen-inset-top: max(var(--screen-gutter), env(safe-area-inset-top));
+  --screen-inset-right: max(var(--screen-gutter), env(safe-area-inset-right));
+  --screen-inset-bottom: max(var(--screen-gutter), env(safe-area-inset-bottom));
+  --screen-inset-left: max(var(--screen-gutter), env(safe-area-inset-left));
 }
 
 * {
