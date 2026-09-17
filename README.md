@@ -1,4 +1,4 @@
-# Caminho ao Tesouro
+# Navegando para o Tesouro
 
 Jogo educativo web para o ensino do **problema do caminho mínimo em grafos**.
 

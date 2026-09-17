@@ -1,6 +1,6 @@
 export const TUTORIAL_STEPS = [
   {
-    title: 'Bem-vindo ao Caminho ao Tesouro',
+    title: 'Bem-vindo ao Navegando para o Tesouro',
     text: 'Neste jogo, você precisa descobrir qual barco chega ao tesouro pelo caminho de menor custo.'
   },
   {
@@ -8,8 +8,8 @@ export const TUTORIAL_STEPS = [
     text: 'Cada ilha representa um vértice do grafo. Cada rota entre ilhas representa uma aresta.'
   },
   {
-    title: 'Pesos',
-    text: 'Todas as rotas possuem pesos. O melhor caminho nem sempre é o mais curto visualmente, mas aquele com o menor custo total. Pense no peso como o nível de dificuldade da rota.'
+    title: 'Custos',
+    text: 'Todas as rotas possuem custos. O melhor caminho nem sempre é o mais curto visualmente, mas aquele com o menor custo total. Pense no custo como o nível de dificuldade da rota.'
   },
   {
     title: 'Corrida dos barcos',

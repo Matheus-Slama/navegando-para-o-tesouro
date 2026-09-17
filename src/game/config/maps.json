@@ -64,9 +64,9 @@
       "hints": [
         "Antes de mover o barco, tente visualizar uma rota completa até o tesouro.",
         "Evite caminhos que terminam sem conexão com o objetivo.",
-        "Observe o peso mostrado em cada conexão da rota.",
-        "Some os pesos de todas as conexões até o tesouro.",
-        "Escolha o caminho cuja soma dos pesos é a menor."
+        "Observe o custo mostrado em cada conexão da rota.",
+        "Some os custos de todas as conexões até o tesouro.",
+        "Escolha o caminho cuja soma dos custos é a menor."
       ]
     },
     {
@@ -76,10 +76,10 @@
       "score": { "maxScore": 1500, "targetTimeSeconds": 30 },
       "hints": [
         "Existem vários caminhos possíveis. Não escolha o primeiro que encontrar.",
-        "Some todos os pesos necessários para chegar ao tesouro.",
+        "Some todos os custos necessários para chegar ao tesouro.",
         "Uma rota que começa barata pode ficar mais cara depois. Analise até o final.",
         "Compare duas rotas completas e descarte aquela com maior custo.",
-        "O caminho com menos ilhas nem sempre possui a menor soma de pesos."
+        "O caminho com menos ilhas nem sempre possui a menor soma de custos."
       ]
     },
     {
@@ -88,8 +88,8 @@
       "weights": { "min": 1, "max": 6 }, "directed": false, "uniqueWinnerGap": 2,
       "score": { "maxScore": 2250, "targetTimeSeconds": 45 },
       "hints": [
-        "Não escolha apenas olhando o peso da primeira conexão.",
-        "Veja os pesos das conexões seguintes antes de decidir.",
+        "Não escolha apenas olhando o custo da primeira conexão.",
+        "Veja os custos das conexões seguintes antes de decidir.",
         "Alguns caminhos parecem baratos no começo, mas acumulam custos maiores depois.",
         "Compare a soma completa de pelo menos duas rotas antes de escolher.",
         "A melhor escolha é a rota com o menor custo total até o tesouro."
@@ -102,10 +102,10 @@
       "score": { "maxScore": 3000, "targetTimeSeconds": 60 },
       "hints": [
         "Observe os números dos caminhos, não apenas a quantidade de ilhas.",
-        "Um caminho com mais ilhas pode custar menos se seus pesos forem menores.",
-        "Some mentalmente os pesos das conexões de cada rota.",
+        "Um caminho com mais ilhas pode custar menos se os custos de suas conexões forem menores.",
+        "Some mentalmente os custos das conexões de cada rota.",
         "Compare o custo total das duas rotas que parecem mais promissoras.",
-        "Escolha a rota cuja soma de todos os pesos até o tesouro seja a menor, mesmo que ela tenha mais etapas.",
+        "Escolha a rota cuja soma de todos os custos até o tesouro seja a menor, mesmo que ela tenha mais etapas.",
         "Exemplo: 3 + 2 + 1 = 6 pode ser melhor que 4 + 5 = 9."
       ]
     },
@@ -124,10 +124,10 @@
       ]
     },
     {
-      "id": 6, "name": "Desafio final de Dijkstra", "difficulty": "difícil / final", "generation": "random", "challengeType": "dijkstra",
-      "objective": "Usar o algoritmo de Dijkstra para encontrar o caminho mínimo.", "islandCount": { "min": 15, "max": 20 }, "extraRouteCount": 20,
-      "weights": { "min": 1, "max": 20 }, "directed": true, "uniqueWinnerGap": 1,
-      "minimumEdgeCount": 20, "minimumWinnerPathNodes": 5,
+      "id": 6, "name": "Desafio final de Dijkstra", "difficulty": "muito difícil / final", "generation": "random", "challengeType": "dijkstra",
+      "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.", "islandCount": { "min": 15, "max": 20 }, "extraRouteCount": 26,
+      "weights": { "min": 1, "max": 30 }, "directed": true, "uniqueWinnerGap": 1,
+      "minimumEdgeCount": 20, "minimumWinnerPathNodes": 6,
       "score": { "maxScore": 6000, "targetTimeSeconds": 180 },
       "hints": [
         "Comece atribuindo custo 0 à posição inicial do barco e considere as ilhas ainda sem custo conhecido.",

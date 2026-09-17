@@ -1,4 +1,4 @@
-export const RECORDS_KEY = 'caminho-ao-tesouro:records:v1';
+export const RECORDS_KEY = 'navegando-para-o-tesouro:records:v1';
 
 export function calculateScore(phase, elapsedSeconds) {
   const { maxScore, targetTimeSeconds } = phase.score;

@@ -8,7 +8,8 @@ const pirataOne = Pirata_One({
 });
 
 export const metadata = {
-  title: 'Caminho ao Tesouro',
+  title: 'Navegando para o Tesouro',
+  applicationName: 'Navegando para o Tesouro',
   description: 'Jogo educativo para ensino do problema do caminho mínimo em grafos.'
 };
 

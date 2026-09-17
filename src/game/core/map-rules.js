@@ -6,7 +6,7 @@ import { getMapProfile, getNodeRadii, getWaterBounds } from '@/game/core/map-lay
  * Regras das ilhas intermediárias:
  * 1. Devem ser alcançáveis a partir de algum barco.
  * 2. Devem ter um caminho até o tesouro.
- * 3. Devem ter pelo menos duas conexões.
+ * 3. Devem ter pelo menos uma entrada e uma saída em todas as fases.
  * 4. Só pode existir uma rota com o peso mínimo vencedor, mesmo entre
  *    caminhos diferentes que saem do mesmo barco.
  * 5. As ilhas devem caber na água do perfil escolhido para a tela.
@@ -48,7 +48,7 @@ export function removeInvalidIslands(graph, phase) {
     const reachesFinish = getReachableNodes(candidate, [FINISH_ISLAND.id], phase.directed, true);
     const invalidIds = new Set(nodes.filter((node) => node.type === 'intermediate' && (
       !reachable.has(node.id) || !reachesFinish.has(node.id) ||
-      edges.filter((edge) => edge.from === node.id || edge.to === node.id).length < 2
+      !hasIncomingAndOutgoingEdges(edges, node.id)
     )).map((node) => node.id));
     if (!invalidIds.size) break;
     nodes = nodes.filter((node) => !invalidIds.has(node.id));
@@ -78,7 +78,7 @@ export function isValidGraph(graph, results, phase) {
   const canReachTreasure = getReachableNodes(graph, [FINISH_ISLAND.id], phase.directed, true);
   if (graph.nodes.some((node) => node.type === 'intermediate' && (
     !reachableFromBoats.has(node.id) || !canReachTreasure.has(node.id) ||
-    graph.edges.filter((edge) => edge.from === node.id || edge.to === node.id).length < 2
+    !hasIncomingAndOutgoingEdges(graph.edges, node.id)
   ))) {
     return false;
   }
@@ -100,6 +100,11 @@ export function isValidGraph(graph, results, phase) {
   }
 
   return second.distance - winner.distance >= phase.uniqueWinnerGap;
+}
+
+function hasIncomingAndOutgoingEdges(edges, nodeId) {
+  return edges.some((edge) => edge.to === nodeId && edge.from !== nodeId) &&
+    edges.some((edge) => edge.from === nodeId && edge.to !== nodeId);
 }
 
 export function isInsideMapWater(graph) {

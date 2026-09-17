@@ -1,5 +1,6 @@
 {
-  "name": "caminho-ao-tesouro-nextjs",
+  "name": "navegando-para-o-tesouro",
+  "displayName": "Navegando para o Tesouro",
   "version": "0.1.0",
   "private": true,
   "engines": {
