@@ -6,6 +6,7 @@ import { TUTORIAL_STEPS } from '@/game/config/tutorial';
 import { generateGraphForPhase } from '@/game/core/graphGenerator';
 import { StartScreen } from '@/game/components/StartScreen/StartScreen';
 import { TutorialScreen } from '@/game/components/TutorialScreen/TutorialScreen';
+import { DijkstraTutorialMap } from '@/game/components/DijkstraTutorial/DijkstraTutorialMap';
 import { GameBoard } from '@/game/components/GameBoard/GameBoard';
 import { useMapLayout } from '@/game/hooks/useMapLayout';
 import './GameShell.css';
@@ -102,11 +103,30 @@ export function GameShell() {
   }
 
   if (screen === 'start') {
-    return <main className="game-page"><StartScreen onStart={startGame} onTutorial={openTutorial} /></main>;
+    return (
+      <main className="game-page">
+        <StartScreen
+          onStart={startGame}
+          onTutorial={openTutorial}
+          onDijkstraTutorial={() => setScreen('dijkstra-tutorial')}
+        />
+      </main>
+    );
   }
 
   if (screen === 'tutorial') {
     return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} layout={layout} /></main>;
+  }
+
+  if (screen === 'dijkstra-tutorial') {
+    return (
+      <main className="game-page">
+        <DijkstraTutorialMap
+          onExit={() => setScreen('start')}
+          layout={layout}
+        />
+      </main>
+    );
   }
 
   return (

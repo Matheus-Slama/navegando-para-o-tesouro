@@ -53,6 +53,7 @@ src/game/
     GameShell/
     StartScreen/
     TutorialScreen/
+    DijkstraTutorial/
     GameBoard/
     GraphCanvas/
     HintDialog/
@@ -144,6 +145,12 @@ src/game/config/tutorial.js
 ```
 
 Ele é separado das fases para deixar claro que o tutorial não é gerado aleatoriamente.
+
+## Tutorial Dijkstra
+
+O botão **Tutorial Dijkstra**, abaixo de **Tutorial** na tela inicial, abre um mapa fixo com as configurações e o visual da última fase. Nesta etapa, a tela contém o mapa e um botão para voltar ao menu; as explicações serão construídas aos poucos.
+
+Os mapas de celular, tablet e tela horizontal estão salvos em `src/game/config/dijkstra-fixed-maps.json`. Cada formato mantém as mesmas ilhas, rotas e pesos ao reabrir o tutorial. A tela é implementada em `src/game/components/DijkstraTutorial/DijkstraTutorialMap.jsx`.
 
 ## Como trocar imagens
 
@@ -289,7 +296,7 @@ Depois podemos criar um `AudioManager` para tocar músicas e efeitos.
 3. Adicionar sprites reais de barcos.
 4. Adicionar sprites reais das ilhas.
 5. Melhorar a tela de resultado com explicação passo a passo do menor caminho.
-6. Criar modo de visualização do Dijkstra.
+6. Ampliar os exemplos do tutorial Dijkstra.
 7. Adicionar som e botão de volume.
 8. Salvar progresso do jogador no `localStorage`.
 

@@ -3,7 +3,7 @@
 import { useDeviceConfig } from '@/game/hooks/useDeviceConfig';
 import './StartScreen.css';
 
-export function StartScreen({ onStart, onTutorial }) {
+export function StartScreen({ onStart, onTutorial, onDijkstraTutorial }) {
   const device = useDeviceConfig();
   const isMobile = device.id === 'mobile' || device.id === 'wideCompact';
 
@@ -33,6 +33,10 @@ export function StartScreen({ onStart, onTutorial }) {
 
         <button type="button" onClick={onTutorial}>
           Tutorial
+        </button>
+
+        <button type="button" onClick={onDijkstraTutorial}>
+          Tutorial Dijkstra
         </button>
 
         <button type="button" onClick={onStart}>

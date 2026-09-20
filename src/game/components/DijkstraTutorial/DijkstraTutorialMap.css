@@ -1,0 +1,23 @@
+.dijkstra-fixed-map__exit {
+  position: absolute;
+  z-index: 21;
+  top: var(--screen-inset-top);
+  left: var(--screen-inset-left);
+  min-height: 44px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ffe3a6;
+  border-radius: 0.6rem;
+  background: #173f59;
+  color: #fff4d8;
+  font: 700 var(--control-font-size)/1.3 var(--font-ui);
+  cursor: pointer;
+}
+
+.dijkstra-fixed-map__exit:hover {
+  background: #245673;
+}
+
+.dijkstra-fixed-map__exit:focus-visible {
+  outline: 3px solid #ffe17a;
+  outline-offset: 3px;
+}

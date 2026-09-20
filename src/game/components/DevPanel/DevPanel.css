@@ -18,6 +18,10 @@
   pointer-events: auto;
 }
 
+.dev-panel__toggle {
+  display: none;
+}
+
 .dev-panel__toggle,
 .dev-panel__regenerate {
   flex-shrink: 0;

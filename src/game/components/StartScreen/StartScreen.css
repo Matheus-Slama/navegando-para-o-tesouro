@@ -100,8 +100,7 @@
   }
 
   .start-screen__content {
-    width: min(100%, clamp(22rem, 48vw, 42rem));
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 22rem);
     gap: var(--control-gap);
   }
 
@@ -127,17 +126,6 @@
     0 4px 0 #794310,
     0 8px 16px rgba(46, 22, 6, 0.25),
     inset 0 2px 0 rgba(255, 247, 199, 0.8);
-}
-
-/* A escala reduz o desenho; a área transparente mantém 44px para toque. */
-.start-screen[data-mobile='true'] .start-screen__content button::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: max(100%, 88px);
-  height: max(100%, 88px);
-  translate: -50% -50%;
 }
 
 @media (max-width: 599px) and (orientation: portrait) {
