@@ -255,7 +255,7 @@
       {
         "from": "island-7",
         "to": "island-9",
-        "weight": 17,
+        "weight": 5,
         "id": "edge-11"
       },
       {
@@ -642,7 +642,7 @@
       {
         "from": "island-6",
         "to": "island-7",
-        "weight": 17,
+        "weight": 7,
         "id": "edge-13"
       },
       {
@@ -969,7 +969,7 @@
       {
         "from": "island-2",
         "to": "island-13",
-        "weight": 23,
+        "weight": 5,
         "id": "edge-9"
       },
       {
@@ -993,7 +993,7 @@
       {
         "from": "start-blue",
         "to": "island-2",
-        "weight": 30,
+        "weight": 5,
         "id": "edge-13"
       },
       {

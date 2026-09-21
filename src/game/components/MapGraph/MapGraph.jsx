@@ -3,7 +3,7 @@ import './MapGraph.css';
 import { AnimatedBoats } from '@/game/components/AnimatedBoat/AnimatedBoat';
 import { GAME_ASSETS } from '@/game/config/gameAssets';
 
-export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinnerArrive, routeStyle = 'chevrons' }) {
+export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinnerArrive, routeStyle = 'chevrons', highlightedEdgeIds = [] }) {
   const layout = graph.metadata.layout ?? 'mobile';
   const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const islands = graph.nodes.filter((node) => node.type === 'intermediate');
@@ -33,7 +33,7 @@ export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinner
           const route = getVisibleRoute(from, to, isDense, layout);
 
           return (
-            <g key={edge.id}>
+            <g key={edge.id} data-highlighted={highlightedEdgeIds.includes(edge.id) || undefined}>
               {usesChevrons ? (
                 <polyline
                   className="map-graph__route-direction map-graph__route-direction--chevrons"
@@ -82,6 +82,7 @@ export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinner
           <span
             key={`${edge.id}-weight`}
             className="map-graph__weight"
+            data-highlighted={highlightedEdgeIds.includes(edge.id) || undefined}
             style={{ left: `${position.x}%`, top: `${position.y}%` }}
             aria-label={`Tempo da rota: ${edge.weight}`}
             title={`Tempo: ${edge.weight}`}

@@ -148,7 +148,9 @@ Ele é separado das fases para deixar claro que o tutorial não é gerado aleato
 
 ## Tutorial Dijkstra
 
-O botão **Tutorial Dijkstra**, abaixo de **Tutorial** na tela inicial, abre um mapa fixo com as configurações e o visual da última fase. Nesta etapa, a tela contém o mapa e um botão para voltar ao menu; as explicações serão construídas aos poucos.
+O botão **Tutorial Dijkstra**, abaixo de **Tutorial** na tela inicial, demonstra o algoritmo sobre o mapa fixo da última fase. Um popover compacto com setas acompanha cada escolha, soma e atualização. Custos acumulados aparecem junto aos pontos: 0 no barco azul, ∞ nos demais e ✓ nos custos confirmados. Os pesos das rotas permanecem os mesmos. A rota analisada e o caminho final recebem destaque dourado.
+
+Os dois botões de seta avançam e desfazem as contas; no teclado, use ← e →. Também é possível recolher a explicação e comparar os quatro barcos no último passo. O barco azul tem o menor custo, sem empate, nos três formatos de tela. Os nove conceitos ficam em `src/game/config/dijkstra-steps.js`; as cenas são calculadas em `src/game/core/dijkstra-walkthrough.js`. Ao mudar o formato da tela, a demonstração reinicia no mapa correspondente. Execute `node scripts/verify-dijkstra-walkthrough.mjs` para validar os estados e as rotas.
 
 Os mapas de celular, tablet e tela horizontal estão salvos em `src/game/config/dijkstra-fixed-maps.json`. Cada formato mantém as mesmas ilhas, rotas e pesos ao reabrir o tutorial. A tela é implementada em `src/game/components/DijkstraTutorial/DijkstraTutorialMap.jsx`.
 
