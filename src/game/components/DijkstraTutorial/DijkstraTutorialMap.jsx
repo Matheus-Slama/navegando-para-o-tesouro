@@ -41,9 +41,7 @@ function DijkstraWalkthrough({ onExit, layout }) {
   const focusY = focus.length ? focus.reduce((sum, node) => sum + node.y, 0) / focus.length : 500;
   const focusX = focus.length ? focus.reduce((sum, node) => sum + node.x, 0) / focus.length : 380;
   const dock = (focusY < 300 ? 'bottom' : 'top') + '-' + (focusX > 500 ? 'left' : 'right');
-  const source = comparing ? comparedBoat : 'start-blue';
   const winner = graph.results.winner;
-  const winnerName = boats.find((boat) => boat.id === winner.startId).label;
 
   const previousStep = useCallback(() => setIndex((value) => Math.max(0, value - 1)), []);
   const nextStep = useCallback(() => {
@@ -106,14 +104,13 @@ function DijkstraWalkthrough({ onExit, layout }) {
             <p>{comparing ? 'Cada barco começa do zero. Toque abaixo para comparar as rotas.' : highlightInfinity(frame.text)}</p>
             {frame.formula && <p className="dijkstra-fixed-map__formula">{highlightInfinity(frame.formula)}</p>}
           </div>
-          {comparing && <>
+          {comparing &&
             <div className="dijkstra-fixed-map__comparison" aria-label="Comparar custos dos barcos">
               {graph.results.all.map((result) => <button key={result.startId} type="button" aria-pressed={comparedBoat === result.startId} onClick={() => setComparedBoat(result.startId)}>
                 {result.label.replace('Barco ', '')}: {result.distance}{result.startId === winner.startId ? ' ★' : ''}
               </button>)}
             </div>
-            <p className="dijkstra-fixed-map__legend" aria-live="polite">{winnerName}: menor custo, {winner.distance}. Rota exibida: {boats.find((boat) => boat.id === source).label.toLowerCase()}.</p>
-          </>}
+          }
         </div>
         <nav className="dijkstra-fixed-map__navigation" aria-label="Navegação da demonstração">
           <button className="dijkstra-fixed-map__arrow dijkstra-fixed-map__arrow--back" type="button" disabled={index === 0} aria-label="Passo anterior" aria-keyshortcuts="ArrowLeft" title="Voltar (←)" onClick={previousStep}>

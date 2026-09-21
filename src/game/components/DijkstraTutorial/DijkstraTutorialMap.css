@@ -59,7 +59,6 @@
 .dijkstra-fixed-map__arrow:focus-visible img { filter: brightness(1.4); }
 .dijkstra-fixed-map__arrow:active:not(:disabled) img { translate: 0 1px; }
 .dijkstra-fixed-map__formula { padding: 0.35rem 0.5rem; border-radius: 0.35rem; background: #f3dda8; font-weight: 750; font-variant-numeric: tabular-nums; }
-.dijkstra-fixed-map__popover .dijkstra-fixed-map__legend { margin-top: 0.5rem; color: #715b3d; font-size: 0.65rem; }
 .dijkstra-fixed-map__comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem; margin-top: 0.5rem; }
 .dijkstra-fixed-map__comparison button { font-size: 0.8rem; font-weight: 400; }
 .dijkstra-fixed-map__comparison button[aria-pressed='true'] { background: #efd09a; color: #492508; outline: 2px solid #7c430f; }
@@ -83,7 +82,6 @@
   .dijkstra-fixed-map__popover { --tutorial-card-width: min(15.5rem, 48vw); font-size: 0.8rem; padding-block: 1rem; max-height: calc(100svh - 65px); }
   .dijkstra-fixed-map__popover[data-dock^='bottom'] { bottom: var(--screen-inset-bottom); }
   .dijkstra-fixed-map__popover-header button { min-height: 26px; }
-  .dijkstra-fixed-map__popover .dijkstra-fixed-map__legend { display: none; }
   .dijkstra-fixed-map__cost { transform: translate(-50%, calc(-100% - 0.6rem)); padding: 2px 4px; font-size: 0.65rem; }
   .dijkstra-fixed-map__cost[data-type='start'] { transform: translate(-50%, calc(-100% - 1.4rem)); }
   .dijkstra-fixed-map__cost[data-type='finish'] { transform: translate(-50%, 0.6rem); }
