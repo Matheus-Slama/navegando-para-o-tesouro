@@ -37,36 +37,36 @@
         "id": "island-1",
         "label": "Ilha 1",
         "sprite": {
-          "sheetIndex": 0,
-          "column": 1,
-          "row": 4
+          "sheetIndex": 1,
+          "column": 8,
+          "row": 0
         },
         "type": "intermediate",
-        "x": 380,
-        "y": 202
+        "x": 850,
+        "y": 345
       },
       {
         "id": "island-2",
         "label": "Ilha 2",
         "sprite": {
-          "sheetIndex": 1,
-          "column": 1,
-          "row": 2
+          "sheetIndex": 0,
+          "column": 8,
+          "row": 9
         },
         "type": "intermediate",
-        "x": 500,
-        "y": 273
+        "x": 860,
+        "y": 488
       },
       {
         "id": "island-3",
         "label": "Ilha 3",
         "sprite": {
           "sheetIndex": 0,
-          "column": 3,
-          "row": 8
+          "column": 5,
+          "row": 0
         },
         "type": "intermediate",
-        "x": 800,
+        "x": 350,
         "y": 273
       },
       {
@@ -74,36 +74,36 @@
         "label": "Ilha 4",
         "sprite": {
           "sheetIndex": 0,
-          "column": 2,
-          "row": 1
+          "column": 1,
+          "row": 0
         },
         "type": "intermediate",
-        "x": 680,
-        "y": 488
+        "x": 650,
+        "y": 273
       },
       {
         "id": "island-5",
         "label": "Ilha 5",
         "sprite": {
           "sheetIndex": 0,
-          "column": 8,
-          "row": 1
+          "column": 2,
+          "row": 4
         },
         "type": "intermediate",
-        "x": 200,
-        "y": 273
+        "x": 680,
+        "y": 416
       },
       {
         "id": "island-6",
         "label": "Ilha 6",
         "sprite": {
-          "sheetIndex": 1,
-          "column": 4,
-          "row": 6
+          "sheetIndex": 0,
+          "column": 5,
+          "row": 5
         },
         "type": "intermediate",
-        "x": 680,
-        "y": 416
+        "x": 150,
+        "y": 345
       },
       {
         "id": "island-7",
@@ -111,11 +111,11 @@
         "sprite": {
           "sheetIndex": 1,
           "column": 4,
-          "row": 6
+          "row": 0
         },
         "type": "intermediate",
-        "x": 500,
-        "y": 488
+        "x": 250,
+        "y": 202
       },
       {
         "id": "island-8",
@@ -126,56 +126,104 @@
           "row": 8
         },
         "type": "intermediate",
-        "x": 680,
-        "y": 345
+        "x": 750,
+        "y": 202
       },
       {
         "id": "island-9",
         "label": "Ilha 9",
         "sprite": {
-          "sheetIndex": 1,
-          "column": 6,
-          "row": 6
+          "sheetIndex": 0,
+          "column": 7,
+          "row": 7
         },
         "type": "intermediate",
         "x": 500,
-        "y": 345
+        "y": 416
       },
       {
         "id": "island-10",
         "label": "Ilha 10",
         "sprite": {
           "sheetIndex": 0,
-          "column": 3,
-          "row": 6
+          "column": 1,
+          "row": 5
         },
         "type": "intermediate",
-        "x": 620,
-        "y": 202
+        "x": 320,
+        "y": 345
       },
       {
-        "id": "island-11",
-        "label": "Ilha 11",
+        "id": "island-12",
+        "label": "Ilha 12",
         "sprite": {
-          "sheetIndex": 1,
-          "column": 4,
-          "row": 8
+          "sheetIndex": 0,
+          "column": 8,
+          "row": 9
         },
         "type": "intermediate",
         "x": 320,
         "y": 416
       },
       {
+        "id": "island-13",
+        "label": "Ilha 13",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 2,
+          "row": 1
+        },
+        "type": "intermediate",
+        "x": 500,
+        "y": 345
+      },
+      {
+        "id": "island-14",
+        "label": "Ilha 14",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 5,
+          "row": 9
+        },
+        "type": "intermediate",
+        "x": 680,
+        "y": 488
+      },
+      {
+        "id": "island-15",
+        "label": "Ilha 15",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 2,
+          "row": 7
+        },
+        "type": "intermediate",
+        "x": 320,
+        "y": 488
+      },
+      {
         "id": "island-16",
         "label": "Ilha 16",
         "sprite": {
-          "sheetIndex": 0,
-          "column": 2,
-          "row": 0
+          "sheetIndex": 1,
+          "column": 4,
+          "row": 2
         },
         "type": "intermediate",
-        "x": 860,
-        "y": 416
+        "x": 140,
+        "y": 488
+      },
+      {
+        "id": "island-17",
+        "label": "Ilha 17",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 1,
+          "row": 4
+        },
+        "type": "intermediate",
+        "x": 500,
+        "y": 202
       },
       {
         "id": "finish",
@@ -187,130 +235,160 @@
     ],
     "edges": [
       {
-        "from": "island-1",
+        "from": "island-7",
         "to": "finish",
-        "weight": 24,
+        "weight": 22,
         "id": "edge-0"
       },
       {
-        "from": "island-10",
+        "from": "island-8",
         "to": "finish",
-        "weight": 9,
+        "weight": 17,
         "id": "edge-1"
       },
       {
-        "from": "island-2",
+        "from": "island-17",
         "to": "finish",
-        "weight": 16,
+        "weight": 19,
         "id": "edge-2"
       },
       {
         "from": "island-3",
-        "to": "island-10",
-        "weight": 19,
+        "to": "island-7",
+        "weight": 2,
         "id": "edge-3"
       },
       {
-        "from": "island-5",
-        "to": "island-1",
-        "weight": 11,
+        "from": "island-4",
+        "to": "island-8",
+        "weight": 8,
         "id": "edge-4"
       },
       {
-        "from": "island-8",
-        "to": "island-10",
-        "weight": 9,
+        "from": "island-1",
+        "to": "island-8",
+        "weight": 14,
         "id": "edge-5"
       },
       {
-        "from": "island-9",
-        "to": "island-5",
-        "weight": 22,
+        "from": "island-6",
+        "to": "island-7",
+        "weight": 20,
         "id": "edge-6"
       },
       {
-        "from": "island-6",
-        "to": "island-9",
-        "weight": 19,
+        "from": "island-10",
+        "to": "island-4",
+        "weight": 2,
         "id": "edge-7"
       },
       {
-        "from": "island-11",
-        "to": "island-9",
+        "from": "island-13",
+        "to": "island-4",
         "weight": 23,
         "id": "edge-8"
       },
       {
-        "from": "island-16",
-        "to": "island-3",
-        "weight": 11,
+        "from": "island-5",
+        "to": "island-1",
+        "weight": 21,
         "id": "edge-9"
       },
       {
-        "from": "island-4",
-        "to": "island-16",
-        "weight": 16,
+        "from": "island-9",
+        "to": "island-10",
+        "weight": 1,
         "id": "edge-10"
       },
       {
-        "from": "island-7",
-        "to": "island-9",
-        "weight": 5,
+        "from": "island-12",
+        "to": "island-6",
+        "weight": 1,
         "id": "edge-11"
       },
       {
-        "from": "start-red",
-        "to": "island-11",
-        "weight": 11,
+        "from": "island-2",
+        "to": "island-5",
+        "weight": 3,
         "id": "edge-12"
       },
       {
-        "from": "start-blue",
-        "to": "island-7",
-        "weight": 2,
+        "from": "island-14",
+        "to": "island-9",
+        "weight": 6,
         "id": "edge-13"
       },
       {
-        "from": "start-green",
-        "to": "island-7",
-        "weight": 13,
+        "from": "island-15",
+        "to": "island-9",
+        "weight": 8,
         "id": "edge-14"
       },
       {
-        "from": "start-black",
-        "to": "island-4",
-        "weight": 25,
+        "from": "island-16",
+        "to": "island-6",
+        "weight": 14,
         "id": "edge-15"
       },
       {
-        "from": "island-8",
-        "to": "island-2",
-        "weight": 7,
+        "from": "start-red",
+        "to": "island-16",
+        "weight": 30,
         "id": "edge-16"
       },
       {
-        "from": "island-7",
-        "to": "island-6",
-        "weight": 23,
+        "from": "start-blue",
+        "to": "island-15",
+        "weight": 24,
         "id": "edge-17"
       },
       {
-        "from": "island-16",
-        "to": "island-8",
-        "weight": 7,
+        "from": "start-green",
+        "to": "island-14",
+        "weight": 30,
         "id": "edge-18"
       },
       {
-        "from": "island-16",
-        "to": "island-9",
-        "weight": 1,
+        "from": "start-black",
+        "to": "island-2",
+        "weight": 19,
         "id": "edge-19"
       },
       {
-        "from": "island-16",
-        "to": "island-10",
-        "weight": 26,
+        "from": "island-6",
+        "to": "island-3",
+        "weight": 8,
         "id": "edge-20"
+      },
+      {
+        "from": "island-16",
+        "to": "island-12",
+        "weight": 23,
+        "id": "edge-21"
+      },
+      {
+        "from": "island-5",
+        "to": "island-13",
+        "weight": 18,
+        "id": "edge-22"
+      },
+      {
+        "from": "island-4",
+        "to": "island-17",
+        "weight": 11,
+        "id": "edge-23"
+      },
+      {
+        "from": "island-17",
+        "to": "island-7",
+        "weight": 14,
+        "id": "edge-24"
+      },
+      {
+        "from": "island-4",
+        "to": "island-3",
+        "weight": 19,
+        "id": "edge-25"
       }
     ],
     "metadata": {
@@ -321,7 +399,7 @@
       "challengeType": "dijkstra",
       "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.",
       "directed": true,
-      "islandCount": 12,
+      "islandCount": 16,
       "score": {
         "maxScore": 6000,
         "targetTimeSeconds": 180
@@ -336,9 +414,414 @@
       "generator": "graphology-erdos-renyi",
       "fixed": true
     },
-    "seed": 25501
+    "seed": 238286066
   },
   "tablet": {
+    "nodes": [
+      {
+        "id": "start-red",
+        "label": "Barco Vermelho",
+        "boat": "red",
+        "x": 140,
+        "y": 600,
+        "type": "start"
+      },
+      {
+        "id": "start-blue",
+        "label": "Barco Azul",
+        "boat": "blue",
+        "x": 320,
+        "y": 600,
+        "type": "start"
+      },
+      {
+        "id": "start-green",
+        "label": "Barco Verde",
+        "boat": "green",
+        "x": 620,
+        "y": 600,
+        "type": "start"
+      },
+      {
+        "id": "start-black",
+        "label": "Barco Preto",
+        "boat": "black",
+        "x": 860,
+        "y": 600,
+        "type": "start"
+      },
+      {
+        "id": "island-1",
+        "label": "Ilha 1",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 3,
+          "row": 9
+        },
+        "type": "intermediate",
+        "x": 500,
+        "y": 202
+      },
+      {
+        "id": "island-2",
+        "label": "Ilha 2",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 8,
+          "row": 9
+        },
+        "type": "intermediate",
+        "x": 650,
+        "y": 273
+      },
+      {
+        "id": "island-3",
+        "label": "Ilha 3",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 4,
+          "row": 6
+        },
+        "type": "intermediate",
+        "x": 320,
+        "y": 345
+      },
+      {
+        "id": "island-4",
+        "label": "Ilha 4",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 8,
+          "row": 2
+        },
+        "type": "intermediate",
+        "x": 150,
+        "y": 345
+      },
+      {
+        "id": "island-5",
+        "label": "Ilha 5",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 8,
+          "row": 7
+        },
+        "type": "intermediate",
+        "x": 500,
+        "y": 273
+      },
+      {
+        "id": "island-6",
+        "label": "Ilha 6",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 2,
+          "row": 3
+        },
+        "type": "intermediate",
+        "x": 860,
+        "y": 488
+      },
+      {
+        "id": "island-8",
+        "label": "Ilha 8",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 6,
+          "row": 7
+        },
+        "type": "intermediate",
+        "x": 140,
+        "y": 488
+      },
+      {
+        "id": "island-9",
+        "label": "Ilha 9",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 7,
+          "row": 0
+        },
+        "type": "intermediate",
+        "x": 500,
+        "y": 416
+      },
+      {
+        "id": "island-10",
+        "label": "Ilha 10",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 4,
+          "row": 3
+        },
+        "type": "intermediate",
+        "x": 250,
+        "y": 202
+      },
+      {
+        "id": "island-11",
+        "label": "Ilha 11",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 4,
+          "row": 5
+        },
+        "type": "intermediate",
+        "x": 680,
+        "y": 345
+      },
+      {
+        "id": "island-12",
+        "label": "Ilha 12",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 2,
+          "row": 2
+        },
+        "type": "intermediate",
+        "x": 750,
+        "y": 202
+      },
+      {
+        "id": "island-13",
+        "label": "Ilha 13",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 7,
+          "row": 5
+        },
+        "type": "intermediate",
+        "x": 680,
+        "y": 416
+      },
+      {
+        "id": "island-14",
+        "label": "Ilha 14",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 2,
+          "row": 6
+        },
+        "type": "intermediate",
+        "x": 500,
+        "y": 488
+      },
+      {
+        "id": "island-15",
+        "label": "Ilha 15",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 3,
+          "row": 3
+        },
+        "type": "intermediate",
+        "x": 320,
+        "y": 416
+      },
+      {
+        "id": "island-17",
+        "label": "Ilha 17",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 3,
+          "row": 3
+        },
+        "type": "intermediate",
+        "x": 850,
+        "y": 345
+      },
+      {
+        "id": "finish",
+        "label": "Ilha do Tesouro",
+        "x": 500,
+        "y": 55,
+        "type": "finish"
+      }
+    ],
+    "edges": [
+      {
+        "from": "island-1",
+        "to": "finish",
+        "weight": 7,
+        "id": "edge-0"
+      },
+      {
+        "from": "island-10",
+        "to": "finish",
+        "weight": 16,
+        "id": "edge-1"
+      },
+      {
+        "from": "island-12",
+        "to": "finish",
+        "weight": 19,
+        "id": "edge-2"
+      },
+      {
+        "from": "island-2",
+        "to": "island-12",
+        "weight": 21,
+        "id": "edge-3"
+      },
+      {
+        "from": "island-5",
+        "to": "island-10",
+        "weight": 22,
+        "id": "edge-4"
+      },
+      {
+        "from": "island-3",
+        "to": "island-10",
+        "weight": 23,
+        "id": "edge-5"
+      },
+      {
+        "from": "island-4",
+        "to": "island-10",
+        "weight": 21,
+        "id": "edge-6"
+      },
+      {
+        "from": "island-11",
+        "to": "island-12",
+        "weight": 10,
+        "id": "edge-7"
+      },
+      {
+        "from": "island-17",
+        "to": "island-12",
+        "weight": 28,
+        "id": "edge-8"
+      },
+      {
+        "from": "island-9",
+        "to": "island-5",
+        "weight": 20,
+        "id": "edge-9"
+      },
+      {
+        "from": "island-13",
+        "to": "island-17",
+        "weight": 6,
+        "id": "edge-10"
+      },
+      {
+        "from": "island-15",
+        "to": "island-5",
+        "weight": 6,
+        "id": "edge-11"
+      },
+      {
+        "from": "island-6",
+        "to": "island-17",
+        "weight": 3,
+        "id": "edge-12"
+      },
+      {
+        "from": "island-8",
+        "to": "island-15",
+        "weight": 13,
+        "id": "edge-13"
+      },
+      {
+        "from": "island-14",
+        "to": "island-13",
+        "weight": 15,
+        "id": "edge-14"
+      },
+      {
+        "from": "start-red",
+        "to": "island-8",
+        "weight": 30,
+        "id": "edge-16"
+      },
+      {
+        "from": "start-green",
+        "to": "island-14",
+        "weight": 25,
+        "id": "edge-18"
+      },
+      {
+        "from": "start-black",
+        "to": "island-6",
+        "weight": 30,
+        "id": "edge-19"
+      },
+      {
+        "from": "island-2",
+        "to": "island-1",
+        "weight": 26,
+        "id": "edge-20"
+      },
+      {
+        "from": "island-9",
+        "to": "island-2",
+        "weight": 25,
+        "id": "edge-21"
+      },
+      {
+        "from": "island-9",
+        "to": "island-11",
+        "weight": 25,
+        "id": "edge-22"
+      },
+      {
+        "from": "island-8",
+        "to": "island-3",
+        "weight": 11,
+        "id": "edge-23"
+      },
+      {
+        "from": "island-8",
+        "to": "island-9",
+        "weight": 10,
+        "id": "edge-24"
+      },
+      {
+        "from": "island-3",
+        "to": "island-4",
+        "weight": 28,
+        "id": "edge-25"
+      },
+      {
+        "from": "island-17",
+        "to": "island-11",
+        "weight": 29,
+        "id": "edge-26"
+      },
+      {
+        "from": "start-blue",
+        "to": "island-9",
+        "weight": 15,
+        "id": "edge-27"
+      }
+    ],
+    "metadata": {
+      "layout": "tablet",
+      "dense": true,
+      "phaseId": 6,
+      "difficulty": "muito difícil / final",
+      "challengeType": "dijkstra",
+      "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.",
+      "directed": true,
+      "islandCount": 15,
+      "score": {
+        "maxScore": 6000,
+        "targetTimeSeconds": 180
+      },
+      "hints": [
+        "Comece atribuindo custo 0 à posição inicial do barco e considere as ilhas ainda sem custo conhecido.",
+        "Calcule o custo para chegar às ilhas vizinhas da posição inicial.",
+        "Escolha o vértice não visitado com o menor custo acumulado.",
+        "A partir dele, verifique se existe um caminho mais barato para seus vizinhos e atualize os valores.",
+        "Repita: menor custo não visitado → atualizar vizinhos → marcar como visitado, até chegar ao vértice do tesouro."
+      ],
+      "generator": "graphology-erdos-renyi",
+      "fixed": true
+    },
+    "seed": 10979090
+  },
+  "wide": {
     "nodes": [
       {
         "id": "start-red",
@@ -377,23 +860,23 @@
         "label": "Ilha 1",
         "sprite": {
           "sheetIndex": 0,
-          "column": 2,
-          "row": 4
+          "column": 1,
+          "row": 5
         },
         "type": "intermediate",
-        "x": 680,
-        "y": 488
+        "x": 370,
+        "y": 345
       },
       {
         "id": "island-2",
         "label": "Ilha 2",
         "sprite": {
-          "sheetIndex": 0,
-          "column": 1,
-          "row": 6
+          "sheetIndex": 1,
+          "column": 3,
+          "row": 1
         },
         "type": "intermediate",
-        "x": 680,
+        "x": 630,
         "y": 345
       },
       {
@@ -401,43 +884,43 @@
         "label": "Ilha 3",
         "sprite": {
           "sheetIndex": 1,
-          "column": 7,
-          "row": 7
+          "column": 6,
+          "row": 5
         },
         "type": "intermediate",
-        "x": 250,
-        "y": 202
+        "x": 330,
+        "y": 488
       },
       {
         "id": "island-4",
         "label": "Ilha 4",
         "sprite": {
           "sheetIndex": 0,
-          "column": 7,
-          "row": 2
+          "column": 0,
+          "row": 5
         },
         "type": "intermediate",
-        "x": 500,
-        "y": 273
+        "x": 420,
+        "y": 202
       },
       {
         "id": "island-5",
         "label": "Ilha 5",
         "sprite": {
-          "sheetIndex": 0,
-          "column": 7,
-          "row": 3
+          "sheetIndex": 1,
+          "column": 2,
+          "row": 4
         },
         "type": "intermediate",
-        "x": 350,
-        "y": 273
+        "x": 800,
+        "y": 416
       },
       {
         "id": "island-6",
         "label": "Ilha 6",
         "sprite": {
           "sheetIndex": 0,
-          "column": 1,
+          "column": 3,
           "row": 9
         },
         "type": "intermediate",
@@ -448,57 +931,57 @@
         "id": "island-7",
         "label": "Ilha 7",
         "sprite": {
-          "sheetIndex": 0,
-          "column": 4,
+          "sheetIndex": 1,
+          "column": 2,
           "row": 5
         },
         "type": "intermediate",
-        "x": 680,
-        "y": 416
+        "x": 580,
+        "y": 202
       },
       {
         "id": "island-8",
         "label": "Ilha 8",
         "sprite": {
           "sheetIndex": 0,
-          "column": 6,
-          "row": 4
+          "column": 4,
+          "row": 3
         },
         "type": "intermediate",
-        "x": 800,
+        "x": 710,
         "y": 273
       },
       {
         "id": "island-9",
         "label": "Ilha 9",
         "sprite": {
-          "sheetIndex": 0,
+          "sheetIndex": 1,
           "column": 8,
-          "row": 4
+          "row": 8
         },
         "type": "intermediate",
-        "x": 500,
-        "y": 345
+        "x": 160,
+        "y": 488
+      },
+      {
+        "id": "island-10",
+        "label": "Ilha 10",
+        "sprite": {
+          "sheetIndex": 0,
+          "column": 0,
+          "row": 5
+        },
+        "type": "intermediate",
+        "x": 840,
+        "y": 488
       },
       {
         "id": "island-11",
         "label": "Ilha 11",
         "sprite": {
-          "sheetIndex": 1,
-          "column": 3,
-          "row": 5
-        },
-        "type": "intermediate",
-        "x": 320,
-        "y": 488
-      },
-      {
-        "id": "island-12",
-        "label": "Ilha 12",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 0,
-          "row": 9
+          "sheetIndex": 0,
+          "column": 1,
+          "row": 8
         },
         "type": "intermediate",
         "x": 500,
@@ -509,48 +992,48 @@
         "label": "Ilha 13",
         "sprite": {
           "sheetIndex": 1,
-          "column": 3,
-          "row": 5
+          "column": 0,
+          "row": 2
         },
         "type": "intermediate",
-        "x": 320,
-        "y": 345
+        "x": 350,
+        "y": 416
       },
       {
-        "id": "island-15",
-        "label": "Ilha 15",
+        "id": "island-14",
+        "label": "Ilha 14",
         "sprite": {
-          "sheetIndex": 1,
-          "column": 7,
-          "row": 5
+          "sheetIndex": 0,
+          "column": 1,
+          "row": 2
         },
         "type": "intermediate",
-        "x": 860,
-        "y": 416
+        "x": 500,
+        "y": 273
+      },
+      {
+        "id": "island-16",
+        "label": "Ilha 16",
+        "sprite": {
+          "sheetIndex": 1,
+          "column": 1,
+          "row": 8
+        },
+        "type": "intermediate",
+        "x": 290,
+        "y": 273
       },
       {
         "id": "island-17",
         "label": "Ilha 17",
         "sprite": {
-          "sheetIndex": 0,
-          "column": 5,
-          "row": 0
+          "sheetIndex": 1,
+          "column": 3,
+          "row": 7
         },
         "type": "intermediate",
-        "x": 140,
-        "y": 416
-      },
-      {
-        "id": "island-18",
-        "label": "Ilha 18",
-        "sprite": {
-          "sheetIndex": 0,
-          "column": 1,
-          "row": 1
-        },
-        "type": "intermediate",
-        "x": 620,
-        "y": 202
+        "x": 670,
+        "y": 488
       },
       {
         "id": "finish",
@@ -562,146 +1045,146 @@
     ],
     "edges": [
       {
-        "from": "island-3",
+        "from": "island-4",
         "to": "finish",
-        "weight": 26,
+        "weight": 6,
         "id": "edge-0"
       },
       {
-        "from": "island-18",
+        "from": "island-7",
         "to": "finish",
-        "weight": 15,
+        "weight": 25,
         "id": "edge-1"
       },
       {
-        "from": "island-4",
-        "to": "finish",
-        "weight": 30,
+        "from": "island-8",
+        "to": "island-7",
+        "weight": 2,
         "id": "edge-2"
       },
       {
-        "from": "island-5",
-        "to": "finish",
-        "weight": 9,
+        "from": "island-14",
+        "to": "island-4",
+        "weight": 24,
         "id": "edge-3"
       },
       {
-        "from": "island-8",
-        "to": "island-18",
-        "weight": 29,
+        "from": "island-16",
+        "to": "island-4",
+        "weight": 15,
         "id": "edge-4"
       },
       {
-        "from": "island-2",
-        "to": "island-4",
-        "weight": 10,
+        "from": "island-1",
+        "to": "island-16",
+        "weight": 14,
         "id": "edge-5"
       },
       {
-        "from": "island-9",
-        "to": "island-5",
-        "weight": 28,
+        "from": "island-2",
+        "to": "island-8",
+        "weight": 12,
         "id": "edge-6"
       },
       {
-        "from": "island-13",
-        "to": "island-3",
-        "weight": 23,
+        "from": "island-5",
+        "to": "island-8",
+        "weight": 10,
         "id": "edge-7"
       },
       {
-        "from": "island-7",
-        "to": "island-9",
-        "weight": 6,
+        "from": "island-11",
+        "to": "island-14",
+        "weight": 7,
         "id": "edge-8"
       },
       {
-        "from": "island-12",
-        "to": "island-13",
-        "weight": 14,
+        "from": "island-13",
+        "to": "island-16",
+        "weight": 7,
         "id": "edge-9"
       },
       {
-        "from": "island-15",
-        "to": "island-8",
-        "weight": 7,
+        "from": "island-3",
+        "to": "island-11",
+        "weight": 5,
         "id": "edge-10"
       },
       {
-        "from": "island-17",
-        "to": "island-13",
-        "weight": 13,
+        "from": "island-6",
+        "to": "island-2",
+        "weight": 25,
         "id": "edge-11"
       },
       {
-        "from": "island-1",
-        "to": "island-15",
-        "weight": 5,
+        "from": "island-9",
+        "to": "island-13",
+        "weight": 28,
         "id": "edge-12"
       },
       {
-        "from": "island-6",
-        "to": "island-7",
-        "weight": 7,
+        "from": "island-17",
+        "to": "island-2",
+        "weight": 24,
         "id": "edge-13"
       },
       {
-        "from": "island-11",
-        "to": "island-17",
-        "weight": 28,
+        "from": "start-red",
+        "to": "island-9",
+        "weight": 13,
         "id": "edge-14"
       },
       {
-        "from": "start-red",
-        "to": "island-17",
-        "weight": 25,
+        "from": "start-blue",
+        "to": "island-3",
+        "weight": 9,
         "id": "edge-15"
       },
       {
-        "from": "start-blue",
-        "to": "island-6",
-        "weight": 4,
+        "from": "start-green",
+        "to": "island-17",
+        "weight": 30,
         "id": "edge-16"
       },
       {
-        "from": "start-green",
-        "to": "island-6",
-        "weight": 14,
+        "from": "start-black",
+        "to": "island-10",
+        "weight": 22,
         "id": "edge-17"
       },
       {
-        "from": "start-black",
+        "from": "island-11",
         "to": "island-1",
-        "weight": 11,
+        "weight": 1,
         "id": "edge-18"
       },
       {
-        "from": "island-15",
-        "to": "island-2",
+        "from": "island-17",
+        "to": "island-5",
         "weight": 16,
         "id": "edge-19"
       },
       {
-        "from": "start-red",
-        "to": "island-11",
-        "weight": 9,
+        "from": "start-blue",
+        "to": "island-6",
+        "weight": 12,
         "id": "edge-20"
       },
       {
-        "from": "island-11",
-        "to": "island-12",
-        "weight": 18,
-        "id": "edge-21"
+        "from": "island-10",
+        "to": "island-17",
+        "weight": 10,
+        "id": "edge-24"
       },
       {
-        "from": "island-15",
-        "to": "island-9",
-        "weight": 3,
-        "id": "edge-22"
+        "from": "island-4",
+        "to": "island-7",
+        "weight": 4,
+        "id": "edge-25"
       }
     ],
     "metadata": {
-      "layout": "tablet",
+      "layout": "wide",
       "dense": true,
       "phaseId": 6,
       "difficulty": "muito difícil / final",
@@ -723,339 +1206,6 @@
       "generator": "graphology-erdos-renyi",
       "fixed": true
     },
-    "seed": 7168
-  },
-  "wide": {
-    "nodes": [
-      {
-        "id": "start-red",
-        "label": "Barco Vermelho",
-        "boat": "red",
-        "x": 140,
-        "y": 600,
-        "type": "start"
-      },
-      {
-        "id": "start-blue",
-        "label": "Barco Azul",
-        "boat": "blue",
-        "x": 380,
-        "y": 600,
-        "type": "start"
-      },
-      {
-        "id": "start-green",
-        "label": "Barco Verde",
-        "boat": "green",
-        "x": 620,
-        "y": 600,
-        "type": "start"
-      },
-      {
-        "id": "start-black",
-        "label": "Barco Preto",
-        "boat": "black",
-        "x": 860,
-        "y": 600,
-        "type": "start"
-      },
-      {
-        "id": "island-2",
-        "label": "Ilha 2",
-        "sprite": {
-          "sheetIndex": 0,
-          "column": 4,
-          "row": 1
-        },
-        "type": "intermediate",
-        "x": 500,
-        "y": 488
-      },
-      {
-        "id": "island-3",
-        "label": "Ilha 3",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 1,
-          "row": 6
-        },
-        "type": "intermediate",
-        "x": 630,
-        "y": 345
-      },
-      {
-        "id": "island-4",
-        "label": "Ilha 4",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 7,
-          "row": 6
-        },
-        "type": "intermediate",
-        "x": 500,
-        "y": 345
-      },
-      {
-        "id": "island-5",
-        "label": "Ilha 5",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 8,
-          "row": 6
-        },
-        "type": "intermediate",
-        "x": 500,
-        "y": 416
-      },
-      {
-        "id": "island-8",
-        "label": "Ilha 8",
-        "sprite": {
-          "sheetIndex": 0,
-          "column": 3,
-          "row": 9
-        },
-        "type": "intermediate",
-        "x": 660,
-        "y": 202
-      },
-      {
-        "id": "island-9",
-        "label": "Ilha 9",
-        "sprite": {
-          "sheetIndex": 0,
-          "column": 1,
-          "row": 0
-        },
-        "type": "intermediate",
-        "x": 800,
-        "y": 416
-      },
-      {
-        "id": "island-10",
-        "label": "Ilha 10",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 9,
-          "row": 2
-        },
-        "type": "intermediate",
-        "x": 670,
-        "y": 488
-      },
-      {
-        "id": "island-11",
-        "label": "Ilha 11",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 8,
-          "row": 2
-        },
-        "type": "intermediate",
-        "x": 200,
-        "y": 416
-      },
-      {
-        "id": "island-12",
-        "label": "Ilha 12",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 1,
-          "row": 5
-        },
-        "type": "intermediate",
-        "x": 500,
-        "y": 202
-      },
-      {
-        "id": "island-13",
-        "label": "Ilha 13",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 8,
-          "row": 3
-        },
-        "type": "intermediate",
-        "x": 650,
-        "y": 416
-      },
-      {
-        "id": "island-14",
-        "label": "Ilha 14",
-        "sprite": {
-          "sheetIndex": 0,
-          "column": 5,
-          "row": 7
-        },
-        "type": "intermediate",
-        "x": 330,
-        "y": 488
-      },
-      {
-        "id": "island-16",
-        "label": "Ilha 16",
-        "sprite": {
-          "sheetIndex": 1,
-          "column": 0,
-          "row": 4
-        },
-        "type": "intermediate",
-        "x": 370,
-        "y": 345
-      },
-      {
-        "id": "finish",
-        "label": "Ilha do Tesouro",
-        "x": 500,
-        "y": 55,
-        "type": "finish"
-      }
-    ],
-    "edges": [
-      {
-        "from": "island-8",
-        "to": "finish",
-        "weight": 30,
-        "id": "edge-0"
-      },
-      {
-        "from": "island-12",
-        "to": "finish",
-        "weight": 5,
-        "id": "edge-1"
-      },
-      {
-        "from": "island-3",
-        "to": "island-8",
-        "weight": 16,
-        "id": "edge-2"
-      },
-      {
-        "from": "island-4",
-        "to": "island-12",
-        "weight": 4,
-        "id": "edge-3"
-      },
-      {
-        "from": "island-16",
-        "to": "island-12",
-        "weight": 5,
-        "id": "edge-4"
-      },
-      {
-        "from": "island-5",
-        "to": "island-16",
-        "weight": 5,
-        "id": "edge-5"
-      },
-      {
-        "from": "island-9",
-        "to": "island-3",
-        "weight": 11,
-        "id": "edge-6"
-      },
-      {
-        "from": "island-11",
-        "to": "island-16",
-        "weight": 25,
-        "id": "edge-7"
-      },
-      {
-        "from": "island-13",
-        "to": "island-4",
-        "weight": 12,
-        "id": "edge-8"
-      },
-      {
-        "from": "island-2",
-        "to": "island-13",
-        "weight": 5,
-        "id": "edge-9"
-      },
-      {
-        "from": "island-10",
-        "to": "island-9",
-        "weight": 15,
-        "id": "edge-10"
-      },
-      {
-        "from": "island-14",
-        "to": "island-16",
-        "weight": 19,
-        "id": "edge-11"
-      },
-      {
-        "from": "start-red",
-        "to": "island-11",
-        "weight": 8,
-        "id": "edge-12"
-      },
-      {
-        "from": "start-blue",
-        "to": "island-2",
-        "weight": 5,
-        "id": "edge-13"
-      },
-      {
-        "from": "start-green",
-        "to": "island-2",
-        "weight": 18,
-        "id": "edge-14"
-      },
-      {
-        "from": "start-black",
-        "to": "island-9",
-        "weight": 19,
-        "id": "edge-15"
-      },
-      {
-        "from": "island-14",
-        "to": "island-5",
-        "weight": 3,
-        "id": "edge-16"
-      },
-      {
-        "from": "start-black",
-        "to": "island-10",
-        "weight": 15,
-        "id": "edge-17"
-      },
-      {
-        "from": "start-red",
-        "to": "island-14",
-        "weight": 15,
-        "id": "edge-18"
-      },
-      {
-        "from": "island-12",
-        "to": "island-8",
-        "weight": 18,
-        "id": "edge-19"
-      }
-    ],
-    "metadata": {
-      "layout": "wide",
-      "dense": true,
-      "phaseId": 6,
-      "difficulty": "muito difícil / final",
-      "challengeType": "dijkstra",
-      "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.",
-      "directed": true,
-      "islandCount": 12,
-      "score": {
-        "maxScore": 6000,
-        "targetTimeSeconds": 180
-      },
-      "hints": [
-        "Comece atribuindo custo 0 à posição inicial do barco e considere as ilhas ainda sem custo conhecido.",
-        "Calcule o custo para chegar às ilhas vizinhas da posição inicial.",
-        "Escolha o vértice não visitado com o menor custo acumulado.",
-        "A partir dele, verifique se existe um caminho mais barato para seus vizinhos e atualize os valores.",
-        "Repita: menor custo não visitado → atualizar vizinhos → marcar como visitado, até chegar ao vértice do tesouro."
-      ],
-      "generator": "graphology-erdos-renyi",
-      "fixed": true
-    },
-    "seed": 55377
+    "seed": 39812169
   }
 }

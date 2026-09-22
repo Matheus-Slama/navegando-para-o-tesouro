@@ -9,11 +9,11 @@ export const DIJKSTRA_STEPS = [
   },
   {
     title: 'Escolha o menor custo',
-    text: 'Entre os pontos ainda não confirmados, escolha o menor custo total desde o barco. Comece pelo próprio barco.'
+    text: 'Escolha o menor custo total entre os pontos descobertos ainda não confirmados que têm saídas pendentes, ou o tesouro. Respeite o sentido das setas.'
   },
   {
     title: 'Confirme o ponto',
-    text: 'Marque o ponto escolhido como confirmado. Seu menor custo está definido. Se for o tesouro, vá ao passo 8.'
+    text: 'Marque o ponto escolhido como confirmado. Seu menor custo está definido. Se for o tesouro, a busca terminou.'
   },
   {
     title: 'Some o próximo trecho',
@@ -28,8 +28,8 @@ export const DIJKSTRA_STEPS = [
     text: 'Após examinar todas as saídas, volte ao passo 3. Continue até confirmar o tesouro.'
   },
   {
-    title: 'Recupere a rota',
-    text: 'Do tesouro, siga os pontos anteriores até o barco. Inverta a sequência: esse é o caminho de menor custo.'
+    title: 'Tesouro encontrado',
+    text: 'O tesouro foi confirmado. Encontramos o menor custo desde o barco.'
   },
   {
     title: 'Compare os barcos',

@@ -33,6 +33,7 @@ function DijkstraWalkthrough({ onExit, layout }) {
   const frames = walkthroughs['start-blue'];
   const frame = frames[index];
   const comparing = frame.step === 8;
+  const selectedBoatId = comparing ? comparedBoat : 'start-blue';
   const current = comparing ? walkthroughs[comparedBoat].at(-1) : frame;
   const isLast = index === frames.length - 1;
   const treasure = graph.nodes.find((node) => node.type === 'finish');
@@ -82,7 +83,7 @@ function DijkstraWalkthrough({ onExit, layout }) {
           return <div key={node.id}>
             {(active || onPath || confirmed) && <span className="dijkstra-fixed-map__halo" aria-hidden="true" data-active={active || onPath} data-confirmed={confirmed}
               style={{ left: node.x / 10 + '%', top: node.y / 6.5 + '%', width: radii.x / 5 + '%', height: radii.y / 3.25 + '%' }} />}
-            {current.showCosts && <span className="dijkstra-fixed-map__cost" data-node-id={node.id} data-active={active || onPath} data-confirmed={confirmed} data-type={node.type}
+            {current.showCosts && (node.type !== 'start' || node.id === selectedBoatId) && <span className="dijkstra-fixed-map__cost" data-node-id={node.id} data-active={active || onPath} data-confirmed={confirmed} data-type={node.type}
               style={{ left: node.x / 10 + '%', top: node.y / 6.5 + '%' }}
               aria-label={node.label + ': custo ' + cost(current.distances[node.id]) + (confirmed ? ', confirmado' : ', provisório')}
               title={node.label + ' · Custo: ' + cost(current.distances[node.id]) + (current.previous[node.id] ? ' · Anterior: ' + graph.nodes.find((item) => item.id === current.previous[node.id]).label : '')}>

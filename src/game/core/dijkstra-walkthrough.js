@@ -1,4 +1,5 @@
 import { DIJKSTRA_STEPS } from '@/game/config/dijkstra-steps';
+import { getNextDijkstraStep } from '@/game/core/dijkstra';
 
 const format = (value) => Number.isFinite(value) ? String(value) : '∞';
 
@@ -23,27 +24,23 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
   add(1, { currentId: startId, text: 'Veja os custos junto aos pontos: 0 na origem e ∞ nos demais.' });
 
   while (confirmed.size < nodes.size) {
-    const currentId = graph.nodes.filter((node) => !confirmed.has(node.id))
-      .reduce((best, node) => distances[node.id] < (best ? distances[best] : Infinity) ? node.id : best, null);
+    const { currentId, neighbors } = getNextDijkstraStep(graph.edges, distances, confirmed, finishId, graph.metadata.directed);
     if (!currentId) {
-      add(6, { title: 'Não há caminho', text: 'Os pontos restantes têm custo ∞. O tesouro não pode ser alcançado desta origem.' });
+      add(6, { title: 'Não há caminho', text: 'Não há mais pontos alcançáveis com saídas pendentes. O tesouro não pode ser alcançado desta origem.' });
       return frames;
     }
-    add(2, { currentId, text: `${name(currentId)} o menor custo ainda não confirmado.` });
+    add(2, { currentId, text: `${name(currentId)}: custo ${distances[currentId]}, o menor entre os pontos que ainda podem avançar ou o tesouro. Ilhas cujas saídas só levam a pontos confirmados são ignoradas.` });
     confirmed.add(currentId);
     add(3, { currentId, text: `${name(currentId)}: custo ${distances[currentId]} confirmado. O ✓ marca um valor definitivo.` });
     if (currentId === finishId) break;
 
-    const neighbors = graph.edges.flatMap((edge) => edge.from === currentId
-      ? [{ edge, targetId: edge.to }]
-      : !graph.metadata.directed && edge.to === currentId ? [{ edge, targetId: edge.from }] : []);
-    for (const { edge, targetId } of neighbors) {
+    for (const { edge, target: targetId } of neighbors) {
       if (confirmed.has(targetId)) continue;
       const oldDistance = distances[targetId];
       const candidate = distances[currentId] + edge.weight;
       const improved = candidate < oldDistance;
       const focus = { currentId, targetId, edgeIds: [edge.id] };
-      add(4, { ...focus, text: `${name(currentId)} → ${name(targetId)}. Some o custo acumulado ao peso da rota destacada.`, formula: `${distances[currentId]} + ${edge.weight} = ${candidate}` });
+      add(4, { ...focus, text: `${name(currentId)} → ${name(targetId)}. Siga a seta que sai do ponto atual e some o custo acumulado ao peso da rota destacada.`, formula: `${distances[currentId]} + ${edge.weight} = ${candidate}` });
       if (improved) {
         distances[targetId] = candidate;
         previous[targetId] = currentId;
@@ -55,7 +52,7 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
         formula: `${candidate} ${improved ? '<' : '≥'} ${format(oldDistance)}`
       });
     }
-    add(6, { currentId, text: `Terminamos as saídas de ${name(currentId)}. Agora escolha novamente o menor custo não confirmado.` });
+    add(6, { currentId, text: `Terminamos as saídas de ${name(currentId)}. Escolha o próximo menor custo, ignorando ilhas sem saídas para pontos ainda não confirmados. O tesouro continua sendo um destino válido.` });
   }
 
   const path = [finishId];
@@ -66,10 +63,9 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
     const edge = graph.edges.find((item) => (item.from === source && item.to === target) || (!graph.metadata.directed && item.from === target && item.to === source));
     path.unshift(source);
     edgeIds.unshift(edge.id);
-    add(7, { currentId: source, targetId: target, path: [...path], edgeIds: [...edgeIds], text: `O anterior de ${name(target)} é ${name(source)}. A rota dourada recupera o caminho até o tesouro.` });
   }
   const weights = edgeIds.map((id) => graph.edges.find((edge) => edge.id === id).weight);
-  add(7, { path: [...path], edgeIds: [...edgeIds], title: 'Caminho encontrado', text: `Do ${name(startId).toLowerCase()} até o tesouro: custo ${distances[finishId]}. Siga a rota dourada.`, formula: `${weights.join(' + ')} = ${distances[finishId]}` });
+  add(7, { currentId: finishId, path: [...path], edgeIds: [...edgeIds], text: `Chegamos ao tesouro! O menor custo desde o ${name(startId).toLowerCase()} é ${distances[finishId]}.`, formula: `${weights.join(' + ')} = ${distances[finishId]}` });
   add(8, { path: [...path], edgeIds: [...edgeIds] });
   return frames;
 }

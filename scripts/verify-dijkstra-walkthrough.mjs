@@ -4,6 +4,53 @@ import { register } from 'node:module';
 register('./map-test-loader.mjs', import.meta.url);
 const { DIJKSTRA_FIXED_PHASE, getDijkstraFixedMap } = await import('../src/game/config/dijkstra-fixed-map.js');
 const { createDijkstraWalkthrough } = await import('../src/game/core/dijkstra-walkthrough.js');
+const { isValidGraph } = await import('../src/game/core/map-rules.js');
+const { dijkstra } = await import('../src/game/core/dijkstra.js');
+
+// O atalho barato só existe se uma seta de entrada for percorrida ao contrário.
+const directionGraph = {
+  nodes: ['start-blue', 'ahead', 'behind', 'finish'].map((id) => ({ id, label: id })),
+  edges: [
+    { id: 'incoming', from: 'behind', to: 'start-blue', weight: 1 },
+    { id: 'shortcut', from: 'behind', to: 'finish', weight: 1 },
+    { id: 'outgoing', from: 'start-blue', to: 'ahead', weight: 5 },
+    { id: 'arrival', from: 'ahead', to: 'finish', weight: 5 }
+  ],
+  metadata: { directed: true }
+};
+const directionFrames = createDijkstraWalkthrough(directionGraph);
+assert.equal(directionFrames.at(-1).distances.finish, 10);
+assert.ok(directionFrames.every((frame) => frame.distances.behind === Infinity));
+assert.equal(dijkstra(directionGraph.nodes, directionGraph.edges, 'start-blue', 'finish', true).distance, 10);
+assert.equal(dijkstra(directionGraph.nodes, directionGraph.edges, 'start-blue', 'finish', false).distance, 2);
+
+const exhaustedBranch = {
+  nodes: directionGraph.nodes,
+  edges: [
+    { id: 'ahead', from: 'start-blue', to: 'ahead', weight: 1 },
+    { id: 'behind', from: 'start-blue', to: 'behind', weight: 2 },
+    { id: 'arrival', from: 'ahead', to: 'finish', weight: 4 },
+    { id: 'return', from: 'behind', to: 'ahead', weight: 1 }
+  ],
+  metadata: { directed: true }
+};
+const exhaustedFrames = createDijkstraWalkthrough(exhaustedBranch);
+assert.equal(exhaustedFrames.at(-1).distances.finish, 5);
+assert.ok(!exhaustedFrames.some((frame) => frame.currentId === 'behind'),
+  'Uma ilha cuja única saída leva a um ponto confirmado não deve receber o foco.');
+assert.equal(dijkstra(exhaustedBranch.nodes, exhaustedBranch.edges, 'start-blue', 'finish').distance, 5);
+
+// Outro ramo ainda precisa ser analisado quando sua seta permite avançar.
+const usefulBranch = structuredClone(exhaustedBranch);
+usefulBranch.edges.at(-1).to = 'finish';
+const usefulFrames = createDijkstraWalkthrough(usefulBranch);
+assert.ok(usefulFrames.some((frame) => frame.step === 2 && frame.currentId === 'behind'));
+assert.equal(usefulFrames.at(-1).distances.finish, 3);
+assert.equal(dijkstra(usefulBranch.nodes, usefulBranch.edges, 'start-blue', 'finish').distance, 3);
+
+const unreachable = { ...exhaustedBranch, edges: exhaustedBranch.edges.filter((edge) => edge.to !== 'finish') };
+assert.equal(createDijkstraWalkthrough(unreachable).at(-1).title, 'Não há caminho');
+assert.equal(dijkstra(unreachable.nodes, unreachable.edges, 'start-blue', 'finish').distance, Infinity);
 
 // Oráculo independente: Bellman-Ford, sem usar a seleção de Dijkstra.
 function shortestCosts(graph, source) {
@@ -25,6 +72,33 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   }
   assert.equal(graph.results.winner.startId, 'start-blue');
   assert.equal(graph.results.winner.shortestPathCount, 1);
+  // Remover a Ilha 18 encurta a rota do tablet em um ponto.
+  const phase = { ...DIJKSTRA_FIXED_PHASE, minimumWinnerPathNodes: layout === 'tablet' ? 5 : DIJKSTRA_FIXED_PHASE.minimumWinnerPathNodes };
+  assert.ok(isValidGraph(graph, graph.results, phase), `${layout}: mapa fora das regras do tutorial.`);
+  assert.equal(graph.metadata.fixed, true);
+  const islands = graph.nodes.filter((node) => node.type === 'intermediate');
+  assert.equal(graph.metadata.islandCount, islands.length);
+  assert.ok(islands.length >= 15, `${layout}: o tutorial deve ter pelo menos 15 ilhas intermediárias.`);
+  assert.ok(graph.edges.length >= 23, `${layout}: o tutorial deve ter pelo menos 23 arestas.`);
+  assert.ok(!graph.nodes.some((node) => node.id === 'island-18'), `${layout}: a Ilha 18 foi removida.`);
+  assert.ok(!graph.edges.some((edge) => edge.from === 'island-18' || edge.to === 'island-18'),
+    `${layout}: nenhuma conexão deve apontar para a Ilha 18.`);
+  const blueFrames = createDijkstraWalkthrough(graph);
+  if (layout === 'wide') {
+    assert.ok(!blueFrames.some((frame) => frame.currentId === 'island-8'),
+      'A Ilha 8 não deve receber o foco depois que sua única saída, a Ilha 7, foi confirmada.');
+    assert.ok(blueFrames.some((frame) => frame.targetId === 'island-8'),
+      'A rota que chega à Ilha 8 continua sendo calculada no sentido correto.');
+  }
+  // A bifurcação deve aparecer na demonstração, antes de confirmar o tesouro.
+  assert.ok(graph.nodes.some((node) => node.type === 'intermediate'
+    && graph.results.winner.path.includes(node.id)
+    && new Set(blueFrames.filter((frame) => frame.step === 4 && frame.currentId === node.id)
+      .map((frame) => frame.targetId)).size >= 2),
+  `${layout}: a rota azul deve explorar uma ilha com várias saídas.`);
+  assert.ok(blueFrames.some((frame, index) => frame.step === 5 && frame.improved
+    && Number.isFinite(blueFrames[index - 1].distances[frame.targetId])),
+  `${layout}: a demonstração deve melhorar um custo já conhecido.`);
   for (const edge of graph.edges) {
     assert.ok(Number.isInteger(edge.weight) && edge.weight >= DIJKSTRA_FIXED_PHASE.weights.min && edge.weight <= DIJKSTRA_FIXED_PHASE.weights.max,
       `${layout}: peso inválido em ${edge.id}.`);
@@ -41,6 +115,16 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
       assert.notEqual(frame.previous, frames[i - 1].previous);
       for (const id of frame.confirmed) assert.equal(frame.distances[id], oracle[id], 'Só um custo ótimo pode ser confirmado.');
       for (const edgeId of frame.edgeIds) assert.ok(graph.edges.some((edge) => edge.id === edgeId));
+      if (frame.step === 2 && frame.currentId !== 'finish') {
+        assert.ok(graph.edges.some((edge) => edge.from === frame.currentId
+          && !frame.confirmed.includes(edge.to)), 'A ilha selecionada precisa ter uma saída pendente.');
+      }
+      if (frame.step === 4 || frame.step === 5) {
+        const edge = graph.edges.find((edge) => edge.id === frame.edgeIds[0]);
+        assert.equal(edge.from, frame.currentId, 'A análise só pode usar setas que saem do ponto atual.');
+        assert.equal(edge.to, frame.targetId, 'O vizinho deve ser o destino da seta.');
+        assert.ok(!frames[i - 1].confirmed.includes(frame.targetId), 'Um ponto confirmado não deve ser reavaliado.');
+      }
       if (frame.step === 5) {
         const before = frames[i - 1];
         assert.equal(before.step, 4);
@@ -52,6 +136,12 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
       }
     }
     const final = frames.at(-1);
+    const arrivalIndex = frames.findIndex((frame) => frame.step === 3 && frame.currentId === 'finish');
+    assert.ok(arrivalIndex >= 0);
+    assert.deepEqual(frames.slice(arrivalIndex + 1).map((frame) => frame.step), [7, 8],
+      'Após confirmar o tesouro, mostre o resultado e a comparação sem voltar pelas ilhas.');
+    assert.equal(frames[arrivalIndex + 1].currentId, 'finish');
+    assert.deepEqual(frames[arrivalIndex + 1].path, final.path);
     assert.equal(final.step, 8);
     assert.equal(final.distances.finish, oracle.finish);
     assert.equal(final.distances.finish, result.distance);
