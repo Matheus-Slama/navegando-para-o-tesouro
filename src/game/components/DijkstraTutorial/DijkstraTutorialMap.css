@@ -42,7 +42,7 @@
 .dijkstra-fixed-map__arrow:hover:not(:disabled) img { filter: brightness(1.18); }
 .dijkstra-fixed-map__arrow:focus-visible img { filter: brightness(1.4); }
 .dijkstra-fixed-map__arrow:active:not(:disabled) img { translate: 0 1px; }
-.dijkstra-fixed-map__formula { padding: 0.35rem 0.5rem; border-radius: 0.35rem; background: #f3dda8; font-weight: 750; font-variant-numeric: tabular-nums; }
+.dijkstra-fixed-map__formula { padding: 0.35rem 0.5rem; border-radius: 0.35rem; background: #f3dda8; font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
 .dijkstra-fixed-map__comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 6.5rem)); justify-content: center; gap: 0.5rem; margin-top: 0.5rem; }
 .game-hint .dijkstra-fixed-map__comparison button {
   min-height: 2rem;
@@ -85,6 +85,7 @@
 .dijkstra-fixed-map__cost strong { font-variant-numeric: tabular-nums; }
 .dijkstra-fixed-map__infinity,
 .dijkstra-fixed-map__cost strong[data-infinite='true'] { font-size: 1.5em; font-weight: 700; line-height: 0.8; vertical-align: -0.05em; }
+.dijkstra-fixed-map__formula .dijkstra-fixed-map__infinity { font-size: 1.15em; line-height: inherit; vertical-align: baseline; }
 .dijkstra-fixed-map__cost[data-type='start'] { transform: translate(-50%, calc(-100% - 2.3rem)); }
 .dijkstra-fixed-map__cost[data-type='finish'] { transform: translate(-50%, calc(-100% - 1.6rem)); }
 .dijkstra-fixed-map__cost[data-confirmed='true'] { background: #165640; border-color: #9eecc0; }

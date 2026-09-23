@@ -9,7 +9,7 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
   if (graph.edges.some((edge) => !nodes.has(edge.from) || !nodes.has(edge.to) || !Number.isFinite(edge.weight) || edge.weight < 0)) {
     throw new Error('Dijkstra exige conexões válidas com pesos não negativos.');
   }
-  const name = (id) => nodes.get(id).label;
+  const name = (id) => nodes.get(id).type === 'intermediate' ? 'Ilha destacada' : nodes.get(id).label;
   const distances = Object.fromEntries(graph.nodes.map((node) => [node.id, Infinity]));
   const previous = Object.fromEntries(graph.nodes.map((node) => [node.id, null]));
   const confirmed = new Set();
@@ -52,7 +52,8 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
         formula: `${candidate} ${improved ? '<' : '≥'} ${format(oldDistance)}`
       });
     }
-    add(6, { currentId, text: `Terminamos as saídas de ${name(currentId)}. Escolha o próximo menor custo, ignorando ilhas sem saídas para pontos ainda não confirmados. O tesouro continua sendo um destino válido.` });
+    const origin = nodes.get(currentId).type === 'intermediate' ? 'da ilha destacada' : `de ${name(currentId)}`;
+    add(6, { currentId, text: `Terminamos as saídas ${origin}. Escolha o próximo menor custo, ignorando ilhas sem saídas para pontos ainda não confirmados. O tesouro continua sendo um destino válido.` });
   }
 
   const path = [finishId];
