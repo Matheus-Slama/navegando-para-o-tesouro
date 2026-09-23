@@ -22,26 +22,6 @@
 }
 .dijkstra-fixed-map__hint .game-hint { font-size: 0.85rem; }
 .dijkstra-fixed-map__hint--comparison { --game-hint-width: 24rem; }
-.dijkstra-fixed-map__navigation { display: flex; align-items: center; justify-content: center; gap: 0.2rem; margin-top: 0.45rem; }
-.dijkstra-fixed-map__navigation > span { flex: 0 0 auto; color: #795c32; font-size: 0.7rem; text-align: center; font-variant-numeric: tabular-nums; }
-.game-hint .dijkstra-fixed-map__navigation .dijkstra-fixed-map__arrow {
-  flex: 0 1 4.25rem;
-  width: 4.25rem;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.dijkstra-fixed-map__navigation .dijkstra-fixed-map__arrow:focus-visible { outline: none; }
-.game-hint .dijkstra-fixed-map__navigation .dijkstra-fixed-map__arrow:hover { background: transparent; }
-.dijkstra-fixed-map__arrow img { display: block; width: 85%; height: auto; pointer-events: none; user-select: none; }
-.dijkstra-fixed-map__arrow--back img { transform: scaleX(-1); }
-.dijkstra-fixed-map__arrow:hover:not(:disabled) img { filter: brightness(1.18); }
-.dijkstra-fixed-map__arrow:focus-visible img { filter: brightness(1.4); }
-.dijkstra-fixed-map__arrow:active:not(:disabled) img { translate: 0 1px; }
 .dijkstra-fixed-map__formula { padding: 0.35rem 0.5rem; border-radius: 0.35rem; background: #f3dda8; font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
 .dijkstra-fixed-map__comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 6.5rem)); justify-content: center; gap: 0.5rem; margin-top: 0.5rem; }
 .game-hint .dijkstra-fixed-map__comparison button {

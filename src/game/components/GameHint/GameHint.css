@@ -58,6 +58,27 @@
 .game-hint button:disabled { opacity: 0.35; cursor: default; }
 .game-hint button:focus-visible { outline: 3px solid #492508; outline-offset: 2px; }
 
+.game-hint__navigation { display: flex; align-items: center; justify-content: center; gap: 0.2rem; margin-top: 0.45rem; }
+.game-hint__navigation > span { flex: 0 0 auto; color: #795c32; font-size: 0.7rem; text-align: center; font-variant-numeric: tabular-nums; }
+.game-hint .game-hint__navigation .game-hint__arrow {
+  flex: 0 1 4.25rem;
+  width: 4.25rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.game-hint .game-hint__navigation .game-hint__arrow:focus-visible { outline: none; }
+.game-hint .game-hint__navigation .game-hint__arrow:hover { background: transparent; }
+.game-hint__arrow img { display: block; width: 85%; height: auto; pointer-events: none; user-select: none; }
+.game-hint__arrow--back img { transform: scaleX(-1); }
+.game-hint__arrow:hover:not(:disabled) img { filter: brightness(1.18); }
+.game-hint__arrow:focus-visible img { filter: brightness(1.4); }
+.game-hint__arrow:active:not(:disabled) img { translate: 0 1px; }
+
 .game-hint__toggle {
   display: grid;
   place-items: center;

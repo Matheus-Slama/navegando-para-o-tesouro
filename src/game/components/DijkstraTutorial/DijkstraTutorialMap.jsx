@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
 import { PHASES } from '@/game/config/phases';
 import { DIJKSTRA_FIXED_PHASE, getDijkstraFixedMap } from '@/game/config/dijkstra-fixed-map';
 import { createDijkstraWalkthrough } from '@/game/core/dijkstra-walkthrough';
@@ -10,6 +9,7 @@ import { MapGraph } from '@/game/components/MapGraph/MapGraph';
 import { TreasureAnchor } from '@/game/components/TreasureAnchor/TreasureAnchor';
 import { BoatDock } from '@/game/components/BoatDock/BoatDock';
 import { GameHint } from '@/game/components/GameHint/GameHint';
+import { GameHintNavigation } from '@/game/components/GameHint/GameHintNavigation';
 import '@/game/components/GameBoard/GameBoard.css';
 import './DijkstraTutorialMap.css';
 
@@ -101,15 +101,15 @@ function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout }) {
           <button type="button" onClick={onPlay}>Voltar ao jogo</button>
         </div>
       ) : (
-        <nav className="dijkstra-fixed-map__navigation" aria-label="Navegação da demonstração">
-          <button className="dijkstra-fixed-map__arrow dijkstra-fixed-map__arrow--back" type="button" disabled={index === 0} aria-label="Passo anterior" aria-keyshortcuts="ArrowLeft" title="Voltar (←)" onClick={previousStep}>
-            <Image src="/assets/game/ui/tutorial-arrow.png" alt="" width={1717} height={916} sizes="68px" draggable={false} />
-          </button>
-          <span aria-label={'Cena ' + (index + 1) + ' de ' + totalScenes}>{index + 1}/{totalScenes}</span>
-          <button className="dijkstra-fixed-map__arrow" type="button" aria-label={index === frames.length - 1 ? 'Concluir tutorial' : 'Próximo passo'} aria-keyshortcuts="ArrowRight" title={index === frames.length - 1 ? 'Concluir (→)' : 'Avançar (→)'} onClick={nextStep}>
-            <Image src="/assets/game/ui/tutorial-arrow.png" alt="" width={1717} height={916} sizes="68px" draggable={false} />
-          </button>
-        </nav>
+        <GameHintNavigation
+          index={index}
+          total={totalScenes}
+          onPrevious={previousStep}
+          onNext={nextStep}
+          nextLabel={index === frames.length - 1 ? 'Concluir tutorial' : 'Próximo passo'}
+          nextTitle={index === frames.length - 1 ? 'Concluir (→)' : 'Avançar (→)'}
+          keyboardShortcuts
+        />
       )}>
         <p>{isComplete
           ? 'Você concluiu o tutorial de Dijkstra! Agora é sua vez de encontrar o caminho de menor custo até o tesouro. Reinicie para rever os passos ou volte ao jogo para praticar.'

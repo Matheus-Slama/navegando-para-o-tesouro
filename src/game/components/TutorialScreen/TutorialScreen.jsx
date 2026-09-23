@@ -8,6 +8,7 @@ import { MapGraph } from '@/game/components/MapGraph/MapGraph';
 import { TreasureAnchor } from '@/game/components/TreasureAnchor/TreasureAnchor';
 import { BoatDock } from '@/game/components/BoatDock/BoatDock';
 import { GameHint } from '@/game/components/GameHint/GameHint';
+import { GameHintNavigation } from '@/game/components/GameHint/GameHintNavigation';
 import './TutorialScreen.css';
 import { getMapProfile } from '@/game/core/map-layout';
 
@@ -50,17 +51,14 @@ export function TutorialScreen({ steps, onFinish, layout = 'mobile' }) {
       </div>
 
       <GameHint title={current.title} label="Regras do jogo" dock={layout === 'wide' ? 'top-left' : 'top-right'} footer={
-          <div className="game-hint__actions">
-            {index > 0 && (
-              <button type="button" onClick={() => setIndex(index - 1)}>
-                Voltar
-              </button>
-            )}
-
-            <button type="button" onClick={next}>
-              {isLast ? 'Começar fase 1' : 'Próximo'}
-            </button>
-          </div>
+        <GameHintNavigation
+          index={index}
+          total={steps.length}
+          onPrevious={() => setIndex((value) => Math.max(0, value - 1))}
+          onNext={next}
+          nextLabel={isLast ? 'Começar fase 1' : 'Próximo passo'}
+          nextTitle={isLast ? 'Começar fase 1 (→)' : 'Avançar (→)'}
+        />
       }>
         <p>{current.text}</p>
       </GameHint>
