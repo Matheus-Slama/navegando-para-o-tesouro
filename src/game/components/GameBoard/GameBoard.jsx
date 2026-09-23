@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import { GameHint } from '@/game/components/GameHint/GameHint';
 import { BoatDock } from '@/game/components/BoatDock/BoatDock';
 import { TreasureAnchor } from '@/game/components/TreasureAnchor/TreasureAnchor';
 import { MapGraph } from '@/game/components/MapGraph/MapGraph';
@@ -44,34 +44,20 @@ export function GameBoard({
         />
       </picture>
 
-      <button
-        className="game-board__hint-button"
-        type="button"
-        onClick={onOpenHint}
-        aria-label={`Abrir dica da fase ${phase.id}`}
+      <GameHint
+        title={`Dica da fase ${phase.id}`}
+        label={`Dica da fase ${phase.id}`}
+        minimized={!hintOpen}
+        onMinimizedChange={(value) => value ? onCloseHint() : onOpenHint()}
+        footer={
+          <div className="game-hint__actions">
+            <button type="button" onClick={onCloseHint}>Entendi</button>
+            {phase.hints.length > 1 && <button type="button" onClick={onNextHint}>Outra dica</button>}
+          </div>
+        }
       >
-        <Image
-          src="/assets/game/ui/hint-lantern.png"
-          alt=""
-          width={1254}
-          height={1254}
-          sizes="64px"
-          priority
-        />
-      </button>
-
-      {hintOpen && (
-        <div className="game-board__hint-backdrop" role="presentation">
-          <section className="game-board__hint-modal" role="dialog" aria-modal="true" aria-label={`Dica da fase ${phase.id}`}>
-            <button className="game-board__hint-close" type="button" onClick={onCloseHint} aria-label="Fechar dica">×</button>
-            <p className="game-board__hint-text">{hint}</p>
-            <div className="game-board__hint-actions">
-              <button type="button" onClick={onCloseHint}>Entendi</button>
-              {phase.hints.length > 1 && <button type="button" onClick={onNextHint}>Outra dica</button>}
-            </div>
-          </section>
-        </div>
-      )}
+        <p>{hint}</p>
+      </GameHint>
 
       <DevPanel
         open={devMode}

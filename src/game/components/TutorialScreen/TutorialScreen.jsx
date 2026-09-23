@@ -7,6 +7,7 @@ import { TUTORIAL_GRAPH } from '@/game/config/tutorial';
 import { MapGraph } from '@/game/components/MapGraph/MapGraph';
 import { TreasureAnchor } from '@/game/components/TreasureAnchor/TreasureAnchor';
 import { BoatDock } from '@/game/components/BoatDock/BoatDock';
+import { GameHint } from '@/game/components/GameHint/GameHint';
 import './TutorialScreen.css';
 import { getMapProfile } from '@/game/core/map-layout';
 
@@ -48,16 +49,10 @@ export function TutorialScreen({ steps, onFinish, layout = 'mobile' }) {
         </span>
       </div>
 
-      <div className="tutorial-screen__backdrop">
-        <article className="tutorial-screen__card" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
-          <div className="tutorial-screen__copy">
-            <h1 id="tutorial-title">{current.title}</h1>
-            <p>{current.text}</p>
-          </div>
-
-          <div className="tutorial-screen__actions">
+      <GameHint title={current.title} label="Regras do jogo" dock={layout === 'wide' ? 'top-left' : 'top-right'} footer={
+          <div className="game-hint__actions">
             {index > 0 && (
-              <button type="button" className="tutorial-screen__secondary" onClick={() => setIndex(index - 1)}>
+              <button type="button" onClick={() => setIndex(index - 1)}>
                 Voltar
               </button>
             )}
@@ -66,8 +61,9 @@ export function TutorialScreen({ steps, onFinish, layout = 'mobile' }) {
               {isLast ? 'Começar fase 1' : 'Próximo'}
             </button>
           </div>
-        </article>
-      </div>
+      }>
+        <p>{current.text}</p>
+      </GameHint>
     </section>
   );
 }

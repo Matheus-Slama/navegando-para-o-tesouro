@@ -32,6 +32,10 @@ export const DIJKSTRA_STEPS = [
     text: 'O tesouro foi confirmado. Encontramos o menor custo desde o barco.'
   },
   {
+    title: 'Repita para todos os barcos',
+    text: 'Lembre-se de fazer o mesmo processo para todos os barcos. Assim, você descobre o menor caminho usando Dijkstra.'
+  },
+  {
     title: 'Compare os barcos',
     text: 'Recomece as contas para cada barco. Compare os custos até o tesouro: a menor soma vence.'
   }

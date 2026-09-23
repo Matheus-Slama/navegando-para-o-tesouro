@@ -1,0 +1,103 @@
+.game-hint-layer {
+  position: absolute;
+  z-index: var(--game-hint-z-index, 30);
+  inset: var(--game-hint-top, var(--screen-inset-top, 12px)) var(--game-hint-right, var(--screen-inset-right, 12px)) var(--game-hint-bottom, var(--screen-inset-bottom, 12px)) var(--game-hint-left, var(--screen-inset-left, 12px));
+  pointer-events: none;
+}
+
+.game-hint {
+  position: absolute;
+  display: flex;
+  width: var(--game-hint-width, 20rem);
+  max-width: 100%;
+  max-height: 100%;
+  padding: 14px;
+  color: #2e1a09;
+  background: url('/assets/game/ui/hint-modal-parchment.png') center / 100% 100% no-repeat;
+  font: 400 0.95rem/1.35 var(--font-pirate, Georgia), Georgia, serif;
+  pointer-events: auto;
+}
+.game-hint[data-dock^='top'] { top: 0; }
+.game-hint[data-dock^='bottom'] { bottom: 0; }
+.game-hint[data-dock$='left'] { left: 0; }
+.game-hint[data-dock$='right'] { right: 0; }
+
+/* A faixa externa transparente recebe o arraste. */
+.game-hint__panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  padding: 0.75rem calc(8% + 0.75rem);
+}
+.game-hint__header { display: flex; justify-content: flex-end; flex: 0 0 auto; }
+.game-hint__content { display: flex; flex-direction: column; min-height: 0; }
+.game-hint__content[hidden] { display: none; }
+.game-hint__body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; overflow-wrap: anywhere; scrollbar-width: thin; padding: 0.2rem; }
+.game-hint__title { margin: 0 0 0.5rem; color: #492508; font: 400 1.2rem/1.15 var(--font-pirate, Georgia), Georgia, serif; }
+.game-hint__body p { margin: 0.45rem 0; }
+.game-hint__body img { max-width: 100%; height: auto; }
+.game-hint__footer { flex: 0 0 auto; padding-top: 0.4rem; padding-bottom: 0.75rem; }
+.game-hint__footer > :first-child { margin-top: 0; }
+.game-hint__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.game-hint__actions > button { flex: 1 1 5rem; }
+.game-hint__body button,
+.game-hint__footer button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.4rem 0.6rem;
+  border: 2px solid #482608;
+  border-radius: 0.55rem;
+  background: #7c430f;
+  color: #fff8db;
+  font: inherit;
+  cursor: pointer;
+}
+.game-hint__body button:hover:not(:disabled),
+.game-hint__footer button:hover:not(:disabled) { background: #9d5a19; }
+.game-hint button:disabled { opacity: 0.35; cursor: default; }
+.game-hint button:focus-visible { outline: 3px solid #492508; outline-offset: 2px; }
+
+.game-hint__toggle {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin-right: 0.1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: #492508;
+  cursor: pointer;
+}
+.game-hint__toggle img { width: 44px; height: 44px; object-fit: contain; pointer-events: none; user-select: none; }
+.game-hint__drag-handle {
+  position: absolute;
+  z-index: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.game-hint__drag-handle[data-edge='top'] { top: 0.5rem; left: calc(14px + 1rem); right: calc(14px + 1rem); height: 14px; }
+.game-hint__drag-handle[data-edge='bottom'] { bottom: 0.5rem; left: calc(14px + 1rem); right: calc(14px + 1rem); height: 14px; }
+.game-hint__drag-handle[data-edge='left'] { top: 0.5rem; bottom: 0.5rem; left: 1rem; width: 14px; }
+.game-hint__drag-handle[data-edge='right'] { top: 0.5rem; bottom: 0.5rem; right: 1rem; width: 14px; }
+.game-hint[data-dragging='true'] { user-select: none; }
+.game-hint[data-dragging='true'] .game-hint__drag-handle { cursor: grabbing; }
+
+.game-hint[data-minimized='true'] { width: 72px; height: 72px; background: transparent; }
+.game-hint[data-minimized='true'] .game-hint__panel { padding: 0; }
+.game-hint[data-minimized='true'] .game-hint__toggle:focus-visible { outline-color: #ffe3a6; }
+
+@media (max-height: 480px) {
+  .game-hint { font-size: 0.85rem; }
+  .game-hint__panel { padding-block: 0.5rem; }
+  .game-hint__title { font-size: 1.05rem; }
+}

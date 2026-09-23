@@ -123,6 +123,7 @@ export function GameShell() {
       <main className="game-page">
         <DijkstraTutorialMap
           onExit={() => setScreen('start')}
+          onPlay={startGame}
           layout={layout}
         />
       </main>

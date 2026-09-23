@@ -9,33 +9,34 @@ import { getMapProfile, getNodeRadii } from '@/game/core/map-layout';
 import { MapGraph } from '@/game/components/MapGraph/MapGraph';
 import { TreasureAnchor } from '@/game/components/TreasureAnchor/TreasureAnchor';
 import { BoatDock } from '@/game/components/BoatDock/BoatDock';
+import { GameHint } from '@/game/components/GameHint/GameHint';
 import '@/game/components/GameBoard/GameBoard.css';
-import '@/game/components/TutorialScreen/TutorialScreen.css';
 import './DijkstraTutorialMap.css';
 
 const cost = (value) => Number.isFinite(value) ? value : '∞';
 const highlightInfinity = (text) => text.split(/(∞)/).map((part, index) => part === '∞'
   ? <span className="dijkstra-fixed-map__infinity" key={index}>∞</span> : part);
 
-export function DijkstraTutorialMap({ onExit, layout = 'mobile' }) {
+export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile' }) {
+  const [run, setRun] = useState(0);
   // Os formatos usam mapas distintos: uma mudança de formato reinicia as contas.
-  return <DijkstraWalkthrough key={layout} onExit={onExit} layout={layout} />;
+  return <DijkstraWalkthrough key={`${layout}-${run}`} onExit={onExit} onPlay={onPlay} onRestart={() => setRun((value) => value + 1)} layout={layout} />;
 }
 
-function DijkstraWalkthrough({ onExit, layout }) {
+function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout }) {
   const [index, setIndex] = useState(0);
-  const [collapsed, setCollapsed] = useState(false);
   const [comparedBoat, setComparedBoat] = useState('start-blue');
   const graph = getDijkstraFixedMap(layout);
   const walkthroughs = useMemo(() => Object.fromEntries(graph.results.all.map((result) => [
     result.startId, createDijkstraWalkthrough(graph, result.startId)
   ])), [graph]);
   const frames = walkthroughs['start-blue'];
-  const frame = frames[index];
-  const comparing = frame.step === 8;
-  const selectedBoatId = comparing ? comparedBoat : 'start-blue';
-  const current = comparing ? walkthroughs[comparedBoat].at(-1) : frame;
-  const isLast = index === frames.length - 1;
+  const isComplete = index === frames.length;
+  const frame = frames[Math.min(index, frames.length - 1)];
+  const comparing = !isComplete && frame.step === 9;
+  const selectedBoatId = frame.step === 9 ? comparedBoat : 'start-blue';
+  const current = frame.step === 9 ? walkthroughs[comparedBoat].at(-1) : frame;
+  const totalScenes = frames.length + 1;
   const treasure = graph.nodes.find((node) => node.type === 'finish');
   const boats = graph.nodes.filter((node) => node.type === 'start');
   const focus = graph.nodes.filter((node) => node.id === current.currentId || node.id === current.targetId);
@@ -46,9 +47,8 @@ function DijkstraWalkthrough({ onExit, layout }) {
 
   const previousStep = useCallback(() => setIndex((value) => Math.max(0, value - 1)), []);
   const nextStep = useCallback(() => {
-    if (isLast) onExit();
-    else setIndex((value) => Math.min(frames.length - 1, value + 1));
-  }, [isLast, onExit, frames.length]);
+    setIndex((value) => Math.min(frames.length, value + 1));
+  }, [frames.length]);
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -95,34 +95,34 @@ function DijkstraWalkthrough({ onExit, layout }) {
 
       <button className="dijkstra-fixed-map__exit" type="button" onClick={onExit}>← Menu</button>
 
-      <aside className="tutorial-screen__card dijkstra-fixed-map__popover" data-dock={dock} aria-labelledby="dijkstra-step-title">
-        <header className="dijkstra-fixed-map__popover-header">
-          <button type="button" aria-label={collapsed ? 'Mostrar explicação' : 'Recolher explicação'} aria-expanded={!collapsed} aria-controls="dijkstra-explanation" onClick={() => setCollapsed((value) => !value)}>{collapsed ? '+' : '−'}</button>
-        </header>
-        <div id="dijkstra-explanation" hidden={collapsed}>
-          <div aria-live="polite" aria-atomic="true">
-            <h1 id="dijkstra-step-title">{frame.title}</h1>
-            <p>{comparing ? 'Cada barco começa do zero. Toque abaixo para comparar as rotas.' : highlightInfinity(frame.text)}</p>
-            {frame.formula && <p className="dijkstra-fixed-map__formula">{highlightInfinity(frame.formula)}</p>}
-          </div>
-          {comparing &&
-            <div className="dijkstra-fixed-map__comparison" aria-label="Comparar custos dos barcos">
-              {graph.results.all.map((result) => <button key={result.startId} type="button" aria-pressed={comparedBoat === result.startId} onClick={() => setComparedBoat(result.startId)}>
-                {result.label.replace('Barco ', '')}: {result.distance}{result.startId === winner.startId ? ' ★' : ''}
-              </button>)}
-            </div>
-          }
+      <GameHint title={isComplete ? 'Tutorial concluído!' : frame.title} label="Regras de Dijkstra" dock={dock} className={`dijkstra-fixed-map__hint${comparing ? ' dijkstra-fixed-map__hint--comparison' : ''}`} footer={isComplete ? (
+        <div className="dijkstra-fixed-map__completion-actions">
+          <button type="button" onClick={onRestart}>Reiniciar tutorial</button>
+          <button type="button" onClick={onPlay}>Voltar ao jogo</button>
         </div>
+      ) : (
         <nav className="dijkstra-fixed-map__navigation" aria-label="Navegação da demonstração">
           <button className="dijkstra-fixed-map__arrow dijkstra-fixed-map__arrow--back" type="button" disabled={index === 0} aria-label="Passo anterior" aria-keyshortcuts="ArrowLeft" title="Voltar (←)" onClick={previousStep}>
             <Image src="/assets/game/ui/tutorial-arrow.png" alt="" width={1717} height={916} sizes="68px" draggable={false} />
           </button>
-          <span aria-label={'Cena ' + (index + 1) + ' de ' + frames.length}>{index + 1}/{frames.length}</span>
-          <button className="dijkstra-fixed-map__arrow" type="button" aria-label={isLast ? 'Concluir tutorial e voltar ao menu' : 'Próximo passo'} aria-keyshortcuts="ArrowRight" title={isLast ? 'Concluir (→)' : 'Avançar (→)'} onClick={nextStep}>
+          <span aria-label={'Cena ' + (index + 1) + ' de ' + totalScenes}>{index + 1}/{totalScenes}</span>
+          <button className="dijkstra-fixed-map__arrow" type="button" aria-label={index === frames.length - 1 ? 'Concluir tutorial' : 'Próximo passo'} aria-keyshortcuts="ArrowRight" title={index === frames.length - 1 ? 'Concluir (→)' : 'Avançar (→)'} onClick={nextStep}>
             <Image src="/assets/game/ui/tutorial-arrow.png" alt="" width={1717} height={916} sizes="68px" draggable={false} />
           </button>
         </nav>
-      </aside>
+      )}>
+        <p>{isComplete
+          ? 'Você concluiu o tutorial de Dijkstra! Agora é sua vez de encontrar o caminho de menor custo até o tesouro. Reinicie para rever os passos ou volte ao jogo para praticar.'
+          : comparing ? 'Cada barco começa do zero. Toque abaixo para comparar as rotas.' : highlightInfinity(frame.text)}</p>
+        {!isComplete && frame.formula && <p className="dijkstra-fixed-map__formula">{highlightInfinity(frame.formula)}</p>}
+        {comparing &&
+          <div className="dijkstra-fixed-map__comparison" aria-label="Comparar custos dos barcos">
+            {graph.results.all.map((result) => <button key={result.startId} type="button" data-boat={result.boat} aria-pressed={comparedBoat === result.startId} onClick={() => setComparedBoat(result.startId)}>
+              {result.label.replace('Barco ', '')}: {result.distance}{result.startId === winner.startId ? ' ★' : ''}
+            </button>)}
+          </div>
+        }
+      </GameHint>
     </section>
   );
 }

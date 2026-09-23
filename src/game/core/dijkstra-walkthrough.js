@@ -67,5 +67,6 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
   const weights = edgeIds.map((id) => graph.edges.find((edge) => edge.id === id).weight);
   add(7, { currentId: finishId, path: [...path], edgeIds: [...edgeIds], text: `Chegamos ao tesouro! O menor custo desde o ${name(startId).toLowerCase()} é ${distances[finishId]}.`, formula: `${weights.join(' + ')} = ${distances[finishId]}` });
   add(8, { path: [...path], edgeIds: [...edgeIds] });
+  add(9, { path: [...path], edgeIds: [...edgeIds] });
   return frames;
 }

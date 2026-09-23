@@ -138,11 +138,11 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
     const final = frames.at(-1);
     const arrivalIndex = frames.findIndex((frame) => frame.step === 3 && frame.currentId === 'finish');
     assert.ok(arrivalIndex >= 0);
-    assert.deepEqual(frames.slice(arrivalIndex + 1).map((frame) => frame.step), [7, 8],
-      'Após confirmar o tesouro, mostre o resultado e a comparação sem voltar pelas ilhas.');
+    assert.deepEqual(frames.slice(arrivalIndex + 1).map((frame) => frame.step), [7, 8, 9],
+      'Após confirmar o tesouro, mostre o resultado, o lembrete e a comparação sem voltar pelas ilhas.');
     assert.equal(frames[arrivalIndex + 1].currentId, 'finish');
     assert.deepEqual(frames[arrivalIndex + 1].path, final.path);
-    assert.equal(final.step, 8);
+    assert.equal(final.step, 9);
     assert.equal(final.distances.finish, oracle.finish);
     assert.equal(final.distances.finish, result.distance);
     assert.deepEqual(final.path, result.path);
