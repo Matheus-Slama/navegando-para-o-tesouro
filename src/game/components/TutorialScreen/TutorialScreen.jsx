@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { PHASES } from '@/game/config/phases';
 import { TUTORIAL_GRAPH } from '@/game/config/tutorial';
 import { MapGraph } from '@/game/components/MapGraph/MapGraph';
@@ -17,6 +16,7 @@ const TUTORIAL_PHASE = PHASES[0];
 export function TutorialScreen({ steps, onFinish, layout = 'mobile' }) {
   const graph = { ...TUTORIAL_GRAPH, metadata: { ...TUTORIAL_GRAPH.metadata, layout } };
   const [index, setIndex] = useState(0);
+  const [routeStyle, setRouteStyle] = useState('arrows-black');
   const current = steps[index];
   const isLast = index === steps.length - 1;
   const treasure = TUTORIAL_GRAPH.nodes.find((node) => node.type === 'finish');
@@ -38,19 +38,16 @@ export function TutorialScreen({ steps, onFinish, layout = 'mobile' }) {
       </picture>
 
       <div className="tutorial-screen__map" inert>
-        <MapGraph graph={graph} phase={TUTORIAL_PHASE} selectedStartId={null} animationKey={1} onWinnerArrive={() => {}} routeStyle="arrows-white" />
+        <MapGraph graph={graph} phase={TUTORIAL_PHASE} selectedStartId={null} animationKey={1} onWinnerArrive={() => {}} routeStyle={routeStyle} />
         <TreasureAnchor node={treasure} phaseIndex={0} totalPhases={steps.length} />
         <BoatDock
           boats={boats}
           selectedStartId={null}
           onSelect={() => {}}
         />
-        <span className="tutorial-screen__hint-icon">
-          <Image src="/assets/game/ui/hint-lantern.png" alt="" width={1254} height={1254} sizes="64px" />
-        </span>
       </div>
 
-      <GameHint title={current.title} label="Regras do jogo" dock={layout === 'wide' ? 'top-left' : 'top-right'} footer={
+      <GameHint title={current.title} label="Regras do jogo" routeStyle={routeStyle} onChangeRouteStyle={setRouteStyle} dock={layout === 'wide' ? 'top-left' : 'top-right'} footer={
         <GameHintNavigation
           index={index}
           total={steps.length}

@@ -1,7 +1,7 @@
 .game-hint-layer {
   position: absolute;
   z-index: var(--game-hint-z-index, 30);
-  inset: var(--game-hint-top, var(--screen-inset-top, 12px)) var(--game-hint-right, var(--screen-inset-right, 12px)) var(--game-hint-bottom, var(--screen-inset-bottom, 12px)) var(--game-hint-left, var(--screen-inset-left, 12px));
+  inset: var(--game-hint-top, var(--screen-inset-top, 12px)) var(--game-hint-right, calc(var(--screen-inset-right, 12px) + 60px)) var(--game-hint-bottom, var(--screen-inset-bottom, 12px)) var(--game-hint-left, var(--screen-inset-left, 12px));
   pointer-events: none;
 }
 
@@ -21,6 +21,59 @@
 .game-hint[data-dock^='bottom'] { bottom: 0; }
 .game-hint[data-dock$='left'] { left: 0; }
 .game-hint[data-dock$='right'] { right: 0; }
+.game-hint[hidden] { display: none; }
+
+.game-hint-tools {
+  position: absolute;
+  z-index: 31;
+  top: var(--screen-inset-top, 12px);
+  right: var(--screen-inset-right, 12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.game-hint__route-control { position: relative; }
+.game-hint-tools > .game-hint__toggle { width: auto; height: auto; margin: 0; }
+.game-hint-tools > .game-hint__toggle img,
+.game-hint__route-toggle img { display: block; width: 36px; height: 36px; object-fit: contain; image-rendering: pixelated; pointer-events: none; user-select: none; }
+.game-hint-tools > .game-hint__toggle,
+.game-hint__route-toggle,
+.game-hint__route-options button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.35rem;
+  border: 2px solid #482608;
+  border-radius: 0.55rem;
+  background: #7c430f;
+  color: #fff8db;
+  font: 400 0.85rem/1.2 var(--font-ui);
+  cursor: pointer;
+}
+.game-hint__route-options {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 0.5rem);
+  display: grid;
+  gap: 0.35rem;
+  width: max-content;
+  padding: 0.4rem;
+  border: 2px solid #482608;
+  border-radius: 0.65rem;
+  background: #f3dda8;
+  box-shadow: 0 3px 8px #082e4355;
+}
+.game-hint__route-options button[aria-pressed='true'] { background: #492508; box-shadow: inset 0 0 0 2px #ffda70; }
+.game-hint-tools > .game-hint__toggle:hover,
+.game-hint__route-toggle:hover,
+.game-hint__route-options button:hover { background: #9d5a19; }
+.game-hint-tools button:focus-visible { outline: 3px solid #ffda70; outline-offset: 2px; }
+.game-hint__route-preview { display: grid; place-items: center; color: #080d12; }
+.game-hint__route-preview[data-style='arrows-white'] { color: #fff; }
 
 /* A faixa externa transparente recebe o arraste. */
 .game-hint__panel {

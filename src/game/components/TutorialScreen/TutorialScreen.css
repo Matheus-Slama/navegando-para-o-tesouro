@@ -39,12 +39,6 @@
   pointer-events: none;
 }
 
-.tutorial-screen__map .map-graph__route-direction {
-  stroke: #ffffff;
-  stroke-width: 7;
-  filter: drop-shadow(0 0.12rem 0 #159edc);
-}
-
 .tutorial-screen__map .map-graph__weight {
   opacity: 0.38;
 }
@@ -53,32 +47,15 @@
 .tutorial-screen__map .map-graph__weight,
 .tutorial-screen__map .boat-dock__boat,
 .tutorial-screen__map .treasure-anchor,
-.tutorial-screen__hint-icon {
+.tutorial-screen .game-hint-tools > .game-hint__toggle {
   transition: opacity 180ms ease, filter 180ms ease, transform 180ms ease;
-}
-
-.tutorial-screen__hint-icon {
-  position: absolute;
-  z-index: 21;
-  top: var(--screen-inset-top);
-  right: var(--screen-inset-right);
-  width: clamp(2.75rem, 9vmin, 3.5rem);
-  aspect-ratio: 1;
-  opacity: 0.42;
-}
-
-.tutorial-screen__hint-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  image-rendering: pixelated;
 }
 
 .tutorial-screen[data-step='1'] .map-graph__island,
 .tutorial-screen[data-step='1'] .map-graph__canvas,
 .tutorial-screen[data-step='2'] .map-graph__weight,
 .tutorial-screen[data-step='3'] .boat-dock__boat,
-.tutorial-screen[data-step='4'] .tutorial-screen__hint-icon {
+.tutorial-screen[data-step='4'] .game-hint-tools > .game-hint__toggle {
   filter: drop-shadow(0 0 0.7rem #fff2a8) brightness(1.2);
 }
 
@@ -88,12 +65,8 @@
 
 .tutorial-screen[data-step='2'] .map-graph__weight,
 .tutorial-screen[data-step='3'] .boat-dock__boat,
-.tutorial-screen[data-step='4'] .tutorial-screen__hint-icon {
+.tutorial-screen[data-step='4'] .game-hint-tools > .game-hint__toggle {
   transform: scale(1.12);
-}
-
-.tutorial-screen[data-step='4'] .tutorial-screen__hint-icon {
-  opacity: 1;
 }
 
 @media (prefers-reduced-motion: reduce) {

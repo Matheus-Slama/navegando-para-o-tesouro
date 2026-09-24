@@ -47,6 +47,8 @@ export function GameBoard({
       <GameHint
         title={`Dica da fase ${phase.id}`}
         label={`Dica da fase ${phase.id}`}
+        routeStyle={routeStyle}
+        onChangeRouteStyle={onChangeRouteStyle}
         minimized={!hintOpen}
         onMinimizedChange={(value) => value ? onCloseHint() : onOpenHint()}
         footer={

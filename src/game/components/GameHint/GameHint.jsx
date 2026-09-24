@@ -2,10 +2,15 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 import Image from 'next/image';
-import { Minimize2 } from 'lucide-react';
+import { ArrowRight, ChevronsRight, Minimize2 } from 'lucide-react';
 import './GameHint.css';
 
 const EDGES = { top: 'superior', right: 'direita', bottom: 'inferior', left: 'esquerda' };
+const ROUTE_STYLES = [
+  { value: 'arrows-white', label: 'Branca' },
+  { value: 'arrows-black', label: 'Preta' },
+  { value: 'chevrons', label: 'Chevron' }
+];
 
 /**
  * Painel flutuante dentro de um ancestral com position: relative.
@@ -18,6 +23,8 @@ export function GameHint({
   title,
   children,
   footer,
+  routeStyle,
+  onChangeRouteStyle,
   label = 'Dica do jogo',
   dock = 'top-right',
   minimized,
@@ -30,10 +37,22 @@ export function GameHint({
   const boundsRef = useRef(null);
   const cardRef = useRef(null);
   const dragRef = useRef(null);
+  const routeMenuRef = useRef(null);
+  const routeButtonRef = useRef(null);
+  const [routeMenuOpen, setRouteMenuOpen] = useState(false);
   const [localMinimized, setLocalMinimized] = useState(defaultMinimized);
   const [position, setPosition] = useState(null);
   const [dragging, setDragging] = useState(false);
   const isMinimized = minimized ?? localMinimized;
+
+  useEffect(() => {
+    if (!routeMenuOpen) return;
+    function closeOutside(event) {
+      if (!routeMenuRef.current?.contains(event.target)) setRouteMenuOpen(false);
+    }
+    document.addEventListener('pointerdown', closeOutside);
+    return () => document.removeEventListener('pointerdown', closeOutside);
+  }, [routeMenuOpen]);
 
   function constrain(next) {
     const bounds = boundsRef.current;
@@ -120,9 +139,62 @@ export function GameHint({
   }
 
   return (
+    <>
+      <div className="game-hint-tools">
+        <button
+          className="game-hint__toggle"
+          type="button"
+          aria-label={`${isMinimized ? 'Mostrar' : 'Minimizar'} ${label.toLowerCase()}`}
+          title={isMinimized ? 'Mostrar dica' : 'Minimizar dica'}
+          aria-expanded={!isMinimized}
+          aria-controls={`${id}-content`}
+          onClick={toggleMinimized}
+        >
+          <Image src="/assets/game/ui/hint-lantern.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
+        </button>
+        {onChangeRouteStyle && (
+          <div className="game-hint__route-control" ref={routeMenuRef}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) setRouteMenuOpen(false);
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'Escape') {
+                event.preventDefault();
+                setRouteMenuOpen(false);
+                routeButtonRef.current?.focus();
+              }
+            }}
+          >
+            <button className="game-hint__route-toggle" ref={routeButtonRef} type="button"
+              aria-label={`Escolher arestas: ${ROUTE_STYLES.find((option) => option.value === routeStyle)?.label}`}
+              aria-expanded={routeMenuOpen} aria-controls={`${id}-routes`}
+              onClick={() => setRouteMenuOpen((value) => !value)}
+            >
+              <Image src="/assets/game/ui/pirate-gear.png" alt="" width={64} height={64} sizes="36px" draggable={false} />
+            </button>
+            {routeMenuOpen && <div id={`${id}-routes`} className="game-hint__route-options" role="group" aria-label="Estilo das arestas">
+              {ROUTE_STYLES.map((option) => <button key={option.value} type="button"
+                aria-label={`Arestas: ${option.label}`}
+                title={option.label}
+                aria-pressed={routeStyle === option.value}
+                onClick={() => {
+                  onChangeRouteStyle(option.value);
+                  setRouteMenuOpen(false);
+                  routeButtonRef.current?.focus();
+                }}
+              >
+                <span className="game-hint__route-preview" data-style={option.value}>
+                  {option.value === 'chevrons' ? <ChevronsRight aria-hidden="true" size={24} /> : <ArrowRight aria-hidden="true" size={24} />}
+                </span>
+              </button>)}
+            </div>}
+          </div>
+        )}
+      </div>
     <div ref={boundsRef} className={`game-hint-layer ${className}`} style={style}>
       <aside
         ref={cardRef}
+        hidden={isMinimized}
         className="game-hint"
         aria-label={label}
         data-dock={dock}
@@ -174,5 +246,6 @@ export function GameHint({
         </div>
       </aside>
     </div>
+    </>
   );
 }

@@ -71,7 +71,6 @@
 .dijkstra-fixed-map__cost[data-confirmed='true'] { background: #165640; border-color: #9eecc0; }
 .dijkstra-fixed-map__cost[data-active='true'] { outline: 2px solid #ffdf7b; }
 .dijkstra-fixed-map .map-graph__routes g[data-highlighted='true'] { filter: drop-shadow(0 0 3px #ffe195); }
-.dijkstra-fixed-map .map-graph__routes g[data-highlighted='true'] .map-graph__route-direction { stroke: #ffda70; stroke-width: 3; }
 .dijkstra-fixed-map .map-graph__weight[data-highlighted='true'] { background: #ffe195; outline: 2px solid #b57212; }
 
 @media (max-height: 480px) {
