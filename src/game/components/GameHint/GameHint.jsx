@@ -145,8 +145,8 @@ export function GameHint({
     const bottom = origin.y + origin.height;
     const maxWidth = fromLeft ? right : bounds.clientWidth - origin.x;
     const maxHeight = fromTop ? bottom : bounds.clientHeight - origin.y;
-    const width = Math.max(Math.min(260, maxWidth), Math.min(maxWidth, origin.width + (fromLeft ? -dx : dx)));
-    const height = Math.max(Math.min(240, origin.height, maxHeight), Math.min(maxHeight, origin.height + (fromTop ? -dy : dy)));
+    const width = Math.max(Math.min(140, maxWidth), Math.min(maxWidth, origin.width + (fromLeft ? -dx : dx)));
+    const height = Math.max(Math.min(80, origin.height, maxHeight), Math.min(maxHeight, origin.height + (fromTop ? -dy : dy)));
     setPosition({ x: fromLeft ? right - width : origin.x, y: fromTop ? bottom - height : origin.y });
     const scale = origin.scale * Math.sqrt((width * height) / (origin.width * origin.height));
     setSize({ width, height, '--game-hint-scale': scale });
