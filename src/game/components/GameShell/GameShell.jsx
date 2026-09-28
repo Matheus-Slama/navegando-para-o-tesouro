@@ -20,7 +20,7 @@ export function GameShell() {
   const [selectedStartId, setSelectedStartId] = useState(null);
   const [animationKey, setAnimationKey] = useState(0);
   const [raceResult, setRaceResult] = useState(null);
-  const [devMode, setDevMode] = useState(false);
+  const [devMode, setDevMode] = useState(true);
   const [hintOpen, setHintOpen] = useState(false);
   const [hintIndex, setHintIndex] = useState(0);
   const [routeStyle, setRouteStyle] = useState('chevrons');
@@ -108,7 +108,6 @@ export function GameShell() {
         <StartScreen
           onStart={startGame}
           onTutorial={openTutorial}
-          onDijkstraTutorial={() => setScreen('dijkstra-tutorial')}
         />
       </main>
     );
@@ -122,8 +121,8 @@ export function GameShell() {
     return (
       <main className="game-page">
         <DijkstraTutorialMap
-          onExit={() => setScreen('start')}
-          onPlay={startGame}
+          onExit={() => setScreen('game')}
+          onPlay={() => setScreen('game')}
           layout={layout}
         />
       </main>
@@ -155,6 +154,7 @@ export function GameShell() {
         onNextHint={() => setHintIndex((value) => (value + 1) % phase.hints.length)}
         routeStyle={routeStyle}
         onChangeRouteStyle={setRouteStyle}
+        onDijkstraTutorial={() => setScreen('dijkstra-tutorial')}
       />
     </main>
   );

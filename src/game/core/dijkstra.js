@@ -14,7 +14,7 @@ export function dijkstra(nodes, edges, startId, finishId, directed = true) {
   pathCounts[startId] = 1;
 
   while (visited.size < nodes.length) {
-    const { currentId, neighbors } = getNextDijkstraStep(edges, distances, visited, finishId, directed);
+    const { currentId, neighbors } = getNextDijkstraStep(edges, distances, visited, directed);
 
     if (!currentId) {
       break;
@@ -54,9 +54,8 @@ export function dijkstra(nodes, edges, startId, finishId, directed = true) {
   };
 }
 
-// Jogo e tutorial ignoram ilhas que só levam a pontos já confirmados.
-// Elas não podem melhorar a rota ao tesouro. O destino sempre é elegível.
-export function getNextDijkstraStep(edges, distances, visited, finishId, directed = true) {
+// Confirma o menor custo alcançável, mesmo quando não há vizinhos a atualizar.
+export function getNextDijkstraStep(edges, distances, visited, directed = true) {
   let selectedId = null;
   let selectedDistance = Number.POSITIVE_INFINITY;
   let selectedNeighbors = [];
@@ -65,7 +64,6 @@ export function getNextDijkstraStep(edges, distances, visited, finishId, directe
     if (!visited.has(nodeId) && distance < selectedDistance) {
       const neighbors = getNeighbors(edges, nodeId, directed)
         .filter(({ target }) => target !== nodeId && !visited.has(target));
-      if (nodeId !== finishId && neighbors.length === 0) return;
       selectedId = nodeId;
       selectedDistance = distance;
       selectedNeighbors = neighbors;

@@ -1,11 +1,5 @@
+import { BOAT_COLORS } from '@/game/enums/boat-colors';
 import './RaceResult.css';
-
-const BOAT_COLORS = {
-  red: 'vermelho',
-  blue: 'azul',
-  green: 'verde',
-  black: 'preto'
-};
 
 export function RaceResult({ result, selectedBoat, winner, isFinalPhase, onContinue }) {
   if (!result) return null;

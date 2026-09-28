@@ -30,7 +30,12 @@ export function getRouteBoundary(node, otherNode, isDense, layout = 'mobile') {
   const deltaX = otherNode.x - node.x;
   const deltaY = otherNode.y - node.y;
   const radii = getNodeRadii(node, isDense, layout);
-  const scale = 1 / Math.sqrt((deltaX / radii.x) ** 2 + (deltaY / radii.y) ** 2);
+  const boundaryShrink = node.type === 'start' ? 0.92 : node.type === 'finish' ? 0.9 : 0.88;
+  const safeRadii = {
+    x: radii.x * boundaryShrink,
+    y: radii.y * boundaryShrink
+  };
+  const scale = 1 / Math.sqrt((deltaX / safeRadii.x) ** 2 + (deltaY / safeRadii.y) ** 2);
   return { x: node.x + deltaX * scale, y: node.y + deltaY * scale };
 }
 

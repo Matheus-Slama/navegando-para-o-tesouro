@@ -28,14 +28,18 @@ const startNodes = [
   { id: 'start-black', label: 'Barco Preto', boat: 'black', x: 875, y: 600 }
 ].map((node) => ({ ...node, type: 'start' }));
 
-const islandSprite = { sheetIndex: 0, column: 0, row: 0 };
+const islandSprites = {
+  left: { sheetIndex: 0, column: 1, row: 1 },
+  right: { sheetIndex: 0, column: 4, row: 2 },
+  center: { sheetIndex: 0, column: 6, row: 0 }
+};
 
 export const TUTORIAL_GRAPH = {
   nodes: [
     ...startNodes,
-    { id: 'island-left', label: 'Ilha esquerda', type: 'intermediate', x: 275, y: 365, sprite: islandSprite },
-    { id: 'island-right', label: 'Ilha direita', type: 'intermediate', x: 725, y: 365, sprite: islandSprite },
-    { id: 'island-center', label: 'Ilha central', type: 'intermediate', x: 500, y: 225, sprite: islandSprite },
+    { id: 'island-left', label: 'Ilha esquerda', type: 'intermediate', x: 275, y: 365, sprite: islandSprites.left },
+    { id: 'island-right', label: 'Ilha direita', type: 'intermediate', x: 725, y: 365, sprite: islandSprites.right },
+    { id: 'island-center', label: 'Ilha central', type: 'intermediate', x: 500, y: 225, sprite: islandSprites.center },
     { id: 'finish', label: 'Ilha do Tesouro', type: 'finish', x: 500, y: 55 }
   ],
   edges: [

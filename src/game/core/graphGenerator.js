@@ -23,6 +23,10 @@ export function generateGraphForPhase(phase, seed = Date.now(), layout = 'mobile
   while (attempt < 2000) {
     // Se o mapa for rejeitado, muda a seed para tentar outra combinação.
     const graph = buildCandidateGraph(phase, seed + attempt * 97, layout);
+    if (!graph) {
+      attempt += 1;
+      continue;
+    }
     const results = getPhaseResults(graph, phase);
 
     if (isValidGraph(graph, results, phase)) {
@@ -42,13 +46,14 @@ export function generateGraphForPhase(phase, seed = Date.now(), layout = 'mobile
 function buildCandidateGraph(phase, seed, layout) {
   const random = createSeededRandom(seed);
   const islandCount = getIslandCount(phase.islandCount, random);
+  const intermediateNodes = createIntermediateNodes(islandCount, random, layout);
+  if (!intermediateNodes) return null;
   let nodes = [
     ...START_ISLANDS.map((start) => ({ ...start, type: 'start' })),
-    ...createIntermediateNodes(islandCount, random, layout),
+    ...intermediateNodes,
     { ...FINISH_ISLAND, type: 'finish' }
   ];
   let edges = [];
-  const intermediateNodes = nodes.filter((node) => node.type === 'intermediate');
   const forcedWinnerIndex = randomInt(random, 0, START_ISLANDS.length - 1);
   const GraphClass = phase.directed ? DirectedGraph : UndirectedGraph;
   const maximumRandomEdges = phase.directed
@@ -187,7 +192,7 @@ function createIntermediateNodes(islandCount, random, layout) {
   }
 
   if (selectedSlots.length < islandCount) {
-    throw new Error(`O perfil ${layout} não possui posições sem sobreposição suficientes.`);
+    return null;
   }
 
   return selectedSlots.map((position, index) => ({
@@ -293,7 +298,9 @@ function hasEnoughVisibleRoute(from, to, nodes, layout) {
     (end.y - start.y) / 6.5
   );
 
-  return travelsForward && visibleLength >= 8;
+  // Ilhas menores nos mapas densos permitem rotas mais curtas entre as bordas.
+  const minimumVisibleLength = isDense ? 6 : 8;
+  return travelsForward && visibleLength >= minimumVisibleLength;
 }
 
 function segmentTouchesNode(from, to, node, isDense, layout) {

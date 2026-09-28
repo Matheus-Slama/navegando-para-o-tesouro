@@ -38,6 +38,7 @@ async function evaluate(expression) {
 const pause = (ms = 120) => new Promise(resolve => setTimeout(resolve, ms));
 async function waitFor(expression) {
   for (let i = 0; i < 120; i++) {
+    if (runtimeErrors.length) throw new Error(JSON.stringify(runtimeErrors));
     if (await evaluate(expression)) return;
     await pause();
   }
@@ -68,6 +69,20 @@ async function assertInside() {
   assert.ok(card.x >= bounds.x - 1 && card.y >= bounds.y - 1 && card.right <= bounds.right + 1 && card.bottom <= bounds.bottom + 1,
     `Card fora dos limites: ${JSON.stringify({ card, bounds })}`);
 }
+async function resizeCorner(corner, dx, dy, touch = false) {
+  const handle = await rect(`.game-hint__resize-handle[data-corner="${corner}"]`);
+  const start = { x: handle.x + handle.width / 2, y: handle.y + handle.height / 2 };
+  if (touch) {
+    await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ ...start, id: 1 }] });
+    await send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: start.x + dx, y: start.y + dy, id: 1 }] });
+    await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  } else {
+    await send('Input.dispatchMouseEvent', { type: 'mousePressed', ...start, button: 'left', clickCount: 1 });
+    await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: start.x + dx, y: start.y + dy, button: 'left', buttons: 1 });
+    await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: start.x + dx, y: start.y + dy, button: 'left', clickCount: 1 });
+  }
+  await pause();
+}
 async function viewport(width, height, mobile = false) {
   await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile });
   await send('Emulation.setTouchEmulationEnabled', { enabled: mobile });
@@ -83,10 +98,72 @@ try {
   await send('Runtime.enable');
   await viewport(1280, 800);
   await send('Page.navigate', { url: baseUrl });
-  await waitFor(`!![...document.querySelectorAll('button')].find(b => b.textContent.trim() === 'Tutorial Dijkstra')`);
-  await clickText('Tutorial Dijkstra');
+  await waitFor(`!!document.querySelector('.start-screen')`);
+  await waitFor(`Object.keys(document.querySelector('.start-screen button')).some(key => key.startsWith('__reactProps'))`);
+  assert.equal(await evaluate(`document.querySelector('.start-screen').textContent.includes('Tutorial Dijkstra')`), false);
+  await clickText('Iniciar jornada');
+  await waitFor(`!!document.querySelector('.dev-panel')`);
+  if (!await evaluate(`!!document.querySelector('.dev-panel select')`)) await click('.dev-panel__toggle');
+  for (let phaseIndex = 0; phaseIndex < 6; phaseIndex++) {
+    await evaluate(`(() => {
+      const select = document.querySelector('.dev-panel select');
+      select.value = '${phaseIndex}';
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    })()`);
+    await waitFor(`document.querySelector('.game-hint__title')?.textContent === 'Dica da fase ${phaseIndex + 1}'`);
+    assert.equal(await evaluate(`!!document.querySelector('.game-hint__dijkstra-toggle')`), phaseIndex >= 4, `Disponibilidade na fase ${phaseIndex + 1}`);
+    if (phaseIndex < 4) continue;
+    const routeControl = await rect('.game-hint__route-control');
+    const tutorialControl = await rect('.game-hint__dijkstra-toggle');
+    assert.ok(tutorialControl.y >= routeControl.bottom, 'Dijkstra fica abaixo do seletor de arestas.');
+    const mapBefore = await evaluate(`document.querySelector('.map-graph').innerHTML`);
+    await click('.game-hint__dijkstra-toggle');
+    await waitFor(`!!document.querySelector('.dijkstra-fixed-map')`);
+    await click('.dijkstra-fixed-map__exit');
+    assert.equal(await evaluate(`document.querySelector('.dev-panel select').value`), String(phaseIndex));
+    assert.equal(await evaluate(`document.querySelector('.map-graph').innerHTML`), mapBefore, 'Voltar mantém o mapa da fase.');
+  }
+  await screenshot('dijkstra-button-desktop');
+  await viewport(390, 844, true);
+  await screenshot('dijkstra-button-mobile');
+  await viewport(1280, 800);
+  await click('.game-hint__dijkstra-toggle');
   await waitFor(`!!document.querySelector('.game-hint__title')`);
   await assertInside();
+  assert.equal(await evaluate(`document.querySelectorAll('.game-hint__resize-handle').length`), 4);
+  for (const corner of ['top-left', 'top-right', 'bottom-left', 'bottom-right']) {
+    const beforeResize = await rect();
+    const fontBefore = await evaluate(`parseFloat(getComputedStyle(document.querySelector('.game-hint__body')).fontSize)`);
+    const arrowBefore = await rect('.game-hint__arrow img');
+    const dx = corner.endsWith('left') ? 20 : -20;
+    const dy = corner.startsWith('top') ? 20 : -20;
+    await resizeCorner(corner, dx, dy);
+    const afterResize = await rect();
+    assert.ok(afterResize.width < beforeResize.width, `${corner}: deve reduzir a largura.`);
+    assert.ok(await evaluate(`parseFloat(getComputedStyle(document.querySelector('.game-hint__body')).fontSize)`) < fontBefore,
+      `${corner}: o texto deve diminuir junto com o painel.`);
+    assert.ok((await rect('.game-hint__arrow img')).width < arrowBefore.width,
+      `${corner}: as setas devem diminuir junto com o painel.`);
+    const anchorX = corner.endsWith('left') ? 'right' : 'x';
+    assert.ok(Math.abs(afterResize[anchorX] - beforeResize[anchorX]) <= 1, 'O canto oposto deve ficar fixo no eixo X.');
+    assert.ok(Math.abs((await rect('.game-hint__footer')).y - (await rect('.game-hint__body')).bottom) <= 1,
+      'Ao terminar o resize, não deve sobrar espaço vazio entre texto e rodapé.');
+    const fontReduced = await evaluate(`parseFloat(getComputedStyle(document.querySelector('.game-hint__body')).fontSize)`);
+    const arrowReduced = await rect('.game-hint__arrow img');
+    await resizeCorner(corner, -dx, -dy);
+    assert.ok(await evaluate(`parseFloat(getComputedStyle(document.querySelector('.game-hint__body')).fontSize)`) > fontReduced,
+      'Ampliar deve aumentar o tamanho do texto.');
+    assert.ok((await rect('.game-hint__arrow img')).width > arrowReduced.width,
+      'Ampliar deve aumentar o tamanho das setas.');
+    assert.ok(Math.abs((await rect('.game-hint__footer')).y - (await rect('.game-hint__body')).bottom) <= 1,
+      'Ampliar mantém o painel ajustado ao conteúdo.');
+    await assertInside();
+  }
+  const resized = await rect();
+  await click('.game-hint__toggle');
+  await click('.game-hint__toggle');
+  assert.equal((await rect()).width, resized.width, 'Reabrir preserva a largura.');
+  assert.equal((await rect()).height, resized.height, 'Reabrir preserva a altura.');
   await click('.game-hint__arrow:not(.game-hint__arrow--back)');
   assert.equal(await evaluate(`document.querySelector('.game-hint__title').textContent`), 'Anote os custos');
   const before = await rect();
@@ -106,9 +183,8 @@ try {
   assert.equal(await evaluate(`document.querySelector('.game-hint').dataset.minimized`), 'true');
   assert.ok((await rect()).width <= 80);
   assert.equal(await evaluate(`document.querySelector('.game-hint__content').hidden`), true);
-  await dragTo(2000, 1500);
-  await assertInside();
   await click('.game-hint__toggle');
+  await dragTo(2000, 1500);
   await assertInside();
   await screenshot('desktop');
   console.log('Desktop: conteúdo dinâmico, arraste, teclado, limites e minimizar/restaurar OK.');
@@ -117,6 +193,9 @@ try {
   await waitFor(`document.querySelector('.dijkstra-fixed-map')?.dataset.layout === 'mobile'`);
   await assertInside();
   const touchBefore = await rect();
+  await resizeCorner('bottom-right', -20, 40, true);
+  assert.ok((await rect()).width < touchBefore.width, 'O toque deve redimensionar a dica.');
+  await assertInside();
   await dragTo(100, 420, true);
   assert.notEqual((await rect()).y, touchBefore.y, 'O toque deve mover a dica.');
   await assertInside();
@@ -132,6 +211,9 @@ try {
   console.log('Toque, rotação e rolagem interna em tela baixa OK.');
 
   await click('.dijkstra-fixed-map__exit');
+  await send('Page.navigate', { url: baseUrl });
+  await waitFor(`!!document.querySelector('.start-screen')`);
+  await waitFor(`Object.keys(document.querySelector('.start-screen button')).some(key => key.startsWith('__reactProps'))`);
   await clickText('Tutorial');
   await waitFor(`!!document.querySelector('.tutorial-screen .game-hint')`);
   const firstTitle = await evaluate(`document.querySelector('.game-hint__title').textContent`);

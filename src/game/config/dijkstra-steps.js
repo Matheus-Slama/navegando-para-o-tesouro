@@ -9,7 +9,7 @@ export const DIJKSTRA_STEPS = [
   },
   {
     title: 'Escolha o menor custo',
-    text: 'Escolha o menor custo total entre os pontos descobertos ainda não confirmados que têm saídas pendentes, ou o tesouro. Respeite o sentido das setas.'
+    text: 'Escolha o menor custo total entre todos os pontos descobertos ainda não confirmados. Respeite o sentido das setas.'
   },
   {
     title: 'Confirme o ponto',
@@ -26,14 +26,6 @@ export const DIJKSTRA_STEPS = [
   {
     title: 'Repita a busca',
     text: 'Após examinar todas as saídas, volte ao passo 3. Continue até confirmar o tesouro.'
-  },
-  {
-    title: 'Tesouro encontrado',
-    text: 'O tesouro foi confirmado. Encontramos o menor custo desde o barco.'
-  },
-  {
-    title: 'Repita para todos os barcos',
-    text: 'Lembre-se de fazer o mesmo processo para todos os barcos. Assim, você descobre o menor caminho usando Dijkstra.'
   },
   {
     title: 'Compare os barcos',

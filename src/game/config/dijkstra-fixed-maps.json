@@ -1047,13 +1047,13 @@
       {
         "from": "island-4",
         "to": "finish",
-        "weight": 6,
+        "weight": 25,
         "id": "edge-0"
       },
       {
         "from": "island-7",
         "to": "finish",
-        "weight": 25,
+        "weight": 6,
         "id": "edge-1"
       },
       {

@@ -36,8 +36,11 @@ const exhaustedBranch = {
 };
 const exhaustedFrames = createDijkstraWalkthrough(exhaustedBranch);
 assert.equal(exhaustedFrames.at(-1).distances.finish, 5);
-assert.ok(!exhaustedFrames.some((frame) => frame.currentId === 'behind'),
-  'Uma ilha cuja única saída leva a um ponto confirmado não deve receber o foco.');
+assert.deepEqual(exhaustedFrames.filter((frame) => frame.step === 3).map((frame) => frame.currentId),
+  ['start-blue', 'ahead', 'behind', 'finish'],
+  'Uma ilha sem saídas pendentes também deve ser confirmada na ordem de custo.');
+assert.ok(!exhaustedFrames.some((frame) => frame.step === 4 && frame.currentId === 'behind'),
+  'A confirmação não deve reavaliar vizinhos já confirmados.');
 assert.equal(dijkstra(exhaustedBranch.nodes, exhaustedBranch.edges, 'start-blue', 'finish').distance, 5);
 
 // Outro ramo ainda precisa ser analisado quando sua seta permite avançar.
@@ -85,8 +88,12 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
     `${layout}: nenhuma conexão deve apontar para a Ilha 18.`);
   const blueFrames = createDijkstraWalkthrough(graph);
   if (layout === 'wide') {
-    assert.ok(!blueFrames.some((frame) => frame.currentId === 'island-8'),
-      'A Ilha 8 não deve receber o foco depois que sua única saída, a Ilha 7, foi confirmada.');
+    const islandIndex = blueFrames.findIndex((frame) => frame.step === 3 && frame.currentId === 'island-8');
+    const treasureIndex = blueFrames.findIndex((frame) => frame.step === 2 && frame.currentId === 'finish');
+    assert.ok(islandIndex >= 0 && islandIndex < treasureIndex,
+      'A Ilha 8, de custo 49, deve ser confirmada antes de selecionar o tesouro de custo 54.');
+    assert.equal(blueFrames[islandIndex].distances['island-8'], 49);
+    assert.equal(blueFrames[treasureIndex].distances.finish, 54);
     assert.ok(blueFrames.some((frame) => frame.targetId === 'island-8'),
       'A rota que chega à Ilha 8 continua sendo calculada no sentido correto.');
   }
@@ -115,9 +122,11 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
       assert.notEqual(frame.previous, frames[i - 1].previous);
       for (const id of frame.confirmed) assert.equal(frame.distances[id], oracle[id], 'Só um custo ótimo pode ser confirmado.');
       for (const edgeId of frame.edgeIds) assert.ok(graph.edges.some((edge) => edge.id === edgeId));
-      if (frame.step === 2 && frame.currentId !== 'finish') {
-        assert.ok(graph.edges.some((edge) => edge.from === frame.currentId
-          && !frame.confirmed.includes(edge.to)), 'A ilha selecionada precisa ter uma saída pendente.');
+      if (frame.step === 2) {
+        const pendingCosts = Object.entries(frame.distances)
+          .filter(([id]) => !frame.confirmed.includes(id)).map(([, cost]) => cost);
+        assert.equal(frame.distances[frame.currentId], Math.min(...pendingCosts),
+          'A seleção deve considerar todos os pontos não confirmados, inclusive os sem saídas pendentes.');
       }
       if (frame.step === 4 || frame.step === 5) {
         const edge = graph.edges.find((edge) => edge.id === frame.edgeIds[0]);
@@ -138,11 +147,10 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
     const final = frames.at(-1);
     const arrivalIndex = frames.findIndex((frame) => frame.step === 3 && frame.currentId === 'finish');
     assert.ok(arrivalIndex >= 0);
-    assert.deepEqual(frames.slice(arrivalIndex + 1).map((frame) => frame.step), [7, 8, 9],
-      'Após confirmar o tesouro, mostre o resultado, o lembrete e a comparação sem voltar pelas ilhas.');
-    assert.equal(frames[arrivalIndex + 1].currentId, 'finish');
+    assert.deepEqual(frames.slice(arrivalIndex + 1).map((frame) => frame.step), [7],
+      'Após confirmar o tesouro, mostre apenas a comparação sem voltar pelas ilhas.');
     assert.deepEqual(frames[arrivalIndex + 1].path, final.path);
-    assert.equal(final.step, 9);
+    assert.equal(final.step, 7);
     assert.equal(final.distances.finish, oracle.finish);
     assert.equal(final.distances.finish, result.distance);
     assert.deepEqual(final.path, result.path);

@@ -2,10 +2,11 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 import Image from 'next/image';
-import { ArrowRight, ChevronsRight, Minimize2 } from 'lucide-react';
+import { ArrowRight, ChevronsRight } from 'lucide-react';
 import './GameHint.css';
 
 const EDGES = { top: 'superior', right: 'direita', bottom: 'inferior', left: 'esquerda' };
+const CORNERS = { 'top-left': 'superior esquerdo', 'top-right': 'superior direito', 'bottom-left': 'inferior esquerdo', 'bottom-right': 'inferior direito' };
 const ROUTE_STYLES = [
   { value: 'arrows-white', label: 'Branca' },
   { value: 'arrows-black', label: 'Preta' },
@@ -25,6 +26,7 @@ export function GameHint({
   footer,
   routeStyle,
   onChangeRouteStyle,
+  onDijkstraTutorial,
   label = 'Dica do jogo',
   dock = 'top-right',
   minimized,
@@ -37,12 +39,15 @@ export function GameHint({
   const boundsRef = useRef(null);
   const cardRef = useRef(null);
   const dragRef = useRef(null);
+  const resizeRef = useRef(null);
   const routeMenuRef = useRef(null);
   const routeButtonRef = useRef(null);
   const [routeMenuOpen, setRouteMenuOpen] = useState(false);
   const [localMinimized, setLocalMinimized] = useState(defaultMinimized);
   const [position, setPosition] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const [size, setSize] = useState(null);
+  const [resizing, setResizing] = useState(false);
   const isMinimized = minimized ?? localMinimized;
 
   useEffect(() => {
@@ -132,6 +137,69 @@ export function GameHint({
     setPosition(constrain({ x: origin.x + direction[0] * distance, y: origin.y + direction[1] * distance }));
   }
 
+  function resizeFrom(origin, corner, dx, dy) {
+    const bounds = boundsRef.current;
+    const fromLeft = corner.endsWith('left');
+    const fromTop = corner.startsWith('top');
+    const right = origin.x + origin.width;
+    const bottom = origin.y + origin.height;
+    const maxWidth = fromLeft ? right : bounds.clientWidth - origin.x;
+    const maxHeight = fromTop ? bottom : bounds.clientHeight - origin.y;
+    const width = Math.max(Math.min(260, maxWidth), Math.min(maxWidth, origin.width + (fromLeft ? -dx : dx)));
+    const height = Math.max(Math.min(240, origin.height, maxHeight), Math.min(maxHeight, origin.height + (fromTop ? -dy : dy)));
+    setPosition({ x: fromLeft ? right - width : origin.x, y: fromTop ? bottom - height : origin.y });
+    const scale = origin.scale * Math.sqrt((width * height) / (origin.width * origin.height));
+    setSize({ width, height, '--game-hint-scale': scale });
+  }
+
+  function getResizeOrigin() {
+    return {
+      ...getPosition(), width: cardRef.current.offsetWidth, height: cardRef.current.offsetHeight,
+      scale: Number.parseFloat(getComputedStyle(cardRef.current).getPropertyValue('--game-hint-scale')) || 1
+    };
+  }
+
+  function startResize(event) {
+    if (!event.isPrimary || event.button !== 0) return;
+    event.preventDefault();
+    resizeRef.current = {
+      pointerId: event.pointerId, x: event.clientX, y: event.clientY,
+      corner: event.currentTarget.dataset.corner, origin: getResizeOrigin()
+    };
+    event.currentTarget.focus({ preventScroll: true });
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setResizing(true);
+  }
+
+  function moveResize(event) {
+    const resize = resizeRef.current;
+    if (!resize || resize.pointerId !== event.pointerId) return;
+    resizeFrom(resize.origin, resize.corner, event.clientX - resize.x, event.clientY - resize.y);
+  }
+
+  function stopResize(event) {
+    if (resizeRef.current?.pointerId !== event.pointerId) return;
+    resizeRef.current = null;
+    setResizing(false);
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+  }
+
+  function resizeWithKeyboard(event) {
+    const directions = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    if (event.key === 'Home') {
+      event.preventDefault();
+      event.stopPropagation();
+      setSize(null);
+      return;
+    }
+    const direction = directions[event.key];
+    if (!direction) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const distance = event.shiftKey ? 40 : 10;
+    resizeFrom(getResizeOrigin(), event.currentTarget.dataset.corner, direction[0] * distance, direction[1] * distance);
+  }
+
   function toggleMinimized() {
     const next = !isMinimized;
     if (minimized === undefined) setLocalMinimized(next);
@@ -190,6 +258,17 @@ export function GameHint({
             </div>}
           </div>
         )}
+        {onDijkstraTutorial && (
+          <button className="game-hint__route-toggle game-hint__dijkstra-toggle" type="button"
+            aria-label="Abrir tutorial de Dijkstra" title="Tutorial de Dijkstra"
+            onClick={() => {
+              setRouteMenuOpen(false);
+              onDijkstraTutorial();
+            }}
+          >
+            <Image src="/assets/game/ui/dijkstra-pirate-flag.svg" alt="" width={64} height={64} sizes="36px" draggable={false} />
+          </button>
+        )}
       </div>
     <div ref={boundsRef} className={`game-hint-layer ${className}`} style={style}>
       <aside
@@ -200,7 +279,13 @@ export function GameHint({
         data-dock={dock}
         data-minimized={isMinimized}
         data-dragging={dragging}
-        style={position ? { left: position.x, top: position.y, right: 'auto', bottom: 'auto' } : undefined}
+        data-resizing={resizing}
+        style={{
+          ...size,
+          // Ao soltar o canto, ajusta a altura ao conteúdo sem mudar sua escala.
+          height: resizing ? size?.height : 'auto',
+          ...(position ? { left: position.x, top: position.y, right: 'auto', bottom: 'auto' } : {})
+        }}
       >
         <span id={`${id}-move-help`} className="sr-only">Arraste pelas bordas. Com a borda focada, use as setas para mover e Home para voltar à posição inicial.</span>
         {Object.entries(EDGES).map(([edge, name]) => (
@@ -220,22 +305,24 @@ export function GameHint({
             onKeyDown={moveWithKeyboard}
           />
         ))}
+        <span id={`${id}-resize-help`} className="sr-only">Arraste pelos cantos para redimensionar. Com um canto focado, use as setas para ajustar o tamanho e Home para restaurar o tamanho inicial.</span>
+        {Object.entries(CORNERS).map(([corner, name]) => (
+          <button
+            key={corner}
+            type="button"
+            className="game-hint__resize-handle"
+            data-corner={corner}
+            aria-label={`Redimensionar ${label.toLowerCase()} pelo canto ${name}`}
+            aria-describedby={`${id}-resize-help`}
+            onPointerDown={startResize}
+            onPointerMove={moveResize}
+            onPointerUp={stopResize}
+            onPointerCancel={stopResize}
+            onLostPointerCapture={stopResize}
+            onKeyDown={resizeWithKeyboard}
+          />
+        ))}
         <div className="game-hint__panel">
-          <header className="game-hint__header">
-            <button
-              className="game-hint__toggle"
-              type="button"
-              aria-label={`${isMinimized ? 'Mostrar' : 'Minimizar'} ${label.toLowerCase()}`}
-              title={isMinimized ? 'Mostrar dica' : 'Minimizar dica'}
-              aria-expanded={!isMinimized}
-              aria-controls={`${id}-content`}
-              onClick={toggleMinimized}
-            >
-              {isMinimized
-                ? <Image src="/assets/game/ui/hint-lantern.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
-                : <Minimize2 aria-hidden="true" size={20} />}
-            </button>
-          </header>
           <div className="game-hint__content" id={`${id}-content`} hidden={isMinimized}>
             <div className="game-hint__body" aria-live="polite" aria-atomic="true">
               {title && <h2 className="game-hint__title">{title}</h2>}

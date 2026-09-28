@@ -24,12 +24,12 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
   add(1, { currentId: startId, text: 'Veja os custos junto aos pontos: 0 na origem e ∞ nos demais.' });
 
   while (confirmed.size < nodes.size) {
-    const { currentId, neighbors } = getNextDijkstraStep(graph.edges, distances, confirmed, finishId, graph.metadata.directed);
+    const { currentId, neighbors } = getNextDijkstraStep(graph.edges, distances, confirmed, graph.metadata.directed);
     if (!currentId) {
-      add(6, { title: 'Não há caminho', text: 'Não há mais pontos alcançáveis com saídas pendentes. O tesouro não pode ser alcançado desta origem.' });
+      add(6, { title: 'Não há caminho', text: 'Não há mais pontos alcançáveis ainda não confirmados. O tesouro não pode ser alcançado desta origem.' });
       return frames;
     }
-    add(2, { currentId, text: `${name(currentId)}: custo ${distances[currentId]}, o menor entre os pontos que ainda podem avançar ou o tesouro. Ilhas cujas saídas só levam a pontos confirmados são ignoradas.` });
+    add(2, { currentId, text: `${name(currentId)}: custo ${distances[currentId]}, o menor entre os pontos alcançáveis ainda não confirmados.` });
     confirmed.add(currentId);
     add(3, { currentId, text: `${name(currentId)}: custo ${distances[currentId]} confirmado. O ✓ marca um valor definitivo.` });
     if (currentId === finishId) break;
@@ -53,7 +53,9 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
       });
     }
     const origin = nodes.get(currentId).type === 'intermediate' ? 'da ilha destacada' : `de ${name(currentId)}`;
-    add(6, { currentId, text: `Terminamos as saídas ${origin}. Escolha o próximo menor custo, ignorando ilhas sem saídas para pontos ainda não confirmados. O tesouro continua sendo um destino válido.` });
+    add(6, { currentId, text: neighbors.length === 0
+      ? 'Não há vizinhos não confirmados para atualizar. Escolha o próximo menor custo.'
+      : `Terminamos as saídas ${origin}. Escolha o próximo menor custo.` });
   }
 
   const path = [finishId];
@@ -65,9 +67,6 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
     path.unshift(source);
     edgeIds.unshift(edge.id);
   }
-  const weights = edgeIds.map((id) => graph.edges.find((edge) => edge.id === id).weight);
-  add(7, { currentId: finishId, path: [...path], edgeIds: [...edgeIds], text: `Chegamos ao tesouro! O menor custo desde o ${name(startId).toLowerCase()} é ${distances[finishId]}.`, formula: `${weights.join(' + ')} = ${distances[finishId]}` });
-  add(8, { path: [...path], edgeIds: [...edgeIds] });
-  add(9, { path: [...path], edgeIds: [...edgeIds] });
+  add(7, { path: [...path], edgeIds: [...edgeIds] });
   return frames;
 }

@@ -20,7 +20,7 @@
   --game-hint-top: calc(var(--screen-inset-top) + 44px + 0.4rem);
   --game-hint-bottom: calc(var(--screen-inset-bottom) + 3.5rem);
 }
-.dijkstra-fixed-map__hint .game-hint { font-size: 0.85rem; }
+.dijkstra-fixed-map__hint .game-hint { font-size: calc(0.85rem * var(--game-hint-scale, 1)); }
 .dijkstra-fixed-map__hint--comparison { --game-hint-width: 24rem; }
 .dijkstra-fixed-map__formula { padding: 0.35rem 0.5rem; border-radius: 0.35rem; background: #f3dda8; font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
 .dijkstra-fixed-map__comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 6.5rem)); justify-content: center; gap: 0.5rem; margin-top: 0.5rem; }
@@ -31,7 +31,7 @@
   border-radius: 0.4rem;
   background: var(--boat-color);
   color: #fff8db;
-  font-size: 0.8rem;
+  font-size: calc(0.8rem * var(--game-hint-scale, 1));
   font-weight: 400;
 }
 .dijkstra-fixed-map__comparison button[data-boat='red'] { --boat-color: #b32222; }
@@ -55,7 +55,7 @@
   padding: 0.2rem 0.4rem;
   border-width: 1px;
   border-radius: 0.4rem;
-  font-size: 0.8rem;
+  font-size: calc(0.8rem * var(--game-hint-scale, 1));
 }
 
 .dijkstra-fixed-map__annotations { pointer-events: none; }

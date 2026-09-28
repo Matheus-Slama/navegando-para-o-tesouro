@@ -29,7 +29,8 @@ export function GameBoard({
   onCloseHint,
   onNextHint,
   routeStyle,
-  onChangeRouteStyle
+  onChangeRouteStyle,
+  onDijkstraTutorial
 }) {
   const treasure = graph.nodes.find((node) => node.type === 'finish');
   const boats = graph.nodes.filter((node) => node.type === 'start');
@@ -49,6 +50,7 @@ export function GameBoard({
         label={`Dica da fase ${phase.id}`}
         routeStyle={routeStyle}
         onChangeRouteStyle={onChangeRouteStyle}
+        onDijkstraTutorial={phase.difficulty.includes('difícil') ? onDijkstraTutorial : undefined}
         minimized={!hintOpen}
         onMinimizedChange={(value) => value ? onCloseHint() : onOpenHint()}
         footer={
@@ -70,8 +72,6 @@ export function GameBoard({
         onToggle={onToggleDevMode}
         onSelectPhase={onSelectPhase}
         onRegenerateMap={onRegenerateMap}
-        routeStyle={routeStyle}
-        onChangeRouteStyle={onChangeRouteStyle}
       />
 
       <MapGraph graph={graph} phase={phase} selectedStartId={selectedStartId} animationKey={animationKey} onWinnerArrive={onWinnerArrive} routeStyle={routeStyle} />

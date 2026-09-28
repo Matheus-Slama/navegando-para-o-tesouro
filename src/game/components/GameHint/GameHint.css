@@ -6,6 +6,7 @@
 }
 
 .game-hint {
+  box-sizing: border-box;
   position: absolute;
   display: flex;
   width: var(--game-hint-width, 20rem);
@@ -14,7 +15,7 @@
   padding: 14px;
   color: #2e1a09;
   background: url('/assets/game/ui/hint-modal-parchment.png') center / 100% 100% no-repeat;
-  font: 400 0.95rem/1.35 var(--font-pirate, Georgia), Georgia, serif;
+  font: 400 calc(0.95rem * var(--game-hint-scale, 1))/1.35 var(--font-pirate, Georgia), Georgia, serif;
   pointer-events: auto;
 }
 .game-hint[data-dock^='top'] { top: 0; }
@@ -76,21 +77,23 @@
 .game-hint__route-preview[data-style='arrows-white'] { color: #fff; }
 
 /* A faixa externa transparente recebe o arraste. */
+/* O painel mantém botão, texto e navegação dentro da área útil do pergaminho. */
 .game-hint__panel {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   width: 100%;
-  padding: 0.75rem calc(8% + 0.75rem);
+  padding: 2.5rem 2rem 0.75rem;
 }
-.game-hint__header { display: flex; justify-content: flex-end; flex: 0 0 auto; }
-.game-hint__content { display: flex; flex-direction: column; min-height: 0; }
+.game-hint__content { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }
 .game-hint__content[hidden] { display: none; }
-.game-hint__body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; overflow-wrap: anywhere; scrollbar-width: thin; padding: 0.2rem; }
-.game-hint__title { margin: 0 0 0.5rem; color: #492508; font: 400 1.2rem/1.15 var(--font-pirate, Georgia), Georgia, serif; }
+.game-hint__body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; overflow-wrap: anywhere; scrollbar-width: none; padding: 0.2rem; }
+.game-hint__body::-webkit-scrollbar { display: none; }
+.game-hint__title { margin: 0 0 0.5rem; color: #492508; font: 400 calc(1.2rem * var(--game-hint-scale, 1))/1.15 var(--font-pirate, Georgia), Georgia, serif; }
 .game-hint__body p { margin: 0.45rem 0; }
 .game-hint__body img { max-width: 100%; height: auto; }
-.game-hint__footer { flex: 0 0 auto; padding-top: 0.4rem; padding-bottom: 0.75rem; }
+.game-hint__footer { flex: 0 0 auto; margin-top: auto; padding-top: 0.4rem; }
 .game-hint__footer > :first-child { margin-top: 0; }
 .game-hint__actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .game-hint__actions > button { flex: 1 1 5rem; }
@@ -111,13 +114,13 @@
 .game-hint button:disabled { opacity: 0.35; cursor: default; }
 .game-hint button:focus-visible { outline: 3px solid #492508; outline-offset: 2px; }
 
-.game-hint__navigation { display: flex; align-items: center; justify-content: center; gap: 0.2rem; margin-top: 0.45rem; }
-.game-hint__navigation > span { flex: 0 0 auto; color: #795c32; font-size: 0.7rem; text-align: center; font-variant-numeric: tabular-nums; }
+.game-hint__navigation { display: flex; align-items: center; justify-content: center; width: fit-content; gap: 0.2rem; margin: 0.45rem auto 0; }
+.game-hint__navigation > span { flex: 0 0 auto; color: #795c32; font-size: calc(0.7rem * var(--game-hint-scale, 1)); text-align: center; font-variant-numeric: tabular-nums; }
 .game-hint .game-hint__navigation .game-hint__arrow {
-  flex: 0 1 4.25rem;
-  width: 4.25rem;
+  flex: 0 1 calc(3.75rem * var(--game-hint-scale, 1));
+  width: calc(3.75rem * var(--game-hint-scale, 1));
   min-width: 44px;
-  min-height: 44px;
+  min-height: 0;
   padding: 0;
   border: 0;
   border-radius: 0;
@@ -126,7 +129,7 @@
 }
 .game-hint .game-hint__navigation .game-hint__arrow:focus-visible { outline: none; }
 .game-hint .game-hint__navigation .game-hint__arrow:hover { background: transparent; }
-.game-hint__arrow img { display: block; width: 85%; height: auto; pointer-events: none; user-select: none; }
+.game-hint__arrow img { display: block; width: 100%; height: auto; pointer-events: none; user-select: none; }
 .game-hint__arrow--back img { transform: scaleX(-1); }
 .game-hint__arrow:hover:not(:disabled) img { filter: brightness(1.18); }
 .game-hint__arrow:focus-visible img { filter: brightness(1.4); }
@@ -166,12 +169,42 @@
 .game-hint[data-dragging='true'] { user-select: none; }
 .game-hint[data-dragging='true'] .game-hint__drag-handle { cursor: grabbing; }
 
+.game-hint__resize-handle {
+  position: absolute;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  touch-action: none;
+  user-select: none;
+}
+.game-hint .game-hint__drag-handle,
+.game-hint .game-hint__resize-handle,
+.game-hint .game-hint__drag-handle:focus-visible,
+.game-hint .game-hint__resize-handle:focus-visible {
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.game-hint__resize-handle[data-corner^='top'] { top: 4px; }
+.game-hint__resize-handle[data-corner^='bottom'] { bottom: 4px; }
+.game-hint__resize-handle[data-corner$='left'] { left: 10px; }
+.game-hint__resize-handle[data-corner$='right'] { right: 10px; }
+.game-hint__resize-handle[data-corner='top-left'],
+.game-hint__resize-handle[data-corner='bottom-right'] { cursor: nwse-resize; }
+.game-hint__resize-handle[data-corner='top-right'],
+.game-hint__resize-handle[data-corner='bottom-left'] { cursor: nesw-resize; }
+.game-hint[data-resizing='true'] { user-select: none; }
+
 .game-hint[data-minimized='true'] { width: 72px; height: 72px; background: transparent; }
 .game-hint[data-minimized='true'] .game-hint__panel { padding: 0; }
 .game-hint[data-minimized='true'] .game-hint__toggle:focus-visible { outline-color: #ffe3a6; }
 
 @media (max-height: 480px) {
-  .game-hint { font-size: 0.85rem; }
-  .game-hint__panel { padding-block: 0.5rem; }
-  .game-hint__title { font-size: 1.05rem; }
+  .game-hint { font-size: calc(0.85rem * var(--game-hint-scale, 1)); }
+  .game-hint__title { font-size: calc(1.05rem * var(--game-hint-scale, 1)); }
 }

@@ -58,9 +58,9 @@
   "phases": [
     {
       "id": 1, "name": "Primeiros custos", "difficulty": "fácil", "generation": "random", "challengeType": "weighted-paths",
-      "objective": "Entender caminhos e comparar seus custos pelos pesos das rotas.", "islandCount": 5, "extraRouteCount": 1,
-      "weights": { "min": 1, "max": 2 }, "directed": false, "uniqueWinnerGap": 1,
-      "score": { "maxScore": 1000, "targetTimeSeconds": 20 },
+      "objective": "Entender caminhos e comparar seus custos pelos pesos das rotas.", "islandCount": 6, "extraRouteCount": 2,
+      "weights": { "min": 1, "max": 3 }, "directed": false, "uniqueWinnerGap": 1,
+      "score": { "maxScore": 1250, "targetTimeSeconds": 18 },
       "hints": [
         "Antes de mover o barco, tente visualizar uma rota completa até o tesouro.",
         "Evite caminhos que terminam sem conexão com o objetivo.",
@@ -71,9 +71,9 @@
     },
     {
       "id": 2, "name": "Comparando custos", "difficulty": "fácil", "generation": "random", "challengeType": "weighted-comparison",
-      "objective": "Comparar o custo total de diferentes caminhos.", "islandCount": 5, "extraRouteCount": 3,
-      "weights": { "min": 1, "max": 3 }, "directed": false, "uniqueWinnerGap": 1,
-      "score": { "maxScore": 1500, "targetTimeSeconds": 30 },
+      "objective": "Comparar o custo total de diferentes caminhos.", "islandCount": 7, "extraRouteCount": 5,
+      "weights": { "min": 1, "max": 4 }, "directed": false, "uniqueWinnerGap": 1,
+      "score": { "maxScore": 1750, "targetTimeSeconds": 28 },
       "hints": [
         "Existem vários caminhos possíveis. Não escolha o primeiro que encontrar.",
         "Some todos os custos necessários para chegar ao tesouro.",
@@ -84,9 +84,9 @@
     },
     {
       "id": 3, "name": "Custos enganosos", "difficulty": "média", "generation": "random", "challengeType": "weighted-full-path",
-      "objective": "Analisar o custo do caminho completo e não somente seu primeiro peso.", "islandCount": 7, "extraRouteCount": 6,
-      "weights": { "min": 1, "max": 6 }, "directed": false, "uniqueWinnerGap": 2,
-      "score": { "maxScore": 2250, "targetTimeSeconds": 45 },
+      "objective": "Analisar o custo do caminho completo e não somente seu primeiro peso.", "islandCount": 8, "extraRouteCount": 8,
+      "weights": { "min": 1, "max": 7 }, "directed": false, "uniqueWinnerGap": 2,
+      "score": { "maxScore": 2500, "targetTimeSeconds": 42 },
       "hints": [
         "Não escolha apenas olhando o custo da primeira conexão.",
         "Veja os custos das conexões seguintes antes de decidir.",
@@ -97,9 +97,9 @@
     },
     {
       "id": 4, "name": "Somas estratégicas", "difficulty": "média", "generation": "random", "challengeType": "weighted-sum",
-      "objective": "Aprofundar a soma dos pesos em grafos com mais caminhos alternativos.", "islandCount": 7, "extraRouteCount": 6,
-      "weights": { "min": 1, "max": 5 }, "directed": false, "uniqueWinnerGap": 2,
-      "score": { "maxScore": 3000, "targetTimeSeconds": 60 },
+      "objective": "Aprofundar a soma dos pesos em grafos com mais caminhos alternativos.", "islandCount": 9, "extraRouteCount": 10,
+      "weights": { "min": 1, "max": 8 }, "directed": false, "uniqueWinnerGap": 2,
+      "score": { "maxScore": 3250, "targetTimeSeconds": 55 },
       "hints": [
         "Observe os números dos caminhos, não apenas a quantidade de ilhas.",
         "Um caminho com mais ilhas pode custar menos se os custos de suas conexões forem menores.",
@@ -111,9 +111,9 @@
     },
     {
       "id": 5, "name": "Custo acumulado", "difficulty": "difícil", "generation": "random", "challengeType": "accumulated-cost",
-      "objective": "Usar o custo acumulado como preparação para Dijkstra.",  "islandCount": { "min": 10, "max": 17 }, "extraRouteCount": 9,
-      "weights": { "min": 2, "max": 9 }, "directed": false, "uniqueWinnerGap": 1,
-      "score": { "maxScore": 4000, "targetTimeSeconds": 90 },
+      "objective": "Usar o custo acumulado como preparação para Dijkstra.",  "islandCount": { "min": 12, "max": 18 }, "extraRouteCount": 12,
+      "weights": { "min": 2, "max": 12 }, "directed": false, "uniqueWinnerGap": 1,
+      "score": { "maxScore": 4500, "targetTimeSeconds": 80 },
       "hints": [
         "Não tente escolher a rota completa de uma vez. Compare os custos para chegar às próximas ilhas.",
         "Anote mentalmente o menor custo conhecido para alcançar cada ilha.",
@@ -125,10 +125,10 @@
     },
     {
       "id": 6, "name": "Desafio final de Dijkstra", "difficulty": "muito difícil / final", "generation": "random", "challengeType": "dijkstra",
-      "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.", "islandCount": { "min": 15, "max": 20 }, "extraRouteCount": 26,
-      "weights": { "min": 1, "max": 30 }, "directed": true, "uniqueWinnerGap": 1,
-      "minimumEdgeCount": 20, "minimumWinnerPathNodes": 6,
-      "score": { "maxScore": 6000, "targetTimeSeconds": 180 },
+      "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.", "islandCount": { "min": 17, "max": 23 }, "extraRouteCount": 32,
+      "weights": { "min": 2, "max": 35 }, "directed": true, "uniqueWinnerGap": 1,
+      "minimumEdgeCount": 24, "minimumWinnerPathNodes": 7,
+      "score": { "maxScore": 7000, "targetTimeSeconds": 160 },
       "hints": [
         "Comece atribuindo custo 0 à posição inicial do barco e considere as ilhas ainda sem custo conhecido.",
         "Calcule o custo para chegar às ilhas vizinhas da posição inicial.",
