@@ -31,6 +31,9 @@ export function AnimatedBoats({ graph, raceStarted, animationKey, onWinnerArrive
 
 function RacingBoat({ graph, boat, result, winnerDistance, isWinner, onWinnerArrive }) {
   const boatRef = useRef(null);
+  const onArrival = useRef(onWinnerArrive);
+
+  useEffect(() => { onArrival.current = onWinnerArrive; }, [onWinnerArrive]);
 
   useEffect(() => {
     const element = boatRef.current;
@@ -78,11 +81,11 @@ function RacingBoat({ graph, boat, result, winnerDistance, isWinner, onWinnerArr
     });
 
     if (isWinner) {
-      animation.finished.then(onWinnerArrive).catch(() => {});
+      animation.finished.then(() => onArrival.current?.()).catch(() => {});
     }
 
     return () => animation.cancel();
-  }, [boat.id, graph, isWinner, onWinnerArrive, result, winnerDistance]);
+  }, [boat.id, graph, isWinner, result, winnerDistance]);
 
   return (
     <Image

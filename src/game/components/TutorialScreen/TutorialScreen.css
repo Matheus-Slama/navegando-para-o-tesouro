@@ -69,6 +69,57 @@
   transform: scale(1.12);
 }
 
+.tutorial-screen__hint-icon {
+  position: absolute;
+  top: clamp(0.75rem, 2vw, 1.5rem);
+  right: clamp(0.75rem, 2vw, 1.5rem);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: clamp(2.75rem, 5vw, 4rem);
+  height: clamp(2.75rem, 5vw, 4rem);
+  pointer-events: none;
+  user-select: none;
+}
+
+.tutorial-screen__hint-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.tutorial-screen__menu-button {
+  position: fixed;
+  top: clamp(0.75rem, 1.5vw, 1.1rem);
+  left: clamp(0.75rem, 1.5vw, 1.1rem);
+  z-index: 40;
+  min-width: 7.5rem;
+  padding: 0.55rem 0.8rem;
+  border: 2px solid #482608;
+  border-radius: 0.55rem;
+  background: rgba(124, 67, 15, 0.96);
+  color: #fff8db;
+  font: 600 0.78rem/1.2 var(--font-ui);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(21, 11, 4, 0.2);
+  transition: background 180ms ease, transform 180ms ease;
+}
+
+.tutorial-screen__menu-button:hover {
+  background: rgba(157, 90, 25, 0.96);
+}
+
+.tutorial-screen__menu-button:active {
+  transform: translateY(1px);
+}
+
+.tutorial-screen__menu-button:focus-visible {
+  outline: 3px solid #ffda70;
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tutorial-screen__map * {
     transition: none !important;

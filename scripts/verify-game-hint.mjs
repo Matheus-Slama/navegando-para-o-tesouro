@@ -116,10 +116,21 @@ try {
     const routeControl = await rect('.game-hint__route-control');
     const tutorialControl = await rect('.game-hint__dijkstra-toggle');
     assert.ok(tutorialControl.y >= routeControl.bottom, 'Dijkstra fica abaixo do seletor de arestas.');
+    await click('.game-hint__route-control .game-hint__route-toggle');
+    await click('.game-hint__route-options button[aria-label="Arestas: Branca"]');
     const mapBefore = await evaluate(`document.querySelector('.map-graph').innerHTML`);
     await click('.game-hint__dijkstra-toggle');
     await waitFor(`!!document.querySelector('.dijkstra-fixed-map')`);
+    assert.ok(await evaluate(`!!document.querySelector('.map-graph__route-direction--arrows-white')`), 'O tutorial usa o estilo escolhido no jogo.');
+    const sceneBefore = await evaluate(`document.querySelector('.game-hint__navigation > span').textContent`);
+    await click('.game-hint__route-control .game-hint__route-toggle');
+    await click('.game-hint__route-options button[aria-label="Arestas: Preta"]');
+    assert.ok(await evaluate(`!!document.querySelector('.map-graph__route-direction--arrows-black')`));
+    assert.equal(await evaluate(`document.querySelector('.game-hint__navigation > span').textContent`), sceneBefore, 'Trocar o estilo preserva o passo.');
     await click('.dijkstra-fixed-map__exit');
+    assert.ok(await evaluate(`!!document.querySelector('.map-graph__route-direction--arrows-black')`), 'O jogo mantém o estilo escolhido no tutorial.');
+    await click('.game-hint__route-control .game-hint__route-toggle');
+    await click('.game-hint__route-options button[aria-label="Arestas: Branca"]');
     assert.equal(await evaluate(`document.querySelector('.dev-panel select').value`), String(phaseIndex));
     assert.equal(await evaluate(`document.querySelector('.map-graph').innerHTML`), mapBefore, 'Voltar mantém o mapa da fase.');
   }

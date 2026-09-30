@@ -1,4 +1,5 @@
 import { GameHint } from '@/game/components/GameHint/GameHint';
+import { GameHud } from '@/game/components/GameHud/GameHud';
 import { BoatDock } from '@/game/components/BoatDock/BoatDock';
 import { TreasureAnchor } from '@/game/components/TreasureAnchor/TreasureAnchor';
 import { MapGraph } from '@/game/components/MapGraph/MapGraph';
@@ -8,6 +9,7 @@ import './GameBoard.css';
 import { getMapProfile } from '@/game/core/map-layout';
 
 export function GameBoard({
+  journey,
   graph,
   phase,
   phaseIndex,
@@ -37,6 +39,7 @@ export function GameBoard({
 
   return (
     <section className="game-board" data-layout={graph.metadata.layout}>
+      <GameHud {...journey} phase={phase.id} />
       <picture className="game-board__background">
         <img
           src={getMapProfile(graph.metadata.layout).asset}
@@ -88,6 +91,9 @@ export function GameBoard({
       />
 
       <RaceResult
+        lives={journey.lives}
+        score={journey.score}
+        earned={journey.earned}
         result={raceResult}
         selectedBoat={boats.find((boat) => boat.id === selectedStartId)}
         winner={boats.find((boat) => boat.id === graph.results.winner.startId)}

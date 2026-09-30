@@ -62,8 +62,9 @@ export function GameHint({
   function constrain(next) {
     const bounds = boundsRef.current;
     const card = cardRef.current;
+    const maxX = Math.max(0, bounds.clientWidth - card.offsetWidth);
     return {
-      x: Math.max(0, Math.min(next.x, Math.max(0, bounds.clientWidth - card.offsetWidth))),
+      x: Math.max(0, Math.min(next.x, maxX)),
       y: Math.max(0, Math.min(next.y, Math.max(0, bounds.clientHeight - card.offsetHeight)))
     };
   }

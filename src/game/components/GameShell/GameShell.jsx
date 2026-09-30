@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useJourney } from '@/game/hooks/useJourney';
 import { PHASES } from '@/game/config/phases';
 import { TUTORIAL_STEPS } from '@/game/config/tutorial';
 import { generateGraphForPhase } from '@/game/core/graphGenerator';
@@ -20,17 +21,17 @@ export function GameShell() {
   const [selectedStartId, setSelectedStartId] = useState(null);
   const [animationKey, setAnimationKey] = useState(0);
   const [raceResult, setRaceResult] = useState(null);
-  const [devMode, setDevMode] = useState(true);
+  const [devMode, setDevMode] = useState(false);
   const [hintOpen, setHintOpen] = useState(false);
   const [hintIndex, setHintIndex] = useState(0);
   const [routeStyle, setRouteStyle] = useState('chevrons');
   const phase = PHASES[phaseIndex];
+  const journey = useJourney(screen === 'game' && !selectedStartId && !raceResult);
 
   // Ao girar a tela, mantém a fase e pede uma nova escolha no mapa adaptado.
   if (previousLayout !== layout) {
     setPreviousLayout(layout);
-    setSelectedStartId(null);
-    setRaceResult(null);
+    if (!raceResult) setSelectedStartId(null);
     setHintOpen(false);
   }
 
@@ -40,6 +41,7 @@ export function GameShell() {
   }, [phase, seedNonce, layout]);
 
   function startGame() {
+    journey.reset();
     setPhaseIndex(0);
     setSeedNonce((value) => value + 1);
     setSelectedStartId(null);
@@ -48,6 +50,7 @@ export function GameShell() {
   }
 
   function openTutorial() {
+    journey.reset();
     setPhaseIndex(0);
     setSeedNonce((value) => value + 1);
     setSelectedStartId(null);
@@ -56,28 +59,48 @@ export function GameShell() {
   }
 
   function startPhase() {
+    journey.reset();
     setSelectedStartId(null);
     setRaceResult(null);
     setScreen('game');
   }
 
+  function returnToMenu() {
+    journey.reset();
+    setPhaseIndex(0);
+    setSeedNonce((value) => value + 1);
+    setSelectedStartId(null);
+    setRaceResult(null);
+    setScreen('start');
+  }
+
   function selectBoat(startId) {
-    if (selectedStartId) return;
+    if (selectedStartId || raceResult || journey.lives === 0) return;
+    journey.freeze();
     setSelectedStartId(startId);
     setRaceResult(null);
     setAnimationKey((value) => value + 1);
   }
 
-  const finishRace = useCallback(() => {
-    setRaceResult(selectedStartId === graph.results.winner.startId ? 'victory' : 'defeat');
-  }, [graph.results.winner.startId, selectedStartId]);
+  function finishRace() {
+    if (!selectedStartId || raceResult) return;
+    const won = selectedStartId === graph.results.winner.startId;
+    journey.finish(won, phase);
+    setRaceResult(won ? 'victory' : 'defeat');
+  }
 
   function continueAfterRace() {
+    if (journey.lives === 0) {
+      returnToMenu();
+      return;
+    }
+    if (raceResult === 'victory' && phaseIndex === PHASES.length - 1) {
+      startGame();
+      return;
+    }
+    journey.resetClock();
     if (raceResult === 'victory' && phaseIndex < PHASES.length - 1) {
       setPhaseIndex((value) => value + 1);
-      setSeedNonce((value) => value + 1);
-    } else if (raceResult === 'victory') {
-      setPhaseIndex(0);
       setSeedNonce((value) => value + 1);
     }
 
@@ -86,6 +109,7 @@ export function GameShell() {
   }
 
   function regenerateMap() {
+    journey.resetClock();
     setSeedNonce((value) => value + 1);
     setSelectedStartId(null);
     setRaceResult(null);
@@ -93,6 +117,7 @@ export function GameShell() {
   }
 
   function selectDevPhase(nextPhaseIndex) {
+    journey.resetClock();
     setPhaseIndex(nextPhaseIndex);
     setSeedNonce((value) => value + 1);
     setSelectedStartId(null);
@@ -114,7 +139,7 @@ export function GameShell() {
   }
 
   if (screen === 'tutorial') {
-    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} layout={layout} /></main>;
+    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} onBackToMenu={returnToMenu} layout={layout} /></main>;
   }
 
   if (screen === 'dijkstra-tutorial') {
@@ -124,6 +149,8 @@ export function GameShell() {
           onExit={() => setScreen('game')}
           onPlay={() => setScreen('game')}
           layout={layout}
+          routeStyle={routeStyle}
+          onChangeRouteStyle={setRouteStyle}
         />
       </main>
     );
@@ -132,6 +159,7 @@ export function GameShell() {
   return (
     <main className="game-page">
       <GameBoard
+        journey={journey}
         graph={graph}
         phase={phase}
         phaseIndex={phaseIndex}

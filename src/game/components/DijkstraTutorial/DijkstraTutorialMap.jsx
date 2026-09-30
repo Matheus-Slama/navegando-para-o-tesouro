@@ -17,13 +17,13 @@ const cost = (value) => Number.isFinite(value) ? value : '∞';
 const highlightInfinity = (text) => text.split(/(∞)/).map((part, index) => part === '∞'
   ? <span className="dijkstra-fixed-map__infinity" key={index}>∞</span> : part);
 
-export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile' }) {
+export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile', routeStyle = 'chevrons', onChangeRouteStyle }) {
   const [run, setRun] = useState(0);
   // Os formatos usam mapas distintos: uma mudança de formato reinicia as contas.
-  return <DijkstraWalkthrough key={`${layout}-${run}`} onExit={onExit} onPlay={onPlay} onRestart={() => setRun((value) => value + 1)} layout={layout} />;
+  return <DijkstraWalkthrough key={`${layout}-${run}`} onExit={onExit} onPlay={onPlay} onRestart={() => setRun((value) => value + 1)} layout={layout} routeStyle={routeStyle} onChangeRouteStyle={onChangeRouteStyle} />;
 }
 
-function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout }) {
+function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout, routeStyle, onChangeRouteStyle }) {
   const [index, setIndex] = useState(0);
   const [comparedBoat, setComparedBoat] = useState('start-blue');
   const graph = getDijkstraFixedMap(layout);
@@ -70,7 +70,7 @@ function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout }) {
         <img src={getMapProfile(layout).asset} alt="" fetchPriority="high" />
       </picture>
 
-      <MapGraph graph={graph} phase={DIJKSTRA_FIXED_PHASE} selectedStartId={null} routeStyle="chevrons" highlightedEdgeIds={current.edgeIds} />
+      <MapGraph graph={graph} phase={DIJKSTRA_FIXED_PHASE} selectedStartId={null} routeStyle={routeStyle} highlightedEdgeIds={current.edgeIds} />
       <TreasureAnchor node={treasure} phaseIndex={PHASES.length - 1} totalPhases={PHASES.length} />
       <div inert><BoatDock boats={boats} selectedStartId={null} /></div>
 
@@ -95,7 +95,7 @@ function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout }) {
 
       <button className="dijkstra-fixed-map__exit" type="button" onClick={onExit}>← Voltar ao jogo</button>
 
-      <GameHint title={isComplete ? 'Tutorial concluído!' : frame.title} label="Regras de Dijkstra" dock={dock} className={`dijkstra-fixed-map__hint${comparing ? ' dijkstra-fixed-map__hint--comparison' : ''}`} footer={isComplete ? (
+      <GameHint title={isComplete ? 'Tutorial concluído!' : frame.title} label="Regras de Dijkstra" routeStyle={routeStyle} onChangeRouteStyle={onChangeRouteStyle} dock={dock} className={`dijkstra-fixed-map__hint${comparing ? ' dijkstra-fixed-map__hint--comparison' : ''}`} footer={isComplete ? (
         <div className="dijkstra-fixed-map__completion-actions">
           <button type="button" onClick={onRestart}>Reiniciar tutorial</button>
           <button type="button" onClick={onPlay}>Voltar ao jogo</button>

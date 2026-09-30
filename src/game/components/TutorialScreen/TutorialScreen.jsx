@@ -14,7 +14,7 @@ import { getMapProfile } from '@/game/core/map-layout';
 
 const TUTORIAL_PHASE = PHASES[0];
 
-export function TutorialScreen({ steps, onFinish, layout = 'mobile' }) {
+export function TutorialScreen({ steps, onFinish, onBackToMenu, layout = 'mobile' }) {
   const graph = { ...TUTORIAL_GRAPH, metadata: { ...TUTORIAL_GRAPH.metadata, layout } };
   const [index, setIndex] = useState(0);
   const current = steps[index];
@@ -50,7 +50,10 @@ export function TutorialScreen({ steps, onFinish, layout = 'mobile' }) {
         </span>
       </div>
 
-      <GameHint title={current.title} label="Regras do jogo" dock={layout === 'wide' ? 'top-left' : 'top-right'} footer={
+      <button type="button" className="tutorial-screen__menu-button" onClick={onBackToMenu}>
+        Voltar ao menu
+      </button>
+      <GameHint title={current.title} label="Regras do jogo" dock="top-right" footer={
         <GameHintNavigation
           index={index}
           total={steps.length}

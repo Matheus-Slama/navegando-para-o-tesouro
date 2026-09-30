@@ -29,9 +29,9 @@
     "characters": "Os quatro barcos representam as opções iniciais; dicas e mensagens educativas orientam o jogador.",
     "narrative": "A jornada até o tesouro apresenta grafo, caminho, peso, caminho mínimo e algoritmo de Dijkstra.",
     "scoring": {
-      "method": "best-time-per-phase",
-      "timerStarts": "boat-selection",
-      "timerEnds": "first-boat-reaches-treasure",
+      "method": "journey-total-by-phase-time",
+      "timerStarts": "phase-ready",
+      "timerEnds": "boat-selection",
       "keepPersonalBest": true,
       "higherScoreForLowerTime": true,
       "formula": "round(maxScore * targetTimeSeconds / max(elapsedTimeSeconds, targetTimeSeconds))"
