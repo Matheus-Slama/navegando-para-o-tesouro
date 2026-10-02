@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useJourney } from '@/game/hooks/useJourney';
 import { PHASES } from '@/game/config/phases';
 import { TUTORIAL_STEPS } from '@/game/config/tutorial';
@@ -9,6 +9,7 @@ import { StartScreen } from '@/game/components/StartScreen/StartScreen';
 import { TutorialScreen } from '@/game/components/TutorialScreen/TutorialScreen';
 import { DijkstraTutorialMap } from '@/game/components/DijkstraTutorial/DijkstraTutorialMap';
 import { GameBoard } from '@/game/components/GameBoard/GameBoard';
+import { PauseGame } from '@/game/components/PauseGame/PauseGame';
 import { useMapLayout } from '@/game/hooks/useMapLayout';
 import './GameShell.css';
 
@@ -16,6 +17,7 @@ export function GameShell() {
   const layout = useMapLayout();
   const [previousLayout, setPreviousLayout] = useState(layout);
   const [screen, setScreen] = useState('start');
+  const [paused, setPaused] = useState(false);
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [seedNonce, setSeedNonce] = useState(1);
   const [selectedStartId, setSelectedStartId] = useState(null);
@@ -26,7 +28,38 @@ export function GameShell() {
   const [hintIndex, setHintIndex] = useState(0);
   const [routeStyle, setRouteStyle] = useState('chevrons');
   const phase = PHASES[phaseIndex];
-  const journey = useJourney(screen === 'game' && !selectedStartId && !raceResult);
+  const journey = useJourney(screen === 'game' && !paused && !selectedStartId && !raceResult);
+
+  useEffect(() => {
+    if (screen === 'start') return;
+    function handleKeyDown(event) {
+      if (paused) {
+        if (event.key === 'Escape' || event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+        return;
+      }
+      if (event.key !== 'Escape' || event.repeat) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setPaused(true);
+    }
+    function pauseGame() { setPaused(true); }
+    function handleVisibility() {
+      if (document.visibilityState === 'hidden') pauseGame();
+    }
+    window.addEventListener('keydown', handleKeyDown, true);
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('pagehide', pauseGame);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, true);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('pagehide', pauseGame);
+    };
+  }, [screen, paused]);
+
+  const pauseModal = paused ? <PauseGame score={journey.score} highscore={journey.highscore} onResume={() => setPaused(false)} /> : null;
 
   // Ao girar a tela, mantém a fase e pede uma nova escolha no mapa adaptado.
   if (previousLayout !== layout) {
@@ -75,7 +108,7 @@ export function GameShell() {
   }
 
   function selectBoat(startId) {
-    if (selectedStartId || raceResult || journey.lives === 0) return;
+    if (paused || selectedStartId || raceResult || journey.lives === 0) return;
     journey.freeze();
     setSelectedStartId(startId);
     setRaceResult(null);
@@ -139,7 +172,7 @@ export function GameShell() {
   }
 
   if (screen === 'tutorial') {
-    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} onBackToMenu={returnToMenu} layout={layout} /></main>;
+    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} onBackToMenu={returnToMenu} layout={layout} />{pauseModal}</main>;
   }
 
   if (screen === 'dijkstra-tutorial') {
@@ -152,6 +185,7 @@ export function GameShell() {
           routeStyle={routeStyle}
           onChangeRouteStyle={setRouteStyle}
         />
+        {pauseModal}
       </main>
     );
   }
@@ -159,6 +193,7 @@ export function GameShell() {
   return (
     <main className="game-page">
       <GameBoard
+        paused={paused}
         journey={journey}
         graph={graph}
         phase={phase}
@@ -184,6 +219,7 @@ export function GameShell() {
         onChangeRouteStyle={setRouteStyle}
         onDijkstraTutorial={() => setScreen('dijkstra-tutorial')}
       />
+      {pauseModal}
     </main>
   );
 }

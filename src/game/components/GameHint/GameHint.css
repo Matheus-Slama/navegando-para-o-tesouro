@@ -30,6 +30,8 @@
 .game-hint[hidden] { display: none; }
 
 .game-hint-tools {
+  --hint-tool-size: clamp(44px, 10vmin, 52px);
+  --hint-tool-icon-size: clamp(24px, 6vmin, 36px);
   position: absolute;
   z-index: 31;
   top: var(--screen-inset-top, 12px);
@@ -37,12 +39,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: clamp(4px, 1vmin, 8px);
 }
 .game-hint__route-control { position: relative; }
-.game-hint-tools > .game-hint__toggle { width: auto; height: auto; margin: 0; }
+.game-hint-tools > .game-hint__toggle,
+.game-hint__route-toggle {
+  width: var(--hint-tool-size);
+  height: var(--hint-tool-size);
+  flex: 0 0 auto;
+  margin: 0;
+}
 .game-hint-tools > .game-hint__toggle img,
-.game-hint__route-toggle img { display: block; width: 36px; height: 36px; object-fit: contain; image-rendering: pixelated; pointer-events: none; user-select: none; }
+.game-hint__route-toggle img { display: block; width: var(--hint-tool-icon-size); height: var(--hint-tool-icon-size); object-fit: contain; image-rendering: pixelated; pointer-events: none; user-select: none; }
 .game-hint-tools > .game-hint__toggle,
 .game-hint__route-toggle,
 .game-hint__route-options button {

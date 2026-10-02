@@ -22,7 +22,7 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
       for (const edge of graph.edges) costs[edge.to] = Math.min(costs[edge.to], costs[edge.from] + edge.weight);
     }
     for (const frame of frames) {
-      if (frame.step === 2) {
+      if (frame.step === 4) {
         const pending = Object.entries(frame.distances).filter(([id]) => !frame.confirmed.includes(id));
         assert.equal(frame.distances[frame.currentId], Math.min(...pending.map(([, cost]) => cost)));
       }
@@ -32,7 +32,7 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
     assert.equal(result.distance, costs.finish);
     assert.deepEqual(frames.at(-1).path, result.path);
     if (layout === 'wide' && result.startId === 'start-blue') {
-      const confirmations = frames.filter((frame) => frame.step === 3);
+      const confirmations = frames.filter((frame) => frame.step === 5);
       const island = confirmations.findIndex((frame) => frame.currentId === 'island-8');
       const treasure = confirmations.findIndex((frame) => frame.currentId === 'finish');
       assert.ok(island >= 0 && island < treasure);

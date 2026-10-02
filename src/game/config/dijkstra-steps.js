@@ -1,7 +1,15 @@
 export const DIJKSTRA_STEPS = [
   {
-    title: 'Comece escolhendo um barco',
-    text: 'Vamos focar no barco azul nesse tutorial.'
+    title: 'Conheça o algoritmo de Dijkstra',
+    text: 'O algoritmo de Dijkstra encontra o menor caminho. Ele compara a soma dos pesos das rotas para descobrir o melhor caminho.'
+  },
+  {
+    title: 'Mova e redimensione o card de dicas',
+    text: 'Arraste o card pelas bordas para movê-lo. Para redimensioná-lo, arraste um dos cantos. Ajuste a posição e o tamanho para acompanhar o mapa.'
+  },
+  {
+    title: 'Comece escolhendo o barco azul',
+    text: 'Vamos começar pelo barco azul, destacado no mapa. Acompanhe os próximos passos para encontrar o melhor caminho dele até o tesouro.'
   },
   {
     title: 'Anote os custos',
@@ -25,7 +33,7 @@ export const DIJKSTRA_STEPS = [
   },
   {
     title: 'Repita a busca',
-    text: 'Após examinar todas as saídas, volte ao passo 3. Continue até confirmar o tesouro.'
+    text: 'Após examinar todas as saídas, escolha novamente o menor custo ainda não confirmado. Continue até confirmar o tesouro.'
   },
   {
     title: 'Compare os barcos',

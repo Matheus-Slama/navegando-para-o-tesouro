@@ -3,7 +3,7 @@ import './MapGraph.css';
 import { AnimatedBoats } from '@/game/components/AnimatedBoat/AnimatedBoat';
 import { GAME_ASSETS } from '@/game/config/gameAssets';
 
-export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinnerArrive, routeStyle = 'chevrons', highlightedEdgeIds = [] }) {
+export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinnerArrive, routeStyle = 'chevrons', highlightedEdgeIds = [], paused = false }) {
   const layout = graph.metadata.layout ?? 'mobile';
   const nodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const islands = graph.nodes.filter((node) => node.type === 'intermediate');
@@ -131,7 +131,7 @@ export function MapGraph({ graph, phase, selectedStartId, animationKey, onWinner
         );
       })}
 
-      <AnimatedBoats graph={graph} raceStarted={Boolean(selectedStartId)} animationKey={animationKey} onWinnerArrive={onWinnerArrive} />
+      <AnimatedBoats graph={graph} raceStarted={Boolean(selectedStartId)} animationKey={animationKey} onWinnerArrive={onWinnerArrive} paused={paused} />
     </div>
   );
 }

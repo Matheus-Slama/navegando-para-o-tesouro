@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { GAME_ASSETS } from '@/game/config/gameAssets';
 import './AnimatedBoat.css';
 
-export function AnimatedBoats({ graph, raceStarted, animationKey, onWinnerArrive }) {
+export function AnimatedBoats({ graph, raceStarted, animationKey, onWinnerArrive, paused = false }) {
   if (!raceStarted) return null;
 
   return (
@@ -22,6 +22,7 @@ export function AnimatedBoats({ graph, raceStarted, animationKey, onWinnerArrive
             winnerDistance={graph.results.winner.distance}
             isWinner={result.startId === graph.results.winner.startId}
             onWinnerArrive={onWinnerArrive}
+            paused={paused}
           />
         );
       })}
@@ -29,8 +30,9 @@ export function AnimatedBoats({ graph, raceStarted, animationKey, onWinnerArrive
   );
 }
 
-function RacingBoat({ graph, boat, result, winnerDistance, isWinner, onWinnerArrive }) {
+function RacingBoat({ graph, boat, result, winnerDistance, isWinner, onWinnerArrive, paused }) {
   const boatRef = useRef(null);
+  const animationRef = useRef(null);
   const onArrival = useRef(onWinnerArrive);
 
   useEffect(() => { onArrival.current = onWinnerArrive; }, [onWinnerArrive]);
@@ -79,13 +81,24 @@ function RacingBoat({ graph, boat, result, winnerDistance, isWinner, onWinnerArr
       easing: 'linear',
       fill: 'forwards'
     });
+    animationRef.current = animation;
 
     if (isWinner) {
       animation.finished.then(() => onArrival.current?.()).catch(() => {});
     }
 
-    return () => animation.cancel();
+    return () => {
+      animation.cancel();
+      animationRef.current = null;
+    };
   }, [boat.id, graph, isWinner, result, winnerDistance]);
+
+  useEffect(() => {
+    const animation = animationRef.current;
+    if (!animation || animation.playState === 'finished') return;
+    if (paused) animation.pause();
+    else animation.play();
+  }, [paused, boat.id, graph, isWinner, result, winnerDistance]);
 
   return (
     <Image

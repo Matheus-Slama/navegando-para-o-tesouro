@@ -1,4 +1,7 @@
 .game-board {
+  --game-hud-width: min(clamp(240px, 30vw, 440px), calc(100vw - var(--screen-inset-left) - var(--screen-inset-right)));
+  --game-hud-height: calc(var(--game-hud-width) * 724 / 2172);
+  --game-hud-bottom: calc(var(--screen-inset-top) + var(--game-hud-height) + 16px);
   position: relative;
   isolation: isolate;
   container-type: size;
@@ -9,6 +12,34 @@
   padding: 0.5rem;
   overflow: hidden;
   background: #42afe2;
+}
+
+.game-board__map {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  isolation: isolate;
+}
+
+.game-board .dev-panel {
+  top: var(--game-hud-bottom);
+  max-height: calc(100% - var(--game-hud-bottom) - var(--screen-inset-bottom));
+}
+
+@media (width < 600px) {
+  .game-board {
+    --game-hud-width: min(clamp(180px, 52vw, 220px), calc(100vw - var(--screen-inset-left) - var(--screen-inset-right)));
+    --game-hud-bottom: calc(env(safe-area-inset-top, 0px) + var(--game-hud-width) * 423 / 2172 + 16px);
+  }
+
+  .game-board__map {
+    /* O centro do tesouro fica em 55/650 da altura: reserva só o espaço necessário. */
+    top: max(0px, calc((var(--game-hud-bottom) + min(18vw, 14svh, 7rem) / 2 - 100svh * 55 / 650) * 650 / 595));
+  }
+
+  .game-board .game-hint-tools {
+    top: var(--game-hud-bottom);
+  }
 }
 
 .game-board__background,
@@ -33,4 +64,3 @@
   object-fit: fill;
   object-position: center;
 }
-

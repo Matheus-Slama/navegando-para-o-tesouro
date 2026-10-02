@@ -19,19 +19,24 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
     confirmed: [...confirmed], currentId: null, targetId: null, edgeIds: [], path: [],
     showCosts: true, formula: '', ...extra
   });
-  add(0, { currentId: startId, showCosts: false, text: `Vamos focar no ${name(startId).toLowerCase()} nesse tutorial.` });
+  add(0, { showCosts: false });
+  add(1, { showCosts: false });
+  add(2, { currentId: startId, showCosts: false, ...(startId !== 'start-blue' ? {
+    title: `Comece escolhendo ${name(startId)}`,
+    text: `Vamos começar por ${name(startId)}, destacado no mapa. Acompanhe os próximos passos para encontrar o melhor caminho dele até o tesouro.`
+  } : {}) });
   distances[startId] = 0;
-  add(1, { currentId: startId, text: 'Veja os custos junto aos pontos: 0 na origem e ∞ nos demais.' });
+  add(3, { currentId: startId });
 
   while (confirmed.size < nodes.size) {
     const { currentId, neighbors } = getNextDijkstraStep(graph.edges, distances, confirmed, graph.metadata.directed);
     if (!currentId) {
-      add(6, { title: 'Não há caminho', text: 'Não há mais pontos alcançáveis ainda não confirmados. O tesouro não pode ser alcançado desta origem.' });
+      add(8, { title: 'Não há caminho', text: 'Não há mais pontos alcançáveis ainda não confirmados. O tesouro não pode ser alcançado desta origem.' });
       return frames;
     }
-    add(2, { currentId, text: `${name(currentId)}: custo ${distances[currentId]}, o menor entre os pontos alcançáveis ainda não confirmados.` });
+    add(4, { currentId, text: `${name(currentId)}: custo ${distances[currentId]}, o menor entre os pontos alcançáveis ainda não confirmados.` });
     confirmed.add(currentId);
-    add(3, { currentId, text: `${name(currentId)}: custo ${distances[currentId]} confirmado. O ✓ marca um valor definitivo.` });
+    add(5, { currentId, text: `${name(currentId)}: custo ${distances[currentId]} confirmado. O ✓ marca um valor definitivo.` });
     if (currentId === finishId) break;
 
     for (const { edge, target: targetId } of neighbors) {
@@ -40,12 +45,12 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
       const candidate = distances[currentId] + edge.weight;
       const improved = candidate < oldDistance;
       const focus = { currentId, targetId, edgeIds: [edge.id] };
-      add(4, { ...focus, text: `${name(currentId)} → ${name(targetId)}. Siga a seta que sai do ponto atual e some o custo acumulado ao peso da rota destacada.`, formula: `${distances[currentId]} + ${edge.weight} = ${candidate}` });
+      add(6, { ...focus, text: `${name(currentId)} → ${name(targetId)}. Siga a seta que sai do ponto atual e some o custo acumulado ao peso da rota destacada.`, formula: `${distances[currentId]} + ${edge.weight} = ${candidate}` });
       if (improved) {
         distances[targetId] = candidate;
         previous[targetId] = currentId;
       }
-      add(5, {
+      add(7, {
         ...focus, improved,
         title: improved ? 'Atualize o custo' : 'Mantenha o custo',
         text: improved ? `${name(targetId)} muda de ${format(oldDistance)} para ${candidate}. Anterior: ${name(currentId)}.` : `${name(targetId)} já tem custo ${format(oldDistance)}. Esta alternativa não melhora o caminho.`,
@@ -53,7 +58,7 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
       });
     }
     const origin = nodes.get(currentId).type === 'intermediate' ? 'da ilha destacada' : `de ${name(currentId)}`;
-    add(6, { currentId, text: neighbors.length === 0
+    add(8, { currentId, text: neighbors.length === 0
       ? 'Não há vizinhos não confirmados para atualizar. Escolha o próximo menor custo.'
       : `Terminamos as saídas ${origin}. Escolha o próximo menor custo.` });
   }
@@ -67,6 +72,6 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
     path.unshift(source);
     edgeIds.unshift(edge.id);
   }
-  add(7, { path: [...path], edgeIds: [...edgeIds] });
+  add(9, { path: [...path], edgeIds: [...edgeIds] });
   return frames;
 }

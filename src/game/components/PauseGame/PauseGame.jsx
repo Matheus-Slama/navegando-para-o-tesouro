@@ -1,0 +1,16 @@
+import { GameDialog } from '@/game/components/GameDialog/GameDialog';
+import '@/game/components/RaceResult/RaceResult.css';
+import './PauseGame.css';
+
+export function PauseGame({ onResume, score, highscore }) {
+  return (
+    <GameDialog labelledBy="pause-game-title" className="pause-game race-result">
+      <div className="race-result__card">
+        <h2 id="pause-game-title">Pause Game</h2>
+        <p>Pontuação atual: <strong>{score.toLocaleString('pt-BR')}</strong><br />
+          High Score: <strong>{highscore.toLocaleString('pt-BR')}</strong></p>
+        <button type="button" onClick={onResume}>Voltar pro jogo</button>
+      </div>
+    </GameDialog>
+  );
+}

@@ -9,6 +9,7 @@ import './GameBoard.css';
 import { getMapProfile } from '@/game/core/map-layout';
 
 export function GameBoard({
+  paused = false,
   journey,
   graph,
   phase,
@@ -39,7 +40,6 @@ export function GameBoard({
 
   return (
     <section className="game-board" data-layout={graph.metadata.layout}>
-      <GameHud {...journey} phase={phase.id} />
       <picture className="game-board__background">
         <img
           src={getMapProfile(graph.metadata.layout).asset}
@@ -47,7 +47,7 @@ export function GameBoard({
           fetchPriority="high"
         />
       </picture>
-
+      <GameHud lives={journey.lives} elapsed={journey.elapsed} score={journey.score} />
       <GameHint
         title={`Dica da fase ${phase.id}`}
         label={`Dica da fase ${phase.id}`}
@@ -77,22 +77,25 @@ export function GameBoard({
         onRegenerateMap={onRegenerateMap}
       />
 
-      <MapGraph graph={graph} phase={phase} selectedStartId={selectedStartId} animationKey={animationKey} onWinnerArrive={onWinnerArrive} routeStyle={routeStyle} />
+      <div className="game-board__map">
+        <MapGraph graph={graph} phase={phase} selectedStartId={selectedStartId} animationKey={animationKey} onWinnerArrive={onWinnerArrive} routeStyle={routeStyle} paused={paused} />
 
-      <TreasureAnchor
-        node={treasure}
-        phaseIndex={phaseIndex}
-        totalPhases={totalPhases}
-      />
-      <BoatDock
-        boats={boats}
-        selectedStartId={selectedStartId}
-        onSelect={onSelectStart}
-      />
+        <TreasureAnchor
+          node={treasure}
+          phaseIndex={phaseIndex}
+          totalPhases={totalPhases}
+        />
+        <BoatDock
+          boats={boats}
+          selectedStartId={selectedStartId}
+          onSelect={onSelectStart}
+        />
+      </div>
 
       <RaceResult
         lives={journey.lives}
         score={journey.score}
+        highscore={journey.highscore}
         earned={journey.earned}
         result={raceResult}
         selectedBoat={boats.find((boat) => boat.id === selectedStartId)}
