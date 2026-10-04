@@ -1,5 +1,8 @@
 .game-board {
-  --game-hud-width: min(clamp(240px, 30vw, 440px), calc(100vw - var(--screen-inset-left) - var(--screen-inset-right)));
+  --game-tool-size: 48px;
+  --game-tool-icon-size: 28px;
+  --game-tool-gap: 8px;
+  --game-hud-width: min(clamp(240px, 30vw, 440px), calc(100cqw - var(--screen-inset-left) - var(--screen-inset-right)));
   --game-hud-height: calc(var(--game-hud-width) * 724 / 2172);
   --game-hud-bottom: calc(var(--screen-inset-top) + var(--game-hud-height) + 16px);
   position: relative;
@@ -12,6 +15,15 @@
   padding: 0.5rem;
   overflow: hidden;
   background: #42afe2;
+}
+
+.game-board__content {
+  /* Reserva a moldura branca e o contorno presentes no PNG (16 px na imagem). */
+  position: absolute;
+  inset: var(--map-frame-y) var(--map-frame-x);
+  container-type: size;
+  isolation: isolate;
+  overflow: hidden;
 }
 
 .game-board__map {
@@ -28,17 +40,86 @@
 
 @media (width < 600px) {
   .game-board {
-    --game-hud-width: min(clamp(180px, 52vw, 220px), calc(100vw - var(--screen-inset-left) - var(--screen-inset-right)));
-    --game-hud-bottom: calc(env(safe-area-inset-top, 0px) + var(--game-hud-width) * 423 / 2172 + 16px);
+    --game-hud-width: min(clamp(210px, 60vw, 260px), calc(100cqw - var(--screen-inset-left) - var(--screen-inset-right)));
+    --game-hud-bottom: calc(var(--screen-inset-top) + var(--game-hud-width) * 423 / 2172 + 16px);
   }
 
   .game-board__map {
     /* O centro do tesouro fica em 55/650 da altura: reserva só o espaço necessário. */
-    top: max(0px, calc((var(--game-hud-bottom) + min(18vw, 14svh, 7rem) / 2 - 100svh * 55 / 650) * 650 / 595));
+    top: max(0px, calc((var(--game-hud-bottom) + min(18cqw, 14cqh, 7rem) / 2 - 100cqh * 55 / 650) * 650 / 595));
   }
 
-  .game-board .game-hint-tools {
+  .dijkstra-fixed-map .game-hint-tools {
     top: var(--game-hud-bottom);
+  }
+
+  .game-board:not(.dijkstra-fixed-map) .game-hint-layer {
+    --game-hint-top: var(--game-hud-bottom);
+  }
+}
+
+@media (600px <= width < 1024px) and (height >= 500px) {
+  .game-board {
+    --game-tool-size: 42px;
+    --game-tool-icon-size: 26px;
+  }
+}
+
+@media (width >= 1600px) and (height >= 900px) {
+  .game-board {
+    --game-tool-size: 52px;
+    --game-tool-icon-size: 32px;
+  }
+}
+
+@media (width < 600px), (height < 500px) and (orientation: landscape) {
+  .game-board {
+    --game-tool-size: 36px;
+    --game-tool-icon-size: 22px;
+    --game-tool-gap: 6px;
+    --control-gap: 8px;
+    --control-font-size: 0.875rem;
+    --control-padding-block: 6px;
+    --control-padding-inline: 10px;
+  }
+
+  .game-board .dev-panel__toggle {
+    position: relative;
+    min-height: var(--game-tool-size);
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
+  /* Amplia a área de toque sem sobrepor os botões vizinhos. */
+  .game-board .dev-panel__toggle::after,
+  .game-board .game-hint-tools > button::after,
+  .game-board .game-hint__route-toggle::after {
+    content: '';
+    position: absolute;
+    inset: max(calc(var(--game-tool-gap) / -2), calc((var(--game-tool-size) - 44px) / 2)) calc((var(--game-tool-size) - 44px) / 2);
+  }
+}
+
+@media (height < 500px) and (orientation: landscape) {
+  .game-board {
+    --game-hud-width: clamp(180px, 26vw, 240px);
+    --game-hud-bottom: calc(var(--screen-inset-top) + var(--game-hud-width) * 528 / 2172 + 8px);
+  }
+}
+
+@media (width < 360px) {
+  .game-board {
+    --game-tool-size: 28px;
+    --game-tool-icon-size: 18px;
+    --game-tool-gap: 6px;
+    --game-hud-width: min(72vw, 230px);
+    --game-hud-bottom: calc(var(--screen-inset-top) + var(--game-hud-width) * 423 / 2172 + 12px);
+  }
+
+  .game-board .dev-panel__toggle {
+    padding: 4px 7px;
+    font-size: 0.625rem;
   }
 }
 

@@ -54,16 +54,15 @@
 
 @media (width < 600px) {
   .game-hud {
-    top: env(safe-area-inset-top, 0px);
-    /* Alinha a madeira ao topo, descontando o vazio dentro da imagem. */
+    left: var(--screen-inset-left);
+    /* Alinha a madeira à margem dos botões, descontando o vazio da imagem. */
     transform: translateY(calc(-100% * 136 / 724));
   }
 }
 
 @media (width >= 600px) {
   .game-hud {
-    top: env(safe-area-inset-top, 0px);
-    left: env(safe-area-inset-left, 0px);
+    left: var(--screen-inset-left);
     /* Compensa apenas a margem transparente do PNG original. */
     transform: translate(calc(-100% * 17 / 2172), calc(-100% * 98 / 724));
   }

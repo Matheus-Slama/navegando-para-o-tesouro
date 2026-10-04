@@ -137,3 +137,15 @@
   text-align: center;
   text-shadow: 0 1px 0 #fff4c7, 1px 0 0 #fff4c7, 0 -1px 0 #fff4c7, -1px 0 0 #fff4c7;
 }
+
+@media (width < 600px) {
+  .game-board .map-graph__weight {
+    min-width: clamp(18px, 6cqw, 26px);
+    min-height: clamp(16px, 4.8cqw, 20px);
+    padding: 1px 3px;
+    border-width: 1px;
+    border-radius: 5px;
+    font-size: clamp(11px, 3cqw, 13px);
+    box-shadow: 0 1px 3px rgba(20, 40, 50, 0.3);
+  }
+}

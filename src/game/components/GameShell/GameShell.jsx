@@ -194,6 +194,7 @@ export function GameShell() {
     <main className="game-page">
       <GameBoard
         paused={paused}
+        onPause={() => setPaused(true)}
         journey={journey}
         graph={graph}
         phase={phase}

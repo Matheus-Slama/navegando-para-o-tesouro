@@ -2,7 +2,7 @@
   position: absolute;
   z-index: var(--game-hint-z-index, 30);
   --hint-dock-top: var(--game-hint-top, var(--screen-inset-top, 12px));
-  --hint-dock-right: var(--game-hint-right, calc(var(--screen-inset-right, 12px) + 60px));
+  --hint-dock-right: var(--game-hint-right, calc(var(--screen-inset-right, 12px) + var(--game-tool-size, 48px) + 12px));
   --hint-dock-bottom: var(--game-hint-bottom, var(--screen-inset-bottom, 12px));
   --hint-dock-left: var(--game-hint-left, var(--screen-inset-left, 12px));
   /* As margens posicionam a dica inicial, mas não limitam o arraste. */
@@ -30,8 +30,8 @@
 .game-hint[hidden] { display: none; }
 
 .game-hint-tools {
-  --hint-tool-size: clamp(44px, 10vmin, 52px);
-  --hint-tool-icon-size: clamp(24px, 6vmin, 36px);
+  --hint-tool-size: var(--game-tool-size, 48px);
+  --hint-tool-icon-size: var(--game-tool-icon-size, 28px);
   position: absolute;
   z-index: 31;
   top: var(--screen-inset-top, 12px);
@@ -39,13 +39,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(4px, 1vmin, 8px);
+  gap: var(--game-tool-gap, 8px);
 }
 .game-hint__route-control { position: relative; }
+.game-hint__pause svg {
+  width: var(--hint-tool-icon-size);
+  height: var(--hint-tool-icon-size);
+  pointer-events: none;
+}
 .game-hint-tools > .game-hint__toggle,
 .game-hint__route-toggle {
+  position: relative;
   width: var(--hint-tool-size);
   height: var(--hint-tool-size);
+  min-width: var(--hint-tool-size);
+  min-height: var(--hint-tool-size);
   flex: 0 0 auto;
   margin: 0;
 }
@@ -58,8 +66,6 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  min-width: 44px;
-  min-height: 44px;
   padding: 0.35rem;
   border: 2px solid #482608;
   border-radius: 0.55rem;
@@ -81,6 +87,7 @@
   background: #f3dda8;
   box-shadow: 0 3px 8px #082e4355;
 }
+.game-hint__route-options button { min-width: 40px; min-height: 40px; }
 .game-hint__route-options button[aria-pressed='true'] { background: #492508; box-shadow: inset 0 0 0 2px #ffda70; }
 .game-hint-tools > .game-hint__toggle:hover,
 .game-hint__route-toggle:hover,
@@ -243,4 +250,16 @@
 @media (max-height: 480px) {
   .game-hint { font-size: calc(0.85rem * var(--game-hint-scale, 1)); }
   .game-hint__title { font-size: calc(1.05rem * var(--game-hint-scale, 1)); }
+}
+
+@media (width < 600px), (height < 500px) and (orientation: landscape) {
+  .game-board .game-hint {
+    padding: 8px;
+    font-size: 0.875rem;
+  }
+  .game-board .game-hint__panel { padding: 28px 20px 12px; }
+  .game-board .game-hint__title { font-size: 1.05rem; }
+  .game-board .game-hint__footer button { min-height: 36px; padding: 6px 8px; }
+  .game-board .game-hint-tools > button,
+  .game-board .game-hint__route-toggle { border-radius: 6px; padding: 4px; }
 }

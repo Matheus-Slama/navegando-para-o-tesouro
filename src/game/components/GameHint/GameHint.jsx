@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 import Image from 'next/image';
-import { ArrowRight, ChevronsRight } from 'lucide-react';
+import { ArrowRight, ChevronsRight, Pause } from 'lucide-react';
 import './GameHint.css';
 
 const EDGES = { top: 'superior', right: 'direita', bottom: 'inferior', left: 'esquerda' };
@@ -27,6 +27,7 @@ export function GameHint({
   routeStyle,
   onChangeRouteStyle,
   onDijkstraTutorial,
+  onPause,
   label = 'Dica do jogo',
   dock = 'top-right',
   minimized,
@@ -210,6 +211,12 @@ export function GameHint({
   return (
     <>
       <div className="game-hint-tools">
+        {onPause && (
+          <button className="game-hint__route-toggle game-hint__pause" type="button"
+            aria-label="Pausar jogo" title="Pausar jogo" onClick={onPause}>
+            <Pause aria-hidden="true" />
+          </button>
+        )}
         <button
           className="game-hint__toggle"
           type="button"
