@@ -27,40 +27,41 @@
 .start-screen__content {
   grid-row: 2;
   position: relative;
-  width: min(100%, 22rem);
+  width: min(56vw, 22rem);
   margin-inline: auto;
-  padding: max(0.75rem, env(safe-area-inset-top)) var(--screen-inset-right) max(1.5rem, env(safe-area-inset-bottom)) var(--screen-inset-left);
+  padding-block: 0 max(1rem, env(safe-area-inset-bottom));
   display: grid;
   justify-items: center;
-  gap: clamp(1rem, 2.4svh, 1.5rem);
+  gap: clamp(1rem, 2.2svh, 1.75rem);
   text-align: center;
   color: #2b1608;
 }
 
 .start-screen__frame {
+  position: relative;
   display: grid;
-  grid-template-rows: minmax(0, 2fr) auto minmax(0, 1fr);
+  grid-template-rows: 56svh auto minmax(0, 1fr);
   min-height: 100svh;
 }
 
 .start-screen__content button {
-  width: min(18.125rem, 100%);
+  width: 100%;
   min-width: 0;
-  min-height: var(--control-min-height);
+  min-height: clamp(2.75rem, 6.5vmin, 5rem);
   line-height: 1.2;
   overflow-wrap: anywhere;
-  border: 0.1875rem solid #55300f;
+  border: clamp(0.125rem, 0.3vmin, 0.1875rem) solid #55300f;
   border-radius: 62.4375rem;
-  padding: var(--control-padding-block) var(--control-padding-inline);
+  padding: 0.5rem clamp(0.75rem, 2vmin, 1.5rem);
   background: linear-gradient(180deg, #ffe08a, #f2b332 58%, #d68a19);
   color: #2b1608;
   font-family: var(--font-title);
-  font-size: clamp(1.125rem, 0.95rem + 0.6vmin, 1.5rem);
+  font-size: clamp(1rem, 0.875rem + 1vmin, 2rem);
   font-weight: 400;
   letter-spacing: 0.02em;
   box-shadow:
-    0 0.4375rem 0 #794310,
-    0 0.875rem 1.75rem rgba(46, 22, 6, 0.32),
+    0 clamp(0.25rem, 0.6vmin, 0.4375rem) 0 #794310,
+    0 0.5rem 1rem rgba(46, 22, 6, 0.32),
     inset 0 0.125rem 0 rgba(255, 247, 199, 0.8);
   transition: transform 150ms ease, filter 150ms ease, box-shadow 150ms ease;
 }
@@ -82,17 +83,18 @@
     0 0.4375rem 1rem rgba(46, 22, 6, 0.3);
 }
 
-@media (min-aspect-ratio: 1/1) {
-  .start-screen {
-    display: grid;
-    place-items: center;
+@media (min-width: 600px) {
+  .start-screen__content { width: min(62vw, 22rem); }
+  .start-screen__content button {
+    min-height: clamp(3rem, 6.5vmin, 5rem);
+    font-size: clamp(1.125rem, 1rem + 1vmin, 2rem);
   }
+}
 
+/* Telas largas usam uma linha abaixo do título, inclusive no celular deitado. */
+@media (min-aspect-ratio: 1/1) {
   .start-screen__frame {
-    position: relative;
-    isolation: isolate;
-    width: 100%;
-    grid-template-rows: minmax(0, 5fr) auto minmax(0, 1fr);
+    grid-template-rows: minmax(100svh, auto);
   }
 
   .start-screen__art img {
@@ -100,51 +102,27 @@
   }
 
   .start-screen__content {
-    width: min(100%, 22rem);
-    gap: var(--control-gap);
+    grid-row: 1;
+    align-self: end;
+    /* A largura acompanha o texto ampliado sem invadir as cordas laterais. */
+    width: min(78vw, max(58vw, 22em), 52rem);
+    margin-bottom: max(12svh, env(safe-area-inset-bottom));
+    padding-block: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(12px, 2vw, 32px);
+    font-size: clamp(max(18px, 1rem), 2.8svh, 2rem);
   }
 
   .start-screen__content button {
-    width: 100%;
-    min-width: 0;
+    min-height: clamp(44px, 7svh, 80px);
+    padding: clamp(6px, 1svh, 12px) clamp(8px, 1.5vw, 24px);
+    font-size: inherit;
   }
 }
 
-.start-screen[data-mobile='true'] .start-screen__content {
-  gap: 14px;
-  padding: max(12px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
-}
-
-.start-screen[data-mobile='true'] .start-screen__content button {
-  position: relative;
-  width: min(224px, 68vw, 100%);
-  min-height: 44px;
-  padding: 6px 14px;
-  border-width: 2px;
-  font-size: clamp(16px, 1rem, 18px);
-  box-shadow:
-    0 4px 0 #794310,
-    0 8px 16px rgba(46, 22, 6, 0.25),
-    inset 0 2px 0 rgba(255, 247, 199, 0.8);
-}
-
-@media (max-width: 599px) and (orientation: portrait) {
-  .start-screen__frame {
-    grid-template-rows: 56svh auto minmax(0, 1fr);
-  }
-
-  .start-screen__art {
-    height: 100svh;
-  }
-
+@media (max-height: 500px) and (min-aspect-ratio: 1/1) {
   .start-screen__content {
-    width: min(100%, 256px);
-  }
-}
-
-@media (max-height: 500px) and (orientation: landscape) {
-  .start-screen__content {
-    width: min(100%, 320px);
+    width: min(78vw, max(52vw, 20em), 52rem);
   }
 }
 

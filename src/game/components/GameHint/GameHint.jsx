@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 import Image from 'next/image';
-import { ArrowRight, ChevronsRight, Pause } from 'lucide-react';
+import { ArrowRight, ChevronsRight } from 'lucide-react';
 import './GameHint.css';
 
 const EDGES = { top: 'superior', right: 'direita', bottom: 'inferior', left: 'esquerda' };
@@ -214,7 +214,7 @@ export function GameHint({
         {onPause && (
           <button className="game-hint__route-toggle game-hint__pause" type="button"
             aria-label="Pausar jogo" title="Pausar jogo" onClick={onPause}>
-            <Pause aria-hidden="true" />
+            <Image src="/assets/game/ui/pirate-pause.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
           </button>
         )}
         <button

@@ -31,7 +31,7 @@
 
 .game-hint-tools {
   --hint-tool-size: var(--game-tool-size, 48px);
-  --hint-tool-icon-size: var(--game-tool-icon-size, 28px);
+  --hint-tool-icon-size: min(var(--game-tool-icon-size, 28px), calc(var(--hint-tool-size) * 0.48));
   position: absolute;
   z-index: 31;
   top: var(--screen-inset-top, 12px);
@@ -42,10 +42,9 @@
   gap: var(--game-tool-gap, 8px);
 }
 .game-hint__route-control { position: relative; }
-.game-hint__pause svg {
-  width: var(--hint-tool-icon-size);
-  height: var(--hint-tool-icon-size);
-  pointer-events: none;
+.game-hint__pause img {
+  /* Compensa as margens transparentes do ícone original. */
+  transform: scale(1.35);
 }
 .game-hint-tools > .game-hint__toggle,
 .game-hint__route-toggle {
@@ -66,10 +65,12 @@
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
-  padding: 0.35rem;
-  border: 2px solid #482608;
+  /* Reserva a moldura e mantém o desenho na área escura central. */
+  padding: calc(var(--hint-tool-size) * 0.26);
+  border: 0;
   border-radius: 0.55rem;
-  background: #7c430f;
+  background: transparent url('/assets/game/ui/pirate-button-background.png') center / 100% 100% no-repeat;
+  image-rendering: pixelated;
   color: #fff8db;
   font: 400 0.85rem/1.2 var(--font-ui);
   cursor: pointer;
@@ -87,14 +88,16 @@
   background: #f3dda8;
   box-shadow: 0 3px 8px #082e4355;
 }
-.game-hint__route-options button { min-width: 40px; min-height: 40px; }
-.game-hint__route-options button[aria-pressed='true'] { background: #492508; box-shadow: inset 0 0 0 2px #ffda70; }
+.game-hint__route-options button { --hint-tool-size: 40px; width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
+.game-hint__route-options button[aria-pressed='true'] { box-shadow: inset 0 0 0 2px #ffda70; }
 .game-hint-tools > .game-hint__toggle:hover,
 .game-hint__route-toggle:hover,
-.game-hint__route-options button:hover { background: #9d5a19; }
+.game-hint__route-options button:hover { filter: brightness(1.15); }
+.game-hint-tools button:active { transform: translateY(1px); }
 .game-hint-tools button:focus-visible { outline: 3px solid #ffda70; outline-offset: 2px; }
-.game-hint__route-preview { display: grid; place-items: center; color: #080d12; }
-.game-hint__route-preview[data-style='arrows-white'] { color: #fff; }
+.game-hint__route-preview { display: grid; place-items: center; width: 100%; height: 100%; color: #080d12; background: #f3dda8; border-radius: 3px; }
+.game-hint__route-preview svg { width: 100%; height: 100%; }
+.game-hint__route-preview[data-style='arrows-white'] { color: #fff; background: #082e43; }
 
 /* A faixa externa transparente recebe o arraste. */
 /* O painel mantém botão, texto e navegação dentro da área útil do pergaminho. */
@@ -261,5 +264,5 @@
   .game-board .game-hint__title { font-size: 1.05rem; }
   .game-board .game-hint__footer button { min-height: 36px; padding: 6px 8px; }
   .game-board .game-hint-tools > button,
-  .game-board .game-hint__route-toggle { border-radius: 6px; padding: 4px; }
+  .game-board .game-hint__route-toggle { border-radius: 6px; }
 }
