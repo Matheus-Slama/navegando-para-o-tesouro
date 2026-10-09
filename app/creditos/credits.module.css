@@ -1,0 +1,46 @@
+.page {
+  min-height: 100svh;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  background: radial-gradient(ellipse at top, #55300f, #120b07);
+}
+
+.panel {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: clamp(1rem, 4vw, 3rem);
+  border: 3px solid #8c5517;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #ffe6b1, #efd09a);
+  color: var(--ink);
+  box-shadow: 0 1rem 3rem #0005;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  background: url('/assets/game/ui/pirate-button-rectangle.png') center / 100% 100% no-repeat;
+  color: #fff8db;
+  text-decoration: none;
+  text-shadow: 0 1px 2px #120b07;
+}
+
+.panel header { margin-block: 2rem; }
+.subtitle { margin-bottom: 0.5rem; font-family: var(--font-title); font-size: 1.25rem; }
+.panel h1 { margin: 0; font: 400 clamp(2.5rem, 6vw, 4rem)/1.1 var(--font-title); }
+.panel h2 { font: 400 2rem/1.2 var(--font-title); }
+.panel h3 { margin-block: 0.5rem; font: 400 1.6rem/1.2 var(--font-title); }
+.panel p, .card a { font-family: system-ui, sans-serif; line-height: 1.6; }
+.panel a:focus-visible { outline: 3px solid #0f5874; outline-offset: 3px; }
+.back:hover { filter: brightness(1.15); }
+.grid { display: grid; gap: 1rem; }
+.card { padding: 1rem; border: 1px solid #8c551760; border-radius: 0.75rem; background: #fff8df70; overflow-wrap: anywhere; }
+.card a { color: #082e43; text-underline-offset: 0.15em; }
+.usage { margin: 0; font-size: 0.875rem; }
+.note { font-size: 0.8rem; }
+
+@media (min-width: 700px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card { padding: 1.5rem; }
+}

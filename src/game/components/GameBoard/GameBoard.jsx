@@ -1,4 +1,5 @@
 import { GameHint } from '@/game/components/GameHint/GameHint';
+import { useScreenMusic } from '@/game/hooks/useScreenMusic';
 import { GameHud } from '@/game/components/GameHud/GameHud';
 import { BoatDock } from '@/game/components/BoatDock/BoatDock';
 import { TreasureAnchor } from '@/game/components/TreasureAnchor/TreasureAnchor';
@@ -36,12 +37,14 @@ export function GameBoard({
   onChangeRouteStyle,
   onDijkstraTutorial
 }) {
+  const musicRef = useScreenMusic();
   const treasure = graph.nodes.find((node) => node.type === 'finish');
   const boats = graph.nodes.filter((node) => node.type === 'start');
   const mapProfile = getMapProfile(graph.metadata.layout);
 
   return (
     <section className="game-board" data-layout={graph.metadata.layout}>
+      <audio ref={musicRef} src="/assets/game/audio/blackmoor-tides-loop.wav" loop preload="auto" />
       <picture className="game-board__background">
         <img
           src={mapProfile.asset}

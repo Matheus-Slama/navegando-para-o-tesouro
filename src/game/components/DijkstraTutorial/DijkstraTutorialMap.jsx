@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useScreenMusic } from '@/game/hooks/useScreenMusic';
 import { PHASES } from '@/game/config/phases';
 import { DIJKSTRA_FIXED_PHASE, getDijkstraFixedMap } from '@/game/config/dijkstra-fixed-map';
 import { createDijkstraWalkthrough } from '@/game/core/dijkstra-walkthrough';
@@ -18,9 +19,13 @@ const formatTutorialText = (text) => text.split(/(∞)/).map((part, index) => pa
   ? <span className="dijkstra-fixed-map__infinity" key={index}>∞</span> : part);
 
 export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile', routeStyle = 'chevrons', onChangeRouteStyle }) {
+  const musicRef = useScreenMusic();
   const [run, setRun] = useState(0);
   // Os formatos usam mapas distintos: uma mudança de formato reinicia as contas.
-  return <DijkstraWalkthrough key={`${layout}-${run}`} onExit={onExit} onPlay={onPlay} onRestart={() => setRun((value) => value + 1)} layout={layout} routeStyle={routeStyle} onChangeRouteStyle={onChangeRouteStyle} />;
+  return <>
+    <audio ref={musicRef} src="/assets/game/audio/a-sailors-chant.ogg" loop preload="auto" />
+    <DijkstraWalkthrough key={`${layout}-${run}`} onExit={onExit} onPlay={onPlay} onRestart={() => setRun((value) => value + 1)} layout={layout} routeStyle={routeStyle} onChangeRouteStyle={onChangeRouteStyle} />
+  </>;
 }
 
 function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout, routeStyle, onChangeRouteStyle }) {

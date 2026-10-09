@@ -15,6 +15,24 @@
   height: 100%;
 }
 
+.start-screen__credits {
+  position: absolute;
+  z-index: 2;
+  top: var(--screen-inset-top);
+  left: var(--screen-inset-left);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.75rem 1.25rem;
+  background: url('/assets/game/ui/pirate-button-rectangle.png') center / 100% 100% no-repeat;
+  color: #fff8db;
+  text-decoration: none;
+  text-shadow: 0 1px 2px #120b07;
+}
+.start-screen__credits:hover { filter: brightness(1.15); }
+.start-screen__credits:focus-visible { outline: 3px solid #ffda70; outline-offset: 3px; }
+
 .start-screen__art {
   z-index: -1;
 }

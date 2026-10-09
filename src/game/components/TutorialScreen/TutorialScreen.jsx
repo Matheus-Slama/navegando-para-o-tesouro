@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
+import { useScreenMusic } from '@/game/hooks/useScreenMusic';
 import { PHASES } from '@/game/config/phases';
 import { TUTORIAL_GRAPH } from '@/game/config/tutorial';
 import { MapGraph } from '@/game/components/MapGraph/MapGraph';
@@ -15,6 +15,7 @@ import { getMapProfile } from '@/game/core/map-layout';
 const TUTORIAL_PHASE = PHASES[0];
 
 export function TutorialScreen({ steps, onFinish, onBackToMenu, layout = 'mobile' }) {
+  const musicRef = useScreenMusic();
   const graph = { ...TUTORIAL_GRAPH, metadata: { ...TUTORIAL_GRAPH.metadata, layout } };
   const [index, setIndex] = useState(0);
   const current = steps[index];
@@ -33,6 +34,7 @@ export function TutorialScreen({ steps, onFinish, onBackToMenu, layout = 'mobile
 
   return (
     <section className="tutorial-screen" data-step={index} data-layout={layout}>
+      <audio ref={musicRef} src="/assets/game/audio/pirate-tavern-loop.wav" loop preload="auto" />
       <picture className="tutorial-screen__background">
         <img src={getMapProfile(layout).asset} alt="" />
       </picture>
@@ -45,9 +47,6 @@ export function TutorialScreen({ steps, onFinish, onBackToMenu, layout = 'mobile
           selectedStartId={null}
           onSelect={() => {}}
         />
-        <span className="tutorial-screen__hint-icon">
-          <Image src="/assets/game/ui/hint-lantern.png" alt="" width={1254} height={1254} sizes="64px" />
-        </span>
       </div>
 
       <button type="button" className="tutorial-screen__menu-button" onClick={onBackToMenu}>
