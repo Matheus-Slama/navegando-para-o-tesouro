@@ -1,0 +1,25 @@
+.game-dialog.dijkstra-unlock {
+  width: min(30rem, calc(100vw - 2rem));
+  max-height: calc(100svh - 2rem);
+  overflow-y: auto;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 3px solid #ad752d;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #ffe6b1, #efd09a);
+  color: #2b1608;
+  text-align: center;
+}
+.dijkstra-unlock > img { margin: 0 auto; }
+.dijkstra-unlock h2 { margin: 0.5rem 0 1rem; font: 400 clamp(1.75rem, 5vw, 2.5rem)/1.1 var(--font-title); }
+.dijkstra-unlock p { font: 0.95rem/1.5 system-ui, sans-serif; }
+.dijkstra-unlock .dijkstra-unlock__eyebrow { color: #6c390b; font-weight: 700; }
+.dijkstra-unlock button {
+  max-width: 100%;
+  padding: 0.875rem 1.25rem;
+  border: 0;
+  background: url('/assets/game/ui/pirate-button-rectangle.png') center / 100% 100% no-repeat;
+  color: #fff8db;
+  font: 400 1.2rem/1.2 var(--font-title);
+  cursor: pointer;
+}
+.dijkstra-unlock button:hover { filter: brightness(1.15); }

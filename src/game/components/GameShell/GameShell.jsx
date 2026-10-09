@@ -10,6 +10,7 @@ import { TutorialScreen } from '@/game/components/TutorialScreen/TutorialScreen'
 import { DijkstraTutorialMap } from '@/game/components/DijkstraTutorial/DijkstraTutorialMap';
 import { GameBoard } from '@/game/components/GameBoard/GameBoard';
 import { PauseGame } from '@/game/components/PauseGame/PauseGame';
+import { DijkstraUnlock } from '@/game/components/DijkstraUnlock/DijkstraUnlock';
 import { useMapLayout } from '@/game/hooks/useMapLayout';
 import './GameShell.css';
 
@@ -18,6 +19,11 @@ export function GameShell() {
   const [previousLayout, setPreviousLayout] = useState(layout);
   const [screen, setScreen] = useState('start');
   const [paused, setPaused] = useState(false);
+  const [dijkstraAnnounced, setDijkstraAnnounced] = useState(() => {
+    try { return typeof window !== 'undefined' && window.localStorage.getItem('dijkstra-unlock-seen') === 'true'; }
+    catch { return false; }
+  });
+  const [highlightDijkstra, setHighlightDijkstra] = useState(false);
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [seedNonce, setSeedNonce] = useState(1);
   const [selectedStartId, setSelectedStartId] = useState(null);
@@ -28,10 +34,11 @@ export function GameShell() {
   const [hintIndex, setHintIndex] = useState(0);
   const [routeStyle, setRouteStyle] = useState('chevrons');
   const phase = PHASES[phaseIndex];
-  const journey = useJourney(screen === 'game' && !paused && !selectedStartId && !raceResult);
+  const showDijkstraUnlock = screen === 'game' && phase.difficulty.includes('difícil') && !dijkstraAnnounced;
+  const journey = useJourney(screen === 'game' && !paused && !showDijkstraUnlock && !selectedStartId && !raceResult);
 
   useEffect(() => {
-    if (screen === 'start') return;
+    if (screen === 'start' || showDijkstraUnlock) return;
     function handleKeyDown(event) {
       if (paused) {
         if (event.key === 'Escape' || event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
@@ -57,7 +64,7 @@ export function GameShell() {
       document.removeEventListener('visibilitychange', handleVisibility);
       window.removeEventListener('pagehide', pauseGame);
     };
-  }, [screen, paused]);
+  }, [screen, paused, showDijkstraUnlock]);
 
   const pauseModal = paused ? <PauseGame score={journey.score} highscore={journey.highscore} onResume={() => setPaused(false)} onBackToMenu={returnToMenu} /> : null;
 
@@ -109,7 +116,7 @@ export function GameShell() {
   }
 
   function selectBoat(startId) {
-    if (paused || selectedStartId || raceResult || journey.lives === 0) return;
+    if (paused || showDijkstraUnlock || selectedStartId || raceResult || journey.lives === 0) return;
     journey.freeze();
     setSelectedStartId(startId);
     setRaceResult(null);
@@ -161,6 +168,12 @@ export function GameShell() {
     setHintIndex(0);
   }
 
+  function acknowledgeDijkstra() {
+    setDijkstraAnnounced(true);
+    setHighlightDijkstra(true);
+    try { window.localStorage.setItem('dijkstra-unlock-seen', 'true'); } catch { /* Keep the announcement dismissed for this session. */ }
+  }
+
   if (screen === 'start') {
     return (
       <main className="game-page">
@@ -174,13 +187,14 @@ export function GameShell() {
   }
 
   if (screen === 'tutorial') {
-    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} onBackToMenu={returnToMenu} layout={layout} />{pauseModal}</main>;
+    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} onBackToMenu={returnToMenu} layout={layout} paused={paused} />{pauseModal}</main>;
   }
 
   if (screen === 'dijkstra-tutorial') {
     return (
       <main className="game-page">
         <DijkstraTutorialMap
+          paused={paused}
           onExit={() => setScreen('game')}
           onPlay={() => setScreen('game')}
           layout={layout}
@@ -195,7 +209,8 @@ export function GameShell() {
   return (
     <main className="game-page">
       <GameBoard
-        paused={paused}
+        paused={paused || showDijkstraUnlock}
+        highlightDijkstra={highlightDijkstra || showDijkstraUnlock}
         onPause={() => setPaused(true)}
         journey={journey}
         graph={graph}
@@ -220,8 +235,12 @@ export function GameShell() {
         onNextHint={() => setHintIndex((value) => (value + 1) % phase.hints.length)}
         routeStyle={routeStyle}
         onChangeRouteStyle={setRouteStyle}
-        onDijkstraTutorial={() => setScreen('dijkstra-tutorial')}
+        onDijkstraTutorial={() => {
+          setHighlightDijkstra(false);
+          setScreen('dijkstra-tutorial');
+        }}
       />
+      {showDijkstraUnlock && <DijkstraUnlock onContinue={acknowledgeDijkstra} />}
       {pauseModal}
     </main>
   );

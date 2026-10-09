@@ -394,7 +394,7 @@
     "metadata": {
       "layout": "mobile",
       "dense": true,
-      "phaseId": 6,
+      "phaseId": 10,
       "difficulty": "muito difícil / final",
       "challengeType": "dijkstra",
       "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.",
@@ -799,7 +799,7 @@
     "metadata": {
       "layout": "tablet",
       "dense": true,
-      "phaseId": 6,
+      "phaseId": 10,
       "difficulty": "muito difícil / final",
       "challengeType": "dijkstra",
       "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.",
@@ -1186,7 +1186,7 @@
     "metadata": {
       "layout": "wide",
       "dense": true,
-      "phaseId": 6,
+      "phaseId": 10,
       "difficulty": "muito difícil / final",
       "challengeType": "dijkstra",
       "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.",

@@ -55,20 +55,22 @@
   min-width: 0;
   max-width: 100%;
   flex-shrink: 0;
-  border: 0.125rem solid #482608;
-  border-radius: 0.55rem;
-  padding: var(--control-padding-block) var(--control-padding-inline);
-  background: #7c430f;
+  border: 0;
+  border-radius: 0;
+  padding: max(0.75rem, var(--control-padding-block)) max(1rem, var(--control-padding-inline));
+  background: transparent url('/assets/game/ui/pirate-button-rectangle.png') center / 100% 100% no-repeat;
+  image-rendering: pixelated;
   color: #fff8db;
   font-family: var(--font-pirate), Georgia, serif;
   font-size: var(--control-font-size);
   line-height: 1.2;
   overflow-wrap: anywhere;
   cursor: pointer;
+  text-shadow: 0 1px 2px #120b07;
 }
 
 .race-result button:hover {
-  background: #9d5a19;
+  filter: brightness(1.15);
 }
 
 .race-result button:focus-visible {

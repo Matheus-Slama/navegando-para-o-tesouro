@@ -104,7 +104,7 @@ try {
   await clickText('Iniciar jornada');
   await waitFor(`!!document.querySelector('.dev-panel')`);
   if (!await evaluate(`!!document.querySelector('.dev-panel select')`)) await click('.dev-panel__toggle');
-  for (let phaseIndex = 0; phaseIndex < 6; phaseIndex++) {
+  for (let phaseIndex = 0; phaseIndex < 10; phaseIndex++) {
     await evaluate(`(() => {
       const select = document.querySelector('.dev-panel select');
       select.value = '${phaseIndex}';

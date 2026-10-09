@@ -112,9 +112,9 @@
     },
     {
       "id": 5, "name": "Custo acumulado", "difficulty": "difícil", "generation": "random", "challengeType": "accumulated-cost",
-      "objective": "Usar o custo acumulado como preparação para Dijkstra.",  "islandCount": { "min": 12, "max": 18 }, "extraRouteCount": 12,
+      "objective": "Usar o custo acumulado como preparação para Dijkstra.",  "islandCount": { "min": 10, "max": 12 }, "extraRouteCount": 12,
       "weights": { "min": 2, "max": 12 }, "directed": false, "uniqueWinnerGap": 1,
-      "score": { "maxScore": 4500, "targetTimeSeconds": 80 },
+      "score": { "maxScore": 4000, "targetTimeSeconds": 65 },
       "hints": [
         "Não tente escolher a rota completa de uma vez. Compare os custos para chegar às próximas ilhas.",
         "Anote mentalmente o menor custo conhecido para alcançar cada ilha.",
@@ -125,10 +125,64 @@
       ]
     },
     {
-      "id": 6, "name": "Desafio final de Dijkstra", "difficulty": "muito difícil / final", "generation": "random", "challengeType": "dijkstra",
+      "id": 6, "name": "Rotas alternativas", "difficulty": "difícil", "generation": "random", "challengeType": "accumulated-cost",
+      "objective": "Comparar alternativas que chegam à mesma ilha e guardar o menor custo acumulado.", "islandCount": { "min": 12, "max": 14 }, "extraRouteCount": 16,
+      "weights": { "min": 2, "max": 16 }, "directed": false, "uniqueWinnerGap": 1,
+      "score": { "maxScore": 4500, "targetTimeSeconds": 80 },
+      "hints": [
+        "Compare os caminhos que chegam à mesma ilha antes de seguir em frente.",
+        "Guarde o menor custo acumulado conhecido para cada ilha.",
+        "Uma conexão barata pode compensar uma rota com mais etapas.",
+        "Se encontrar uma soma menor, atualize o custo daquela ilha.",
+        "Compare os custos totais dos quatro barcos até o tesouro."
+      ]
+    },
+    {
+      "id": 7, "name": "Navegando pelas setas", "difficulty": "difícil", "generation": "random", "challengeType": "directed-paths",
+      "objective": "Encontrar o menor custo respeitando o sentido das rotas.", "islandCount": { "min": 12, "max": 15 }, "extraRouteCount": 18,
+      "weights": { "min": 2, "max": 20 }, "directed": true, "uniqueWinnerGap": 1,
+      "score": { "maxScore": 5000, "targetTimeSeconds": 95 },
+      "hints": [
+        "Agora as rotas têm sentido obrigatório. Siga apenas as setas que saem da ilha atual.",
+        "Uma conexão que aponta para sua ilha não pode ser percorrida ao contrário.",
+        "Some os pesos somente dos caminhos que respeitam todas as setas.",
+        "Mantenha o menor custo conhecido para chegar a cada ilha.",
+        "Compare as rotas completas de cada barco até o tesouro."
+      ]
+    },
+    {
+      "id": 8, "name": "Explorando com Dijkstra", "difficulty": "muito difícil", "generation": "random", "challengeType": "dijkstra",
+      "objective": "Aplicar Dijkstra em rotas direcionadas com mais alternativas.", "islandCount": { "min": 14, "max": 18 }, "extraRouteCount": 22,
+      "weights": { "min": 2, "max": 25 }, "directed": true, "uniqueWinnerGap": 1,
+      "minimumEdgeCount": 18, "minimumWinnerPathNodes": 5,
+      "score": { "maxScore": 5500, "targetTimeSeconds": 115 },
+      "hints": [
+        "Comece com custo 0 no barco e custo desconhecido nas outras ilhas.",
+        "Escolha a ilha ainda não confirmada com o menor custo acumulado.",
+        "Siga suas setas de saída e some os pesos para atualizar as ilhas vizinhas.",
+        "Confirme o custo da ilha analisada e repita a comparação.",
+        "Use o tutorial de Dijkstra para rever esse processo passo a passo."
+      ]
+    },
+    {
+      "id": 9, "name": "Travessia estratégica", "difficulty": "muito difícil", "generation": "random", "challengeType": "dijkstra",
+      "objective": "Comparar caminhos mais longos com custos próximos usando Dijkstra.", "islandCount": { "min": 16, "max": 21 }, "extraRouteCount": 27,
+      "weights": { "min": 2, "max": 30 }, "directed": true, "uniqueWinnerGap": 1,
+      "minimumEdgeCount": 21, "minimumWinnerPathNodes": 6,
+      "score": { "maxScore": 6250, "targetTimeSeconds": 135 },
+      "hints": [
+        "Divida o mapa em etapas e mantenha os menores custos acumulados.",
+        "Não confirme uma ilha antes de comparar as outras ainda não visitadas.",
+        "Uma soma menor substitui o custo anterior de uma ilha não confirmada.",
+        "Respeite as setas mesmo quando uma conexão parece um atalho.",
+        "Compare o custo final de cada barco, não apenas o trecho inicial."
+      ]
+    },
+    {
+      "id": 10, "name": "Desafio final de Dijkstra", "difficulty": "muito difícil / final", "generation": "random", "challengeType": "dijkstra",
       "objective": "Usar o algoritmo de Dijkstra para comparar rotas mais longas e encontrar o menor custo acumulado.", "islandCount": { "min": 17, "max": 23 }, "extraRouteCount": 32,
       "weights": { "min": 2, "max": 35 }, "directed": true, "uniqueWinnerGap": 1,
-      "minimumEdgeCount": 24, "minimumWinnerPathNodes": 7,
+      "minimumEdgeCount": 24, "minimumWinnerPathNodes": 6,
       "score": { "maxScore": 7000, "targetTimeSeconds": 160 },
       "hints": [
         "Comece atribuindo custo 0 à posição inicial do barco e considere as ilhas ainda sem custo conhecido.",

@@ -9,6 +9,10 @@ const { PHASES, START_ISLANDS, FINISH_ISLAND } = await import('../src/game/confi
 const { isValidGraph, removeInvalidIslands } = await import('../src/game/core/map-rules.js');
 const { getMapProfile, getWaterBounds, getNodeRadii } = await import('../src/game/core/map-layout.js');
 
+assert.equal(PHASES.length, 10);
+assert.deepEqual(PHASES.map((phase) => phase.id), Array.from({ length: 10 }, (_, index) => index + 1));
+assert.equal(PHASES.at(-1).challengeType, 'dijkstra');
+
 // Uma remoção pode deixar a próxima ilha sem entrada ou sem saída.
 for (const missing of ['incoming', 'outgoing']) {
   const nodes = [

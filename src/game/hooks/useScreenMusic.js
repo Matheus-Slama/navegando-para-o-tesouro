@@ -2,13 +2,17 @@
 
 import { useEffect, useRef } from 'react';
 
-export function useScreenMusic() {
+export function useScreenMusic(paused = false) {
   const musicRef = useRef(null);
 
   useEffect(() => {
     const music = musicRef.current;
     let disposed = false;
     music.volume = 0.35;
+    if (paused) {
+      music.pause();
+      return;
+    }
 
     function playMusic() {
       if (disposed || !music.paused) return;
@@ -27,6 +31,13 @@ export function useScreenMusic() {
       disposed = true;
       window.removeEventListener('pointerdown', playMusic);
       window.removeEventListener('keydown', playMusic);
+      music.pause();
+    };
+  }, [paused]);
+
+  useEffect(() => {
+    const music = musicRef.current;
+    return () => {
       music.pause();
       music.currentTime = 0;
     };

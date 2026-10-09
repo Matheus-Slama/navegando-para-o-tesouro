@@ -18,8 +18,8 @@ const cost = (value) => Number.isFinite(value) ? value : '∞';
 const formatTutorialText = (text) => text.split(/(∞)/).map((part, index) => part === '∞'
   ? <span className="dijkstra-fixed-map__infinity" key={index}>∞</span> : part);
 
-export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile', routeStyle = 'chevrons', onChangeRouteStyle }) {
-  const musicRef = useScreenMusic();
+export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile', routeStyle = 'chevrons', onChangeRouteStyle, paused = false }) {
+  const musicRef = useScreenMusic(paused);
   const [run, setRun] = useState(0);
   // Os formatos usam mapas distintos: uma mudança de formato reinicia as contas.
   return <>

@@ -27,6 +27,7 @@ export function GameHint({
   routeStyle,
   onChangeRouteStyle,
   onDijkstraTutorial,
+  highlightDijkstra = false,
   onPause,
   label = 'Dica do jogo',
   dock = 'top-right',
@@ -269,6 +270,7 @@ export function GameHint({
         )}
         {onDijkstraTutorial && (
           <button className="game-hint__route-toggle game-hint__dijkstra-toggle" type="button"
+            data-highlighted={highlightDijkstra}
             aria-label="Abrir tutorial de Dijkstra" title="Tutorial de Dijkstra"
             onClick={() => {
               setRouteMenuOpen(false);
@@ -276,6 +278,7 @@ export function GameHint({
             }}
           >
             <Image src="/assets/game/ui/dijkstra-pirate-flag.svg" alt="" width={64} height={64} sizes="36px" draggable={false} />
+            {highlightDijkstra && <span className="game-hint__power-label">Novo poder!</span>}
           </button>
         )}
       </div>

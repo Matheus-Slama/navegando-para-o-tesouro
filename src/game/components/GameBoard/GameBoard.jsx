@@ -11,6 +11,7 @@ import { getMapProfile } from '@/game/core/map-layout';
 
 export function GameBoard({
   paused = false,
+  highlightDijkstra = false,
   onPause,
   journey,
   graph,
@@ -37,7 +38,7 @@ export function GameBoard({
   onChangeRouteStyle,
   onDijkstraTutorial
 }) {
-  const musicRef = useScreenMusic();
+  const musicRef = useScreenMusic(paused);
   const treasure = graph.nodes.find((node) => node.type === 'finish');
   const boats = graph.nodes.filter((node) => node.type === 'start');
   const mapProfile = getMapProfile(graph.metadata.layout);
@@ -59,6 +60,7 @@ export function GameBoard({
         <GameHud lives={journey.lives} elapsed={journey.elapsed} score={journey.score} />
         <GameHint
           onPause={onPause}
+          highlightDijkstra={highlightDijkstra}
           title={`Dica da fase ${phase.id}`}
           label={`Dica da fase ${phase.id}`}
           routeStyle={routeStyle}
@@ -106,7 +108,6 @@ export function GameBoard({
           lives={journey.lives}
           score={journey.score}
           highscore={journey.highscore}
-          earned={journey.earned}
           result={raceResult}
           selectedBoat={boats.find((boat) => boat.id === selectedStartId)}
           winner={boats.find((boat) => boat.id === graph.results.winner.startId)}

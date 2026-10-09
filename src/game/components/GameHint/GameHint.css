@@ -275,3 +275,21 @@
   .game-board .game-hint-tools > button,
   .game-board .game-hint__route-toggle { border-radius: 6px; }
 }
+.game-hint__dijkstra-toggle[data-highlighted='true'] {
+  outline: 3px solid #ffe08a;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 7px #f2b33255, 0 0 22px #ffce60;
+}
+.game-hint__power-label {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #ffe08a;
+  color: #2b1608;
+  font: 700 0.75rem/1.2 system-ui, sans-serif;
+  white-space: nowrap;
+  pointer-events: none;
+}

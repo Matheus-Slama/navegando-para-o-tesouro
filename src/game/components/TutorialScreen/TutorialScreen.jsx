@@ -14,8 +14,8 @@ import { getMapProfile } from '@/game/core/map-layout';
 
 const TUTORIAL_PHASE = PHASES[0];
 
-export function TutorialScreen({ steps, onFinish, onBackToMenu, layout = 'mobile' }) {
-  const musicRef = useScreenMusic();
+export function TutorialScreen({ steps, onFinish, onBackToMenu, layout = 'mobile', paused = false }) {
+  const musicRef = useScreenMusic(paused);
   const graph = { ...TUTORIAL_GRAPH, metadata: { ...TUTORIAL_GRAPH.metadata, layout } };
   const [index, setIndex] = useState(0);
   const current = steps[index];
