@@ -30,6 +30,7 @@ export function GameHint({
   onPause,
   label = 'Dica do jogo',
   dock = 'top-right',
+  minimizable = true,
   minimized,
   defaultMinimized = false,
   onMinimizedChange,
@@ -49,7 +50,7 @@ export function GameHint({
   const [dragging, setDragging] = useState(false);
   const [size, setSize] = useState(null);
   const [resizing, setResizing] = useState(false);
-  const isMinimized = minimized ?? localMinimized;
+  const isMinimized = minimizable && (minimized ?? localMinimized);
 
   useEffect(() => {
     if (!routeMenuOpen) return;
@@ -217,7 +218,7 @@ export function GameHint({
             <Image src="/assets/game/ui/pirate-pause.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
           </button>
         )}
-        <button
+        {minimizable && <button
           className="game-hint__toggle"
           type="button"
           aria-label={`${isMinimized ? 'Mostrar' : 'Minimizar'} ${label.toLowerCase()}`}
@@ -227,7 +228,7 @@ export function GameHint({
           onClick={toggleMinimized}
         >
           <Image src="/assets/game/ui/hint-lantern.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
-        </button>
+        </button>}
         {onChangeRouteStyle && (
           <div className="game-hint__route-control" ref={routeMenuRef}
             onBlur={(event) => {

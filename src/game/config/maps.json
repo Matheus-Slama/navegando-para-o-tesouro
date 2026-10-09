@@ -34,6 +34,7 @@
       "timerEnds": "boat-selection",
       "keepPersonalBest": true,
       "higherScoreForLowerTime": true,
+      "wrongBoatPenalty": 250,
       "formula": "round(maxScore * targetTimeSeconds / max(elapsedTimeSeconds, targetTimeSeconds))"
     }
   },

@@ -13,7 +13,7 @@ export const DIJKSTRA_STEPS = [
   },
   {
     title: 'Anote os custos',
-    text: 'O barco começa com 0. Os outros pontos começam com ∞: caminho ainda desconhecido.'
+    text: 'O barco começa com 0 (zero). Os outros pontos começam com ∞: caminho ainda desconhecido.'
   },
   {
     title: 'Escolha o menor custo',

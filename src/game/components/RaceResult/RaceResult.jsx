@@ -1,7 +1,7 @@
 import { BOAT_COLORS } from '@/game/enums/boat-colors';
 import './RaceResult.css';
 
-export function RaceResult({ result, winner, isFinalPhase, onContinue, lives, score, highscore }) {
+export function RaceResult({ result, winner, isFinalPhase, onContinue, lives, score, highscore, earned = 0 }) {
   if (!result) return null;
 
   const winnerBoatName = `barco ${BOAT_COLORS[winner.boat]}`;
@@ -21,6 +21,10 @@ export function RaceResult({ result, winner, isFinalPhase, onContinue, lives, sc
               : 'Siga para a próxima fase.'
             : `O ${winnerBoatName} foi o vencedor.`}
         </p>
+        {result === 'defeat' && (
+          <p>Você perdeu 1 vida e {Math.abs(earned).toLocaleString('pt-BR')} pontos.<br />
+            Pontuação atual: {score.toLocaleString('pt-BR')}</p>
+        )}
         {lives === 0 && (
           <p>Pontuação final: {score.toLocaleString('pt-BR')}<br />
             High Score: {highscore.toLocaleString('pt-BR')}</p>

@@ -59,7 +59,7 @@ export function GameShell() {
     };
   }, [screen, paused]);
 
-  const pauseModal = paused ? <PauseGame score={journey.score} highscore={journey.highscore} onResume={() => setPaused(false)} /> : null;
+  const pauseModal = paused ? <PauseGame score={journey.score} highscore={journey.highscore} onResume={() => setPaused(false)} onBackToMenu={returnToMenu} /> : null;
 
   // Ao girar a tela, mantém a fase e pede uma nova escolha no mapa adaptado.
   if (previousLayout !== layout) {
@@ -99,6 +99,7 @@ export function GameShell() {
   }
 
   function returnToMenu() {
+    setPaused(false);
     journey.reset();
     setPhaseIndex(0);
     setSeedNonce((value) => value + 1);
@@ -164,6 +165,7 @@ export function GameShell() {
     return (
       <main className="game-page">
         <StartScreen
+          highscore={journey.highscore}
           onStart={startGame}
           onTutorial={openTutorial}
         />

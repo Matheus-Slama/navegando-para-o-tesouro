@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { calculateScore } from '@/game/core/scoring';
 import { readHighscore, saveHighscore } from '@/game/core/highscore';
+import { GAME_DESIGN } from '@/game/config/phases';
 
 export function useJourney(running) {
   const [score, setScore] = useState(0);
@@ -65,6 +66,9 @@ export function useJourney(running) {
     if (settled.current) return;
     settled.current = true;
     if (!won) {
+      const lost = Math.min(score, GAME_DESIGN.scoring.wrongBoatPenalty);
+      setScore(score - lost);
+      setEarned(-lost);
       setLives((value) => Math.max(0, value - 1));
       return;
     }

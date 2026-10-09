@@ -170,11 +170,7 @@ try {
       'Ampliar mantém o painel ajustado ao conteúdo.');
     await assertInside();
   }
-  const resized = await rect();
-  await click('.game-hint__toggle');
-  await click('.game-hint__toggle');
-  assert.equal((await rect()).width, resized.width, 'Reabrir preserva a largura.');
-  assert.equal((await rect()).height, resized.height, 'Reabrir preserva a altura.');
+  assert.equal(await evaluate(`document.querySelector('.game-hint__toggle')`), null, 'O tutorial não exibe o botão de dica.');
   await click('.game-hint__arrow:not(.game-hint__arrow--back)');
   assert.equal(await evaluate(`document.querySelector('.game-hint__title').textContent`), 'Anote os custos');
   const before = await rect();
@@ -190,15 +186,12 @@ try {
   await pause();
   assert.ok((await rect()).x > moved.x, 'As setas movem a dica quando a borda tem foco.');
   assert.equal(await evaluate(`document.querySelector('.game-hint__navigation > span').textContent`), counter, 'Arraste por teclado não avança o tutorial.');
-  await click('.game-hint__toggle');
-  assert.equal(await evaluate(`document.querySelector('.game-hint').dataset.minimized`), 'true');
-  assert.ok((await rect()).width <= 80);
-  assert.equal(await evaluate(`document.querySelector('.game-hint__content').hidden`), true);
-  await click('.game-hint__toggle');
+  assert.equal(await evaluate(`document.querySelector('.game-hint').dataset.minimized`), 'false');
+  assert.equal(await evaluate(`document.querySelector('.game-hint__content').hidden`), false);
   await dragTo(2000, 1500);
   await assertInside();
   await screenshot('desktop');
-  console.log('Desktop: conteúdo dinâmico, arraste, teclado, limites e minimizar/restaurar OK.');
+  console.log('Desktop: conteúdo dinâmico, arraste, teclado, limites e tutorial sempre aberto OK.');
 
   await viewport(390, 844, true);
   await waitFor(`document.querySelector('.dijkstra-fixed-map')?.dataset.layout === 'mobile'`);

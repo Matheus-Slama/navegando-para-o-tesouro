@@ -1,3 +1,5 @@
+import { GAME_DESIGN } from '@/game/config/phases';
+
 export const TUTORIAL_STEPS = [
   {
     title: 'Bem-vindo ao Navegando para o Tesouro',
@@ -14,6 +16,10 @@ export const TUTORIAL_STEPS = [
   {
     title: 'Corrida dos barcos',
     text: 'Escolha um barco para iniciar a corrida. O barco com menor custo chega primeiro.'
+  },
+  {
+    title: 'Pontuação e vidas',
+    text: `Ao acertar, você ganha pontos e avança de fase. Ao escolher o barco errado, perde uma vida e até ${GAME_DESIGN.scoring.wrongBoatPenalty} pontos. A pontuação nunca fica abaixo de zero. Com três erros, a jornada termina.`
   },
   {
     title: 'Dicas',

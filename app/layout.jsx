@@ -4,7 +4,7 @@ import { Pirata_One } from 'next/font/google';
 const pirataOne = Pirata_One({
   weight: '400',
   subsets: ['latin'],
-  variable: '--font-pirate'
+  variable: '--font-pirate-base'
 });
 
 export const metadata = {

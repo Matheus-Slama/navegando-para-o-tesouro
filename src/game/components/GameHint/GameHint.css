@@ -83,21 +83,28 @@
   gap: 0.35rem;
   width: max-content;
   padding: 0.4rem;
-  border: 2px solid #482608;
-  border-radius: 0.65rem;
-  background: #f3dda8;
-  box-shadow: 0 3px 8px #082e4355;
 }
 .game-hint__route-options button { --hint-tool-size: 40px; width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
 .game-hint__route-options button[aria-pressed='true'] { box-shadow: inset 0 0 0 2px #ffda70; }
 .game-hint-tools > .game-hint__toggle:hover,
-.game-hint__route-toggle:hover,
-.game-hint__route-options button:hover { filter: brightness(1.15); }
+.game-hint__route-toggle:hover { filter: brightness(1.15); }
+.game-hint__route-options button { position: relative; }
+.game-hint__route-options button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  /* Clareia a madeira interna sem atingir a moldura dourada. */
+  clip-path: polygon(27% 15%, 73% 15%, 85% 27%, 85% 73%, 73% 85%, 27% 85%, 15% 73%, 15% 27%);
+  filter: brightness(3);
+  pointer-events: none;
+}
+.game-hint__route-options button:hover::before { filter: brightness(3.2); }
 .game-hint-tools button:active { transform: translateY(1px); }
 .game-hint-tools button:focus-visible { outline: 3px solid #ffda70; outline-offset: 2px; }
-.game-hint__route-preview { display: grid; place-items: center; width: 100%; height: 100%; color: #080d12; background: #f3dda8; border-radius: 3px; }
+.game-hint__route-preview { position: relative; display: grid; place-items: center; width: 100%; height: 100%; color: #080d12; }
 .game-hint__route-preview svg { width: 100%; height: 100%; }
-.game-hint__route-preview[data-style='arrows-white'] { color: #fff; background: #082e43; }
+.game-hint__route-preview[data-style='arrows-white'] { color: #fff; }
 
 /* A faixa externa transparente recebe o arraste. */
 /* O painel mantém botão, texto e navegação dentro da área útil do pergaminho. */
@@ -147,16 +154,18 @@
 .game-hint__footer button {
   min-width: calc(44px * var(--game-hint-scale, 1));
   min-height: calc(44px * var(--game-hint-scale, 1));
-  padding: calc(0.4rem * var(--game-hint-scale, 1)) calc(0.6rem * var(--game-hint-scale, 1));
-  border: 2px solid #482608;
-  border-radius: 0.55rem;
-  background: #7c430f;
+  padding: calc(0.75rem * var(--game-hint-scale, 1)) calc(0.875rem * var(--game-hint-scale, 1));
+  border: 0;
+  border-radius: 0;
+  background: transparent url('/assets/game/ui/pirate-button-rectangle.png') center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  text-shadow: 0 1px 2px #120b07;
   color: #fff8db;
   font: inherit;
   cursor: pointer;
 }
 .game-hint__body button:hover:not(:disabled),
-.game-hint__footer button:hover:not(:disabled) { background: #9d5a19; }
+.game-hint__footer button:hover:not(:disabled) { filter: brightness(1.15); }
 .game-hint button:disabled { opacity: 0.35; cursor: default; }
 .game-hint button:focus-visible { outline: 3px solid #492508; outline-offset: 2px; }
 
@@ -262,7 +271,7 @@
   }
   .game-board .game-hint__panel { padding: 28px 20px 12px; }
   .game-board .game-hint__title { font-size: 1.05rem; }
-  .game-board .game-hint__footer button { min-height: 36px; padding: 6px 8px; }
+  .game-board .game-hint__footer button { min-height: 36px; padding: 8px 10px; }
   .game-board .game-hint-tools > button,
   .game-board .game-hint__route-toggle { border-radius: 6px; }
 }

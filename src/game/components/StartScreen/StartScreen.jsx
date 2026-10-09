@@ -1,8 +1,9 @@
 'use client';
 
+import Image from 'next/image';
 import './StartScreen.css';
 
-export function StartScreen({ onStart, onTutorial }) {
+export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
   return (
     <section className="start-screen" aria-labelledby="start-screen-title">
       <div className="start-screen__frame">
@@ -26,6 +27,11 @@ export function StartScreen({ onStart, onTutorial }) {
         <h1 id="start-screen-title" className="sr-only">
           Navegando para o Tesouro
         </h1>
+
+        <div className="start-screen__highscore" aria-label={`Recorde: ${highscore.toLocaleString('pt-BR')} pontos`}>
+          <Image src="/assets/game/ui/highscore-trophy.png" alt="" width={1254} height={1254} sizes="(min-width: 1024px) 200px, 88px" draggable={false} />
+          <span>Recorde <strong>{highscore.toLocaleString('pt-BR')}</strong></span>
+        </div>
 
         <button type="button" onClick={onTutorial}>
           Tutorial

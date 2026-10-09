@@ -22,7 +22,7 @@
 }
 .dijkstra-fixed-map__hint .game-hint { font-size: calc(0.85rem * var(--game-hint-scale, 1)); }
 .dijkstra-fixed-map__hint--comparison { --game-hint-width: 24rem; }
-.dijkstra-fixed-map__formula { padding: calc(0.35rem * var(--game-hint-scale, 1)) calc(0.5rem * var(--game-hint-scale, 1)); border-radius: 0.35rem; background: #f3dda8; font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+.dijkstra-fixed-map__formula { padding: calc(0.35rem * var(--game-hint-scale, 1)) calc(0.5rem * var(--game-hint-scale, 1)); border-radius: 0.35rem; background: #f3dda8; font-family: 'Treasure Zero', Arial, Helvetica, sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
 .dijkstra-fixed-map__comparison { display: grid; grid-template-columns: repeat(2, minmax(0, calc(6.5rem * var(--game-hint-scale, 1)))); justify-content: center; gap: calc(0.5rem * var(--game-hint-scale, 1)); margin-top: calc(0.5rem * var(--game-hint-scale, 1)); }
 .game-hint .dijkstra-fixed-map__comparison button {
   min-height: calc(2rem * var(--game-hint-scale, 1));
@@ -61,11 +61,19 @@
 .dijkstra-fixed-map__annotations { pointer-events: none; }
 .dijkstra-fixed-map__halo { position: absolute; z-index: 16; transform: translate(-50%, -50%); border-radius: 50%; border: 2px solid #7cd9ab; box-shadow: 0 0 8px #34bc8980; pointer-events: none; }
 .dijkstra-fixed-map__halo[data-active='true'] { border: 3px dashed #ffdf7b; box-shadow: 0 0 12px #ffdf7b99; }
-.dijkstra-fixed-map__cost { position: absolute; z-index: 19; transform: translate(-50%, calc(-100% - 1.2rem)); display: inline-flex; align-items: center; gap: 4px; max-width: 22%; padding: 3px 5px; border: 1px solid #b5eaff; border-radius: 5px; background: #12394ff2; color: #fff; font: 600 0.75rem/1.1 system-ui, sans-serif; white-space: nowrap; box-shadow: 0 2px 3px #082e4355; }
+.dijkstra-fixed-map__cost { position: absolute; z-index: 19; transform: translate(-50%, calc(-100% - 1.2rem)); display: inline-flex; align-items: center; gap: 4px; max-width: 22%; padding: 3px 5px; border: 1px solid #b5eaff; border-radius: 5px; background: #12394ff2; color: #fff; font: 600 0.75rem/1.1 'Treasure Zero', system-ui, sans-serif; white-space: nowrap; box-shadow: 0 2px 3px #082e4355; }
 .dijkstra-fixed-map__cost strong { font-variant-numeric: tabular-nums; }
 .dijkstra-fixed-map__infinity,
 .dijkstra-fixed-map__cost strong[data-infinite='true'] { font-size: 1.5em; font-weight: 700; line-height: 0.8; vertical-align: -0.05em; }
-.dijkstra-fixed-map__formula .dijkstra-fixed-map__infinity { font-size: 1.15em; line-height: inherit; vertical-align: baseline; }
+.dijkstra-fixed-map__formula .dijkstra-fixed-map__infinity {
+  font-size: 1.65em;
+  font-weight: 900;
+  -webkit-text-stroke: 0.025em currentColor;
+  line-height: 0.8;
+  vertical-align: middle;
+  position: relative;
+  top: -0.04em;
+}
 .dijkstra-fixed-map__cost[data-type='start'] { transform: translate(-50%, calc(-100% - 2.3rem)); }
 .dijkstra-fixed-map__cost[data-type='finish'] { transform: translate(-50%, calc(-100% - 1.6rem)); }
 .dijkstra-fixed-map__cost[data-confirmed='true'] { background: #165640; border-color: #9eecc0; }
