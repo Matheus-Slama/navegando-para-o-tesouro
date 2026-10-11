@@ -1,12 +1,11 @@
 import { dijkstra } from './dijkstra.js';
+import { formatCost } from './text.js';
 
 export function getNodeLabel(graph, nodeId) {
+  // O identificador é uma alternativa quando a ilha ainda não possui rótulo,
+  // para que as explicações sempre consigam identificar o ponto analisado.
   const node = graph.nodes.find((item) => item.id === nodeId);
   return node?.label ?? nodeId;
-}
-
-export function formatCost(value) {
-  return Number.isFinite(value) ? String(value) : '∞';
 }
 
 function neighbors(graph, nodeId, directed) {
@@ -29,7 +28,7 @@ export function getRouteWeights(graph, path, directed) {
 // alternativa mantém mapas externos úteis sem enumerar todos os caminhos simples.
 export function getLearningRoutes(graph, phase, startId) {
   const finishId = graph.nodes.find((node) => node.type === 'finish')?.id ?? 'finish';
-  const shortest = dijkstra(graph.nodes, graph.edges, startId, finishId, phase.directed);
+  const shortest = dijkstra(graph.nodes, graph.edges, startId, finishId, (phase.directed ?? true));
   if (!Number.isFinite(shortest.distance)) return [];
 
   const candidates = [shortest, ...(graph.metadata?.learning?.[startId]?.routes ?? [])];
@@ -38,9 +37,9 @@ export function getLearningRoutes(graph, phase, startId) {
       const source = shortest.path[index];
       const edges = graph.edges.filter((edge) => !(
         (edge.from === source && edge.to === target)
-        || (!phase.directed && edge.from === target && edge.to === source)
+        || (phase.directed === false && edge.from === target && edge.to === source)
       ));
-      candidates.push(dijkstra(graph.nodes, edges, startId, finishId, phase.directed));
+      candidates.push(dijkstra(graph.nodes, edges, startId, finishId, (phase.directed ?? true)));
     });
   }
 
@@ -48,7 +47,7 @@ export function getLearningRoutes(graph, phase, startId) {
   const routes = candidates.flatMap(({ path }) => {
     const key = path.join('|');
     if (seen.has(key) || path[0] !== startId || path.at(-1) !== finishId) return [];
-    const weights = getRouteWeights(graph, path, phase.directed);
+    const weights = getRouteWeights(graph, path, (phase.directed ?? true));
     const distance = weights.reduce((sum, value) => sum + value, 0);
     if (!Number.isFinite(distance)) return [];
     seen.add(key);
@@ -59,8 +58,10 @@ export function getLearningRoutes(graph, phase, startId) {
   const best = routes[0];
   const alternatives = routes.slice(1).filter((route) => route.distance > best.distance);
   const matchesConcept = (route) => {
-    if (phase.challengeType === 'weighted-sum') return best.path.length > route.path.length;
-    if (phase.challengeType !== 'weighted-full-path') return true;
+    // As fases 3 e 4 ensinam, respectivamente, custos iniciais enganosos
+    // e caminhos com mais etapas que ainda têm uma soma menor.
+    if (phase.id === 4) return best.path.length > route.path.length;
+    if (phase.id !== 3) return true;
     const divergence = best.path.findIndex((nodeId, index) => route.path[index] !== nodeId);
     return divergence > 0 && route.weights[divergence - 1] < best.weights[divergence - 1];
   };

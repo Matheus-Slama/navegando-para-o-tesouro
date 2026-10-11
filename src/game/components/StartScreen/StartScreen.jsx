@@ -1,5 +1,6 @@
 'use client';
 
+import { formatScore } from '@/game/core/text';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useScreenMusic } from '@/game/hooks/useScreenMusic';
@@ -34,9 +35,9 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
           Navegando para o Tesouro
         </h1>
 
-        <div className="start-screen__highscore" aria-label={`Recorde: ${highscore.toLocaleString('pt-BR')} pontos`}>
+        <div className="start-screen__highscore" aria-label={`Recorde: ${formatScore(highscore)} pontos`}>
           <Image src="/assets/game/ui/highscore-trophy.png" alt="" width={1254} height={1254} sizes="(min-width: 1024px) 200px, 88px" draggable={false} />
-          <span>Recorde <strong>{highscore.toLocaleString('pt-BR')}</strong></span>
+          <span>Recorde <strong>{formatScore(highscore)}</strong></span>
         </div>
 
         <button type="button" onClick={onTutorial}>

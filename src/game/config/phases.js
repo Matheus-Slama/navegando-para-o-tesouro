@@ -1,21 +1,15 @@
-import mapConfig from '@/game/config/maps.json';
+import mapConfig from '@/game/config/json/maps.json';
+import mapAnchors from '@/game/config/json/map-anchors.json';
+import { getPhaseBalance } from '@/game/config/balance';
+import { getWeightRange } from '@/game/enums/weight-ranges';
 
-// O JSON é a fonte única das regras e do balanceamento dos mapas.
-export const MAP_SIZE = mapConfig.mapSize;
-export const START_ISLANDS = mapConfig.starts;
-export const FINISH_ISLAND = mapConfig.finish;
-export const GAME_DESIGN = mapConfig.gameDesign;
-export const TUTORIAL_MAP = mapConfig.tutorial;
+// Barcos e tesouro são pontos fixos compartilhados pela geração e validação.
+export const START_ISLANDS = mapAnchors.starts;
+export const FINISH_ISLAND = mapAnchors.finish;
 
-const finalPhase = mapConfig.phases.at(-1);
-
-export const PHASES = mapConfig.testing?.useFinalPhaseRulesOnFirstPhase
-  ? mapConfig.phases.map((phase, index) => index === 0
-    ? {
-        ...finalPhase,
-        id: phase.id,
-        name: `Teste completo — ${finalPhase.name}`,
-        isTestPhase: true
-      }
-    : phase)
-  : mapConfig.phases;
+// O JSON guarda os mapas; pesos e balanceamento completam as fases.
+export const PHASES = mapConfig.phases.map((phase) => ({
+  ...phase,
+  weights: getWeightRange(phase.difficulty),
+  ...getPhaseBalance(phase.id),
+}));

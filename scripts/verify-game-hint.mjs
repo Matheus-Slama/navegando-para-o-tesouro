@@ -1,7 +1,9 @@
 // Com o app em localhost:3000 e um Chrome de teste em --remote-debugging-port=9224:
 // node scripts/verify-game-hint.mjs (sem dependências extras).
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+
+const { phases } = JSON.parse(await readFile(new URL('../src/game/config/json/maps.json', import.meta.url), 'utf8'));
 
 const baseUrl = process.env.GAME_HINT_URL ?? 'http://localhost:3000';
 const browserUrl = process.env.GAME_HINT_CDP ?? 'http://127.0.0.1:9224';
@@ -104,15 +106,15 @@ try {
   await clickText('Iniciar jornada');
   await waitFor(`!!document.querySelector('.dev-panel')`);
   if (!await evaluate(`!!document.querySelector('.dev-panel select')`)) await click('.dev-panel__toggle');
-  for (let phaseIndex = 0; phaseIndex < 10; phaseIndex++) {
+  for (let phaseIndex = 0; phaseIndex < phases.length; phaseIndex++) {
     await evaluate(`(() => {
       const select = document.querySelector('.dev-panel select');
       select.value = '${phaseIndex}';
       select.dispatchEvent(new Event('change', { bubbles: true }));
     })()`);
     await waitFor(`document.querySelector('.game-hint__title')?.textContent === 'Dica da fase ${phaseIndex + 1}'`);
-    assert.equal(await evaluate(`!!document.querySelector('.game-hint__dijkstra-toggle')`), phaseIndex >= 4, `Disponibilidade na fase ${phaseIndex + 1}`);
-    if (phaseIndex < 4) continue;
+    assert.equal(await evaluate(`!!document.querySelector('.game-hint__dijkstra-toggle')`), phases[phaseIndex].enableDijkstraTutorial, `Disponibilidade na fase ${phaseIndex + 1}`);
+    if (!phases[phaseIndex].enableDijkstraTutorial) continue;
     const routeControl = await rect('.game-hint__route-control');
     const tutorialControl = await rect('.game-hint__dijkstra-toggle');
     assert.ok(tutorialControl.y >= routeControl.bottom, 'Dijkstra fica abaixo do seletor de arestas.');

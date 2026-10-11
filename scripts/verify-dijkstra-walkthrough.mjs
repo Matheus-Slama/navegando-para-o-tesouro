@@ -76,7 +76,7 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   assert.equal(graph.results.winner.startId, 'start-blue');
   assert.equal(graph.results.winner.shortestPathCount, 1);
   // Remover a Ilha 18 encurta a rota do tablet em um ponto.
-  const phase = { ...DIJKSTRA_FIXED_PHASE, minimumWinnerPathNodes: layout === 'tablet' ? 5 : DIJKSTRA_FIXED_PHASE.minimumWinnerPathNodes };
+  const phase = { ...DIJKSTRA_FIXED_PHASE, weights: { ...DIJKSTRA_FIXED_PHASE.weights, minimumWinnerPathNodes: layout === 'tablet' ? 5 : DIJKSTRA_FIXED_PHASE.weights.minimumWinnerPathNodes } };
   assert.ok(isValidGraph(graph, graph.results, phase), `${layout}: mapa fora das regras do tutorial.`);
   assert.equal(graph.metadata.fixed, true);
   const islands = graph.nodes.filter((node) => node.type === 'intermediate');

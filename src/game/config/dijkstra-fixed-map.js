@@ -1,4 +1,4 @@
-import maps from '@/game/config/dijkstra-fixed-maps.json';
+import maps from '@/game/config/json/dijkstra-fixed-maps.json';
 import { PHASES } from '@/game/config/phases';
 import { getPhaseResults } from '@/game/core/dijkstra';
 

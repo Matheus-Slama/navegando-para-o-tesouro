@@ -45,7 +45,7 @@ export function generateGraphForPhase(phase, seed = Date.now(), layout = 'mobile
 
 function buildCandidateGraph(phase, seed, layout) {
   const random = createSeededRandom(seed);
-  const islandCount = getIslandCount(phase.islandCount, random);
+  const islandCount = getIslandCount(phase.weights.islandCount, random);
   const intermediateNodes = createIntermediateNodes(islandCount, random, layout);
   if (!intermediateNodes) return null;
   let nodes = [
@@ -54,16 +54,18 @@ function buildCandidateGraph(phase, seed, layout) {
     { ...FINISH_ISLAND, type: 'finish' }
   ];
   let edges = [];
-  const forcedWinnerIndex = randomInt(random, 0, START_ISLANDS.length - 1);
-  const GraphClass = phase.directed ? DirectedGraph : UndirectedGraph;
-  const maximumRandomEdges = phase.directed
+  // Mapas do jogo seguem as setas por padrão; false fica disponível para
+  // exercícios que precisem representar explicitamente um grafo sem direção.
+  const GraphClass = (phase.directed ?? true) ? DirectedGraph : UndirectedGraph;
+  const maximumRandomEdges = (phase.directed ?? true)
     ? intermediateNodes.length * (intermediateNodes.length - 1)
     : intermediateNodes.length * (intermediateNodes.length - 1) / 2;
   const topology = erdosRenyi(GraphClass, {
     order: intermediateNodes.length,
     approximateSize: Math.min(
       maximumRandomEdges,
-      phase.extraRouteCount
+      // Varia as alternativas sem ultrapassar a densidade da dificuldade.
+      randomInt(random, Math.ceil(phase.weights.extraRouteCount * 0.75), phase.weights.extraRouteCount)
     ),
     rng: random
   });
@@ -71,12 +73,10 @@ function buildCandidateGraph(phase, seed, layout) {
   const addLayoutEdge = (...args) => addEdge(...args, layout);
   connectRandomBackbone(edges, nodes, intermediateNodes, phase, random, addLayoutEdge);
 
-  // Dá uma vantagem inicial a um barco, mas a vitória depende do caminho completo.
-  START_ISLANDS.forEach((start, index) => {
-    const baseWeight = randomInt(random, phase.weights.min, phase.weights.max);
-    const winnerBonus = index === forcedWinnerIndex
-      ? -Math.max(1, Math.floor(phase.weights.max / 3))
-      : randomInt(random, 1, 5);
+  // Todos os barcos sorteiam pesos na mesma faixa, sem favorecer uma cor.
+  // O vencedor é definido pelo caminho completo e validado após a geração.
+  START_ISLANDS.forEach((start) => {
+    const weight = randomInt(random, phase.weights.min, phase.weights.max);
     const destinations = shuffle(
       random,
       intermediateNodes.filter((node) => node.y >= 260)
@@ -87,8 +87,8 @@ function buildCandidateGraph(phase, seed, layout) {
       nodes,
       start.id,
       destination.id,
-      Math.min(phase.weights.max, Math.max(phase.weights.min, baseWeight + winnerBonus)),
-      phase.directed
+      weight,
+      (phase.directed ?? true)
     ));
   });
 
@@ -98,7 +98,7 @@ function buildCandidateGraph(phase, seed, layout) {
     const first = intermediateNodes[Number(source)];
     const second = intermediateNodes[Number(target)];
     // Nas fases com setas, as rotas seguem de baixo para cima.
-    const [from, to] = phase.directed && first.y < second.y
+    const [from, to] = (phase.directed ?? true) && first.y < second.y
       ? [second, first]
       : [first, second];
     randomEdges.push([from.id, to.id]);
@@ -114,7 +114,7 @@ function buildCandidateGraph(phase, seed, layout) {
       from,
       to,
       randomInt(random, phase.weights.min, phase.weights.max),
-      phase.directed
+      (phase.directed ?? true)
     );
   });
 
@@ -126,15 +126,8 @@ function buildCandidateGraph(phase, seed, layout) {
     metadata: {
       layout,
       dense: islandCount >= 15,
-      phaseId: phase.id,
-      difficulty: phase.difficulty,
-      challengeType: phase.challengeType,
-      objective: phase.objective,
-      directed: phase.directed,
+      directed: (phase.directed ?? true),
       islandCount: nodes.filter((node) => node.type === 'intermediate').length,
-      score: phase.score,
-      hints: phase.hints,
-      generator: 'graphology-erdos-renyi'
     }
   };
 }
@@ -154,7 +147,7 @@ function connectRandomBackbone(edges, nodes, intermediateNodes, phase, random, a
       node.id,
       parent.id,
       randomInt(random, phase.weights.min, phase.weights.max),
-      phase.directed
+      (phase.directed ?? true)
     ));
 
     if (wasConnected) connected.push(node);

@@ -1,0 +1,136 @@
+{
+  "phases": [
+    {
+      "id": 1,
+      "name": "Primeiros custos",
+      "difficulty": "fácil",
+      "enableDijkstraTutorial": false,
+      "hints": [
+        "Antes de mover o barco, tente visualizar uma rota completa até o tesouro.",
+        "Evite caminhos que terminam sem conexão com o objetivo.",
+        "Observe o custo mostrado em cada conexão da rota.",
+        "Some os custos de todas as conexões até o tesouro.",
+        "Escolha o caminho cuja soma dos custos é a menor."
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Comparando custos",
+      "difficulty": "fácil",
+      "enableDijkstraTutorial": false,
+      "hints": [
+        "Existem vários caminhos possíveis. Não escolha o primeiro que encontrar.",
+        "Some todos os custos necessários para chegar ao tesouro.",
+        "Uma rota que começa barata pode ficar mais cara depois. Analise até o final.",
+        "Compare duas rotas completas e descarte aquela com maior custo.",
+        "O caminho com menos ilhas nem sempre possui a menor soma de custos."
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Custos enganosos",
+      "difficulty": "média",
+      "enableDijkstraTutorial": false,
+      "hints": [
+        "Não escolha apenas olhando o custo da primeira conexão.",
+        "Veja os custos das conexões seguintes antes de decidir.",
+        "Alguns caminhos parecem baratos no começo, mas acumulam custos maiores depois.",
+        "Compare a soma completa de pelo menos duas rotas antes de escolher.",
+        "A melhor escolha é a rota com o menor custo total até o tesouro."
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Somas estratégicas",
+      "difficulty": "média",
+      "enableDijkstraTutorial": false,
+      "hints": [
+        "Observe os números dos caminhos, não apenas a quantidade de ilhas.",
+        "Um caminho com mais ilhas pode custar menos se os custos de suas conexões forem menores.",
+        "Some mentalmente os custos das conexões de cada rota.",
+        "Compare o custo total das duas rotas que parecem mais promissoras.",
+        "Escolha a rota cuja soma de todos os custos até o tesouro seja a menor, mesmo que ela tenha mais etapas.",
+        "Exemplo: 3 + 2 + 1 = 6 pode ser melhor que 4 + 5 = 9."
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Custo acumulado",
+      "difficulty": "difícil",
+      "enableDijkstraTutorial": true,
+      "hints": [
+        "Não tente escolher a rota completa de uma vez. Compare os custos para chegar às próximas ilhas.",
+        "Anote mentalmente o menor custo conhecido para alcançar cada ilha.",
+        "Se duas rotas chegam à mesma ilha, mantenha apenas aquela com menor custo acumulado.",
+        "Continue primeiro a partir da ilha que possui o menor custo acumulado até agora.",
+        "Recalcule os custos sempre que encontrar um caminho mais barato para uma ilha que você já analisou.",
+        "Exemplo: se A vale 4 e o caminho de A até B custa 2, então B passa a valer 6, não 7."
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Rotas alternativas",
+      "difficulty": "difícil",
+      "enableDijkstraTutorial": true,
+      "hints": [
+        "Compare os caminhos que chegam à mesma ilha antes de seguir em frente.",
+        "Guarde o menor custo acumulado conhecido para cada ilha.",
+        "Uma conexão barata pode compensar uma rota com mais etapas.",
+        "Se encontrar uma soma menor, atualize o custo daquela ilha.",
+        "Compare os custos totais dos quatro barcos até o tesouro."
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Navegando pelas setas",
+      "difficulty": "difícil",
+      "enableDijkstraTutorial": true,
+      "hints": [
+        "Agora as rotas têm sentido obrigatório. Siga apenas as setas que saem da ilha atual.",
+        "Uma conexão que aponta para sua ilha não pode ser percorrida ao contrário.",
+        "Some os pesos somente dos caminhos que respeitam todas as setas.",
+        "Mantenha o menor custo conhecido para chegar a cada ilha.",
+        "Compare as rotas completas de cada barco até o tesouro."
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Explorando com Dijkstra",
+      "difficulty": "muito difícil",
+      "enableDijkstraTutorial": true,
+      "hints": [
+        "Comece com custo 0 no barco e custo desconhecido nas outras ilhas.",
+        "Escolha a ilha ainda não confirmada com o menor custo acumulado.",
+        "Siga suas setas de saída e some os pesos para atualizar as ilhas vizinhas.",
+        "Confirme o custo da ilha analisada e repita a comparação.",
+        "Use o tutorial de Dijkstra para rever esse processo passo a passo."
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Travessia estratégica",
+      "difficulty": "muito difícil",
+      "enableDijkstraTutorial": true,
+      "hints": [
+        "Divida o mapa em etapas e mantenha os menores custos acumulados.",
+        "Não confirme uma ilha antes de comparar as outras ainda não visitadas.",
+        "Uma soma menor substitui o custo anterior de uma ilha não confirmada.",
+        "Respeite as setas mesmo quando uma conexão parece um atalho.",
+        "Compare o custo final de cada barco, não apenas o trecho inicial."
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Desafio final de Dijkstra",
+      "difficulty": "muito difícil",
+      "enableDijkstraTutorial": true,
+      "hints": [
+        "Comece atribuindo custo 0 à posição inicial do barco e considere as ilhas ainda sem custo conhecido.",
+        "Calcule o custo para chegar às ilhas vizinhas da posição inicial.",
+        "Escolha o vértice não visitado com o menor custo acumulado.",
+        "A partir dele, verifique se existe um caminho mais barato para seus vizinhos e atualize os valores.",
+        "Repita: menor custo não visitado → atualizar vizinhos → marcar como visitado, até chegar ao vértice do tesouro."
+      ]
+    }
+  ]
+}

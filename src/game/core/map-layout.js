@@ -1,4 +1,4 @@
-import islandPlacement from '@/game/config/islandPlacement.json';
+import islandPlacement from '@/game/config/json/islandPlacement.json';
 
 export const WIDE_MAP_QUERY = '(min-aspect-ratio: 1/1)';
 export const TABLET_MAP_QUERY = '(min-width: 600px)';

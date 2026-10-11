@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useScreenMusic } from '@/game/hooks/useScreenMusic';
+import { formatCost, shortBoatLabel } from '@/game/core/text';
+import { TutorialText } from './TutorialText';
 import { PHASES } from '@/game/config/phases';
 import { DIJKSTRA_FIXED_PHASE, getDijkstraFixedMap } from '@/game/config/dijkstra-fixed-map';
 import { createDijkstraWalkthrough } from '@/game/core/dijkstra-walkthrough';
@@ -14,9 +16,6 @@ import { GameHintNavigation } from '@/game/components/GameHint/GameHintNavigatio
 import '@/game/components/GameBoard/GameBoard.css';
 import './DijkstraTutorialMap.css';
 
-const cost = (value) => Number.isFinite(value) ? value : '∞';
-const formatTutorialText = (text) => text.split(/(∞)/).map((part, index) => part === '∞'
-  ? <span className="dijkstra-fixed-map__infinity" key={index}>∞</span> : part);
 
 export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile', routeStyle = 'chevrons', onChangeRouteStyle, paused = false }) {
   const musicRef = useScreenMusic(paused);
@@ -96,9 +95,9 @@ function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout, routeStyle, on
                 style={{ left: node.x / 10 + '%', top: node.y / 6.5 + '%', width: radii.x / 5 + '%', height: radii.y / 3.25 + '%' }} />}
               {current.showCosts && (node.type !== 'start' || node.id === selectedBoatId) && <span className="dijkstra-fixed-map__cost" data-node-id={node.id} data-active={active || onPath} data-confirmed={confirmed} data-type={node.type}
                 style={{ left: node.x / 10 + '%', top: node.y / 6.5 + '%' }}
-                aria-label={node.label + ': custo ' + cost(current.distances[node.id]) + (confirmed ? ', confirmado' : ', provisório')}
-                title={node.label + ' · Custo: ' + cost(current.distances[node.id]) + (current.previous[node.id] ? ' · Anterior: ' + graph.nodes.find((item) => item.id === current.previous[node.id]).label : '')}>
-                <strong data-infinite={!Number.isFinite(current.distances[node.id])}>{cost(current.distances[node.id])}{confirmed ? ' ✓' : ''}</strong>
+                aria-label={node.label + ': custo ' + formatCost(current.distances[node.id]) + (confirmed ? ', confirmado' : ', provisório')}
+                title={node.label + ' · Custo: ' + formatCost(current.distances[node.id]) + (current.previous[node.id] ? ' · Anterior: ' + graph.nodes.find((item) => item.id === current.previous[node.id]).label : '')}>
+                <strong data-infinite={!Number.isFinite(current.distances[node.id])}>{formatCost(current.distances[node.id])}{confirmed ? ' ✓' : ''}</strong>
               </span>}
             </div>;
           })}
@@ -124,12 +123,12 @@ function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout, routeStyle, on
         )}>
           <p>{isComplete
             ? 'Você concluiu o tutorial de Dijkstra! Agora é sua vez de encontrar o caminho de menor custo até o tesouro. Reinicie para rever os passos ou volte ao jogo para praticar.'
-            : comparing ? 'Cada barco começa do zero. Toque abaixo para comparar as rotas.' : formatTutorialText(frame.text)}</p>
-          {!isComplete && frame.formula && <p className="dijkstra-fixed-map__formula">{formatTutorialText(frame.formula)}</p>}
+            : comparing ? 'Cada barco começa do zero. Toque abaixo para comparar as rotas.' : <TutorialText text={frame.text} />}</p>
+          {!isComplete && frame.formula && <p className="dijkstra-fixed-map__formula"><TutorialText text={frame.formula} /></p>}
           {comparing &&
             <div className="dijkstra-fixed-map__comparison" aria-label="Comparar custos dos barcos">
               {graph.results.all.map((result) => <button key={result.startId} type="button" data-boat={result.boat} aria-pressed={comparedBoat === result.startId} onClick={() => setComparedBoat(result.startId)}>
-                {result.label.replace('Barco ', '')}: {formatTutorialText(String(result.distance))}{result.startId === winner.startId ? ' ★' : ''}
+                {shortBoatLabel(result.label)}: <TutorialText text={formatCost(result.distance)} />{result.startId === winner.startId ? ' ★' : ''}
               </button>)}
             </div>
           }

@@ -1,4 +1,4 @@
-import { GAME_DESIGN } from '@/game/config/phases';
+import { WRONG_BOAT_PENALTY } from '@/game/config/balance';
 
 export const TUTORIAL_STEPS = [
   {
@@ -19,7 +19,7 @@ export const TUTORIAL_STEPS = [
   },
   {
     title: 'Pontuação e vidas',
-    text: `Ao acertar, você ganha pontos e avança de fase. Ao escolher o barco errado, perde uma vida e até ${GAME_DESIGN.scoring.wrongBoatPenalty} pontos. A pontuação nunca fica abaixo de zero. Com três erros, a jornada termina.`
+    text: `Ao acertar, você ganha pontos e avança de fase. Ao escolher o barco errado, perde uma vida e até ${WRONG_BOAT_PENALTY} pontos. A pontuação nunca fica abaixo de zero. Com três erros, a jornada termina.`
   },
   {
     title: 'Dicas',

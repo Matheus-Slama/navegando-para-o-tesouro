@@ -65,7 +65,7 @@ export function GameBoard({
           label={`Dica da fase ${phase.id}`}
           routeStyle={routeStyle}
           onChangeRouteStyle={onChangeRouteStyle}
-          onDijkstraTutorial={phase.difficulty.includes('difícil') ? onDijkstraTutorial : undefined}
+          onDijkstraTutorial={phase.enableDijkstraTutorial ? onDijkstraTutorial : undefined}
           minimized={!hintOpen}
           onMinimizedChange={(value) => value ? onCloseHint() : onOpenHint()}
           footer={

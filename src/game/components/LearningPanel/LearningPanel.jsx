@@ -4,11 +4,11 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   advanceDijkstraExercise,
   createDijkstraExercise,
-  formatCost,
   getLearningRoutes,
   getNodeLabel,
   getRouteWeights
 } from '@/game/core/learning';
+import { formatCost } from '@/game/core/text';
 import './LearningPanel.css';
 
 export function LearningPanel({ graph, phase, startId, onComplete, onCancel, onFocusNode, onHighlightPath }) {
@@ -26,7 +26,7 @@ export function LearningPanel({ graph, phase, startId, onComplete, onCancel, onF
         <button type="button" className="learning-panel__cancel" onClick={onCancel}>Voltar ao mapa</button>
       </div>
       <p className="learning-panel__origin">Origem desta análise: <strong>{getNodeLabel(graph, startId)}</strong>.</p>
-      <p className="learning-panel__rules">{phase.directed
+      <p className="learning-panel__rules">{(phase.directed ?? true)
         ? 'As setas indicam o sentido permitido. Todos os pesos são positivos.'
         : 'As conexões permitem os dois sentidos. Some os pesos, independentemente do tamanho da linha.'}</p>
       {phase.id < 5
@@ -116,7 +116,7 @@ function CostExercise({ graph, phase, startId, onComplete, onHighlightPath }) {
 }
 
 function DijkstraExercise({ graph, phase, startId, onComplete, onFocusNode, onHighlightPath }) {
-  const [state, setState] = useState(() => createDijkstraExercise(graph, startId, phase.directed));
+  const [state, setState] = useState(() => createDijkstraExercise(graph, startId, (phase.directed ?? true)));
   const [feedback, setFeedback] = useState('Use 0 para a origem e ∞ para custos ainda desconhecidos.');
   const [value, setValue] = useState('');
   const [choice, setChoice] = useState('');
@@ -198,7 +198,7 @@ function DijkstraExercise({ graph, phase, startId, onComplete, onFocusNode, onHi
           <p className="learning-panel__trace">{state.route.map(label).join(' ← ')}</p>
         </>}
         {finishedRoute && <>
-          <RouteView graph={graph} route={{ path: [...state.route].reverse(), weights: getRouteWeights(graph, [...state.route].reverse(), phase.directed) }} title="Caminho reconstruído" onHighlightPath={onHighlightPath} />
+          <RouteView graph={graph} route={{ path: [...state.route].reverse(), weights: getRouteWeights(graph, [...state.route].reverse(), (phase.directed ?? true)) }} title="Caminho reconstruído" onHighlightPath={onHighlightPath} />
           <label className="learning-panel__field" htmlFor={`${formId}-value`}>Custo mínimo até o tesouro
             <input id={`${formId}-value`} type="number" min="0" step="1" inputMode="numeric" required value={value} onChange={(event) => setValue(event.target.value)} />
           </label>

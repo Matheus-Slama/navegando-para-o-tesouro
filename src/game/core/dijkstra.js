@@ -121,7 +121,7 @@ export function getPhaseResults(graph, phase) {
     startId: start.id,
     boat: start.boat,
     label: start.label,
-    ...dijkstra(graph.nodes, graph.edges, start.id, 'finish', phase.directed)
+    ...dijkstra(graph.nodes, graph.edges, start.id, 'finish', (phase.directed ?? true))
   }));
 
   const reachable = results.filter((result) => Number.isFinite(result.distance));

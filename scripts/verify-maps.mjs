@@ -11,7 +11,7 @@ const { getMapProfile, getWaterBounds, getNodeRadii } = await import('../src/gam
 
 assert.equal(PHASES.length, 10);
 assert.deepEqual(PHASES.map((phase) => phase.id), Array.from({ length: 10 }, (_, index) => index + 1));
-assert.equal(PHASES.at(-1).challengeType, 'dijkstra');
+assert.equal(PHASES.at(-1).enableDijkstraTutorial, true);
 
 // Uma remoção pode deixar a próxima ilha sem entrada ou sem saída.
 for (const missing of ['incoming', 'outgoing']) {
@@ -40,9 +40,12 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
       assert.ok(isValidGraph(graph, graph.results, phase));
       assert.equal(graph.results.winner.shortestPathCount, 1);
       assert.equal(graph.results.ordered.length, 4);
+      assert.ok(graph.edges.every((edge) => Number.isInteger(edge.weight)
+        && edge.weight >= phase.weights.min && edge.weight <= phase.weights.max),
+      `Peso fora da dificuldade: ${layout}, fase ${phase.id}, seed ${graph.seed}`);
       const profile = getMapProfile(layout);
       const islands = graph.nodes.filter((node) => node.type === 'intermediate');
-      if (sample === 1 && !phase.directed) {
+      if (sample === 1 && phase.directed === false) {
         // Inverter as pontas mantém custos e conectividade do grafo não direcionado,
         // mas deve ser rejeitado se todas as setas entrarem ou saírem da mesma ilha.
         const island = islands[0];
@@ -74,7 +77,7 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
         }
         for (const edge of graph.edges) {
           const next = edge.from === nodeId ? edge.to
-            : !phase.directed && edge.to === nodeId ? edge.from : null;
+            : phase.directed === false && edge.to === nodeId ? edge.from : null;
           if (next && !visited.has(next)) visit(next, cost + edge.weight, new Set([...visited, next]));
         }
       }

@@ -31,7 +31,7 @@ export function completeIslandConnections(edges, nodes, intermediateNodes, phase
         edges, nodes,
         incoming ? candidate.id : node.id,
         incoming ? node.id : candidate.id,
-        randomInt(random, phase.weights.min, phase.weights.max), phase.directed
+        randomInt(random, phase.weights.min, phase.weights.max), (phase.directed ?? true)
       ));
     }
   });
@@ -44,8 +44,8 @@ export function removeInvalidIslands(graph, phase) {
   // Descarta ilhas que a geometria nao permitiu conectar, em vez de exibir becos sem saida.
   while (true) {
     const candidate = { nodes, edges };
-    const reachable = getReachableNodes(candidate, START_ISLANDS.map((node) => node.id), phase.directed);
-    const reachesFinish = getReachableNodes(candidate, [FINISH_ISLAND.id], phase.directed, true);
+    const reachable = getReachableNodes(candidate, START_ISLANDS.map((node) => node.id), (phase.directed ?? true));
+    const reachesFinish = getReachableNodes(candidate, [FINISH_ISLAND.id], (phase.directed ?? true), true);
     const invalidIds = new Set(nodes.filter((node) => node.type === 'intermediate' && (
       !reachable.has(node.id) || !reachesFinish.has(node.id) ||
       !hasIncomingAndOutgoingEdges(edges, node.id)
@@ -74,8 +74,8 @@ export function isValidGraph(graph, results, phase) {
     return false;
   }
 
-  const reachableFromBoats = getReachableNodes(graph, START_ISLANDS.map((node) => node.id), phase.directed);
-  const canReachTreasure = getReachableNodes(graph, [FINISH_ISLAND.id], phase.directed, true);
+  const reachableFromBoats = getReachableNodes(graph, START_ISLANDS.map((node) => node.id), (phase.directed ?? true));
+  const canReachTreasure = getReachableNodes(graph, [FINISH_ISLAND.id], (phase.directed ?? true), true);
   if (graph.nodes.some((node) => node.type === 'intermediate' && (
     !reachableFromBoats.has(node.id) || !canReachTreasure.has(node.id) ||
     !hasIncomingAndOutgoingEdges(graph.edges, node.id)
@@ -91,15 +91,16 @@ export function isValidGraph(graph, results, phase) {
     return false;
   }
 
-  if (phase.minimumEdgeCount && graph.edges.length < phase.minimumEdgeCount) {
+  if (phase.weights.minimumEdgeCount && graph.edges.length < phase.weights.minimumEdgeCount) {
     return false;
   }
 
-  if (phase.minimumWinnerPathNodes && winner.path.length < phase.minimumWinnerPathNodes) {
+  if (phase.weights.minimumWinnerPathNodes && winner.path.length < phase.weights.minimumWinnerPathNodes) {
     return false;
   }
 
-  return second.distance - winner.distance >= phase.uniqueWinnerGap;
+  // Basta uma vitória estrita; não exigimos uma margem artificial por fase.
+  return second.distance > winner.distance;
 }
 
 function hasIncomingAndOutgoingEdges(edges, nodeId) {

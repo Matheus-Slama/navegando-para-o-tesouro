@@ -98,7 +98,7 @@ public/assets/game/
 As fases ficam em:
 
 ```text
-src/game/config/maps.json
+src/game/config/json/maps.json
 ```
 
 Exemplo de configuração:
@@ -152,7 +152,7 @@ O botão **Tutorial Dijkstra**, abaixo de **Tutorial** na tela inicial, demonstr
 
 Os dois botões de seta avançam e desfazem as contas; no teclado, use ← e →. Também é possível recolher a explicação e comparar os quatro barcos no último passo. O barco azul tem o menor custo, sem empate, nos três formatos de tela. Os nove conceitos ficam em `src/game/config/dijkstra-steps.js`; as cenas são calculadas em `src/game/core/dijkstra-walkthrough.js`. Ao mudar o formato da tela, a demonstração reinicia no mapa correspondente. Execute `node scripts/verify-dijkstra-walkthrough.mjs` para validar os estados e as rotas.
 
-Os mapas de celular, tablet e tela horizontal estão salvos em `src/game/config/dijkstra-fixed-maps.json`. Cada formato mantém as mesmas ilhas, rotas e pesos ao reabrir o tutorial. A tela é implementada em `src/game/components/DijkstraTutorial/DijkstraTutorialMap.jsx`.
+Os mapas de celular, tablet e tela horizontal estão salvos em `src/game/config/json/dijkstra-fixed-maps.json`. Cada formato mantém as mesmas ilhas, rotas e pesos ao reabrir o tutorial. A tela é implementada em `src/game/components/DijkstraTutorial/DijkstraTutorialMap.jsx`.
 
 ## Como trocar imagens
 

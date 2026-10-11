@@ -1,0 +1,38 @@
+{
+  "starts": [
+    {
+      "id": "start-red",
+      "label": "Barco Vermelho",
+      "boat": "red",
+      "x": 140,
+      "y": 600
+    },
+    {
+      "id": "start-blue",
+      "label": "Barco Azul",
+      "boat": "blue",
+      "x": 380,
+      "y": 600
+    },
+    {
+      "id": "start-green",
+      "label": "Barco Verde",
+      "boat": "green",
+      "x": 620,
+      "y": 600
+    },
+    {
+      "id": "start-black",
+      "label": "Barco Preto",
+      "boat": "black",
+      "x": 860,
+      "y": 600
+    }
+  ],
+  "finish": {
+    "id": "finish",
+    "label": "Ilha do Tesouro",
+    "x": 500,
+    "y": 55
+  }
+}

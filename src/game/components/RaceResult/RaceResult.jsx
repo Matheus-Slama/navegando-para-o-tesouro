@@ -1,3 +1,4 @@
+import { formatScore } from '@/game/core/text';
 import { BOAT_COLORS } from '@/game/enums/boat-colors';
 import './RaceResult.css';
 
@@ -22,8 +23,8 @@ export function RaceResult({ result, winner, isFinalPhase, onContinue, lives, sc
             : `O ${winnerBoatName} foi o vencedor.`}
         </p>
         {lives === 0 && (
-          <p>Pontuação final: {score.toLocaleString('pt-BR')}<br />
-            High Score: {highscore.toLocaleString('pt-BR')}</p>
+          <p>Pontuação final: {formatScore(score)}<br />
+            High Score: {formatScore(highscore)}</p>
         )}
         <button type="button" onClick={onContinue}>
           {lives === 0 ? 'Voltar ao menu' : result === 'victory' && !isFinalPhase ? 'Próxima fase' : result === 'victory' ? 'Jogar novamente' : 'Tentar novamente'}

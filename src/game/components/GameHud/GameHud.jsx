@@ -1,9 +1,9 @@
+import { formatScore, formatElapsedTime } from '@/game/core/text';
 import Image from 'next/image';
 import './GameHud.css';
 
 export function GameHud({ lives, elapsed = 0, score = 0 }) {
-  const totalSeconds = Math.max(0, Math.floor(elapsed));
-  const time = `${Math.floor(totalSeconds / 60)}:${String(totalSeconds % 60).padStart(2, '0')}`;
+  const time = formatElapsedTime(elapsed);
 
   return (
     <div className="game-hud">
@@ -31,7 +31,7 @@ export function GameHud({ lives, elapsed = 0, score = 0 }) {
         )}
       </span>
       <span className="game-hud__score" role="status" aria-label={`Pontuação: ${score} pontos`}>
-        {score.toLocaleString('pt-BR')}
+        {formatScore(score)}
       </span>
       <span className="game-hud__time" role="timer" aria-label={`Tempo da fase: ${time}`}>
         {time}

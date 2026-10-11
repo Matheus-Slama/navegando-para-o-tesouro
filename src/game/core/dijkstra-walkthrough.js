@@ -1,7 +1,7 @@
-import { DIJKSTRA_STEPS } from '@/game/config/dijkstra-steps';
+import DIJKSTRA_STEPS from '@/game/config/json/dijkstra-steps.json';
 import { getNextDijkstraStep } from '@/game/core/dijkstra';
 
-const format = (value) => Number.isFinite(value) ? String(value) : '∞';
+import { formatCost } from './text.js';
 
 export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishId = 'finish') {
   const nodes = new Map(graph.nodes.map((node) => [node.id, node]));
@@ -53,8 +53,8 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
       add(7, {
         ...focus, improved,
         title: improved ? 'Atualize o custo' : 'Mantenha o custo',
-        text: improved ? `${name(targetId)} muda de ${format(oldDistance)} para ${candidate}. Anterior: ${name(currentId)}.` : `${name(targetId)} já tem custo ${format(oldDistance)}. Esta alternativa não melhora o caminho.`,
-        formula: `${candidate} ${improved ? '<' : '≥'} ${format(oldDistance)}`
+        text: improved ? `${name(targetId)} muda de ${formatCost(oldDistance)} para ${candidate}. Anterior: ${name(currentId)}.` : `${name(targetId)} já tem custo ${formatCost(oldDistance)}. Esta alternativa não melhora o caminho.`,
+        formula: `${candidate} ${improved ? '<' : '≥'} ${formatCost(oldDistance)}`
       });
     }
     const origin = nodes.get(currentId).type === 'intermediate' ? 'da ilha destacada' : `de ${name(currentId)}`;

@@ -1,4 +1,4 @@
-import deviceSizes from '@/game/config/device-sizes.json';
+import deviceSizes from '@/game/config/json/device-sizes.json';
 
 const configurations = new Map();
 const styles = new WeakMap();

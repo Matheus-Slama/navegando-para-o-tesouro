@@ -34,7 +34,7 @@ export function GameShell() {
   const [hintIndex, setHintIndex] = useState(0);
   const [routeStyle, setRouteStyle] = useState('chevrons');
   const phase = PHASES[phaseIndex];
-  const showDijkstraUnlock = screen === 'game' && phase.difficulty.includes('difícil') && !dijkstraAnnounced;
+  const showDijkstraUnlock = screen === 'game' && phase.enableDijkstraTutorial && !dijkstraAnnounced;
   const journey = useJourney(screen === 'game' && !paused && !showDijkstraUnlock && !selectedStartId && !raceResult);
 
   useEffect(() => {
