@@ -79,7 +79,7 @@
   padding: 0.75rem 0.875rem;
   border: 0;
   border-radius: 0;
-  background: transparent url('/assets/game/ui/pirate-button-rectangle.png') center / 100% 100% no-repeat;
+  background: transparent url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
   image-rendering: pixelated;
   color: #fff8db;
   font: 600 0.78rem/1.2 var(--font-ui);

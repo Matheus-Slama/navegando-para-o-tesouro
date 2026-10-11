@@ -11,20 +11,20 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
 
   return (
     <section className="start-screen" aria-labelledby="start-screen-title">
-      <audio ref={musicRef} src="/assets/game/audio/treasure-hunter.mp3" loop preload="auto" />
+      <audio ref={musicRef} src="/assets/game/audio/music-menu.mp3" loop preload="auto" />
       <Link className="start-screen__credits" href="/creditos">Créditos</Link>
       <div className="start-screen__frame">
       <picture className="start-screen__art">
         <source
           media="(min-aspect-ratio: 1/1)"
-          srcSet="/assets/game/backgrounds/start-screen-wide.png"
+          srcSet="/assets/game/backgrounds/background-menu-wide.png"
         />
         <source
           media="(min-width: 37.5rem)"
-          srcSet="/assets/game/backgrounds/start-screen-portrait.png"
+          srcSet="/assets/game/backgrounds/background-menu-portrait.png"
         />
         <img
-          src="/assets/game/backgrounds/start-screen-tall.png"
+          src="/assets/game/backgrounds/background-menu-tall.png"
           alt=""
           fetchPriority="high"
         />
@@ -36,7 +36,7 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
         </h1>
 
         <div className="start-screen__highscore" aria-label={`Recorde: ${formatScore(highscore)} pontos`}>
-          <Image src="/assets/game/ui/highscore-trophy.png" alt="" width={1254} height={1254} sizes="(min-width: 1024px) 200px, 88px" draggable={false} />
+          <Image src="/assets/game/ui/icon-highscore.png" alt="" width={1254} height={1254} sizes="(min-width: 1024px) 200px, 88px" draggable={false} />
           <span>Recorde <strong>{formatScore(highscore)}</strong></span>
         </div>
 

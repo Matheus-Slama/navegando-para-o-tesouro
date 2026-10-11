@@ -2,6 +2,10 @@
 
 Jogo educativo web para o ensino do **problema do caminho mínimo em grafos**.
 
+Consulte o [FAQ do projeto](FAQ.md) para perguntas sobre Next.js, arquitetura, Dijkstra e funcionamento do jogo.
+
+Os arquivos de mídia seguem a [convenção de nomes dos assets](public/assets/README.md).
+
 O projeto foi feito em **Next.js + React + SVG/CSS**, sem Phaser. A ideia é manter uma arquitetura simples para o TCC: mapa fixo, ilhas como vértices, rotas como arestas, pesos, direção, dicas, animação dos barcos e cálculo do vencedor com o algoritmo de Dijkstra.
 
 ## Por que não Phaser?
@@ -78,8 +82,8 @@ public/assets/game/
   backgrounds/
   islands/
   boats/
-  icons/
-  music/
+  ui/
+  audio/
 ```
 
 ## Fluxo do jogo
@@ -169,15 +173,15 @@ Exemplo:
 ```js
 export const GAME_ASSETS = {
   backgrounds: {
-    menu: '/assets/game/backgrounds/menu-map.png',
-    board: '/assets/game/backgrounds/map-board.png'
+    menu: '/assets/game/backgrounds/background-menu-portrait.png',
+    board: '/assets/game/backgrounds/background-map-mobile.png'
   },
 
   boats: {
-    red: '/assets/game/boats/red-boat.png',
-    blue: '/assets/game/boats/blue-boat.png',
-    green: '/assets/game/boats/green-boat.png',
-    yellow: '/assets/game/boats/yellow-boat.png'
+    red: '/assets/game/boats/boat-red.png',
+    blue: '/assets/game/boats/boat-blue.png',
+    green: '/assets/game/boats/boat-green.png',
+    black: '/assets/game/boats/boat-black.png'
   }
 };
 ```
@@ -188,8 +192,8 @@ export const GAME_ASSETS = {
 public/assets/game/backgrounds
 public/assets/game/islands
 public/assets/game/boats
-public/assets/game/icons
-public/assets/game/music
+public/assets/game/ui
+public/assets/game/audio
 ```
 
 Enquanto você não adiciona sprites reais, o jogo usa desenhos SVG/CSS simples.
@@ -279,17 +283,17 @@ src/game/components/StartScreen/StartScreen.css
 Coloque arquivos em:
 
 ```text
-public/assets/game/music
+public/assets/game/audio
 ```
 
 Exemplo:
 
 ```text
-public/assets/game/music/menu.ogg
-public/assets/game/music/phase-1.ogg
+public/assets/game/audio/music-menu.mp3
+public/assets/game/audio/music-gameplay.wav
 ```
 
-Depois podemos criar um `AudioManager` para tocar músicas e efeitos.
+O hook `useScreenMusic` controla a reprodução nas telas. Ao trocar uma faixa, atualize o caminho no componente correspondente e os créditos em `public/assets/game/audio/CREDITS.md`.
 
 ## Próximos passos sugeridos
 

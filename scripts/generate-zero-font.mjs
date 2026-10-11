@@ -93,6 +93,6 @@ output.writeUInt32BE((0xb1b0afba - checksum(output)) >>> 0, headOffset + 8);
 assert.equal(checksum(output), 0xb1b0afba);
 await mkdir('public/fonts', { recursive: true });
 await mkdir('public/licenses', { recursive: true });
-await writeFile('public/fonts/treasure-zero.ttf', output);
+await writeFile('public/fonts/font-treasure-zero.ttf', output);
 await writeFile('public/licenses/Pirata-One-OFL.txt', await download('OFL.txt'));
 console.log('Generated Treasure Zero: U+0030 uses the uppercase O glyph.');

@@ -1,6 +1,6 @@
 # Pirate gear icon
 
-Asset: `public/assets/game/ui/pirate-gear.png`
+Asset: `public/assets/game/ui/icon-settings.png`
 
 Generated with the built-in `image_gen` tool. Transparent PNG; displayed with pixelated rendering.
 

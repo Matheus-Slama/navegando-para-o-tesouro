@@ -1,6 +1,6 @@
 # Music
 
-- File: `a-sailors-chant.ogg`
+- File: `music-dijkstra-tutorial.ogg`
 - Title: A sailor's chant
 - Author: Thimras
 - Source: https://opengameart.org/content/a-sailors-chant
@@ -8,7 +8,7 @@
 - License: CC0 — https://creativecommons.org/publicdomain/zero/1.0/
 - Changes: None; original OGG played in a loop.
 
-- File: `blackmoor-tides-loop.wav`
+- File: `music-gameplay.wav`
 - Title: Blackmoor Tides (Epic Pirate Battle Theme)
 - Author: Matthew Pablo — https://www.matthewpablo.com/
 - Source: https://opengameart.org/content/blackmoor-tides-epic-pirate-battle-theme
@@ -17,7 +17,7 @@
 - License: CC BY 3.0 — https://creativecommons.org/licenses/by/3.0/
 - Changes: None; original loop version played in a loop.
 
-- File: `pirate-tavern-loop.wav`
+- File: `music-tutorial.wav`
 - Title: Pirate tavern loop
 - Author: ©2017 Emma Andersson (Emma_MA)
 - Source: https://opengameart.org/content/pirate-tavern-loop
@@ -25,7 +25,7 @@
 - License: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
 - Changes: None; original WAV played in a loop.
 
-- File: `treasure-hunter.mp3`
+- File: `music-menu.mp3`
 - Title: Treasure Hunter
 - Author: TAD
 - Source: https://opengameart.org/content/treasure-hunter

@@ -1,7 +1,7 @@
 /* Keep numeric zero in the content, displaying the uppercase O glyph. */
 @font-face {
   font-family: 'Treasure Zero';
-  src: url('/fonts/treasure-zero.ttf') format('truetype');
+  src: url('/fonts/font-treasure-zero.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

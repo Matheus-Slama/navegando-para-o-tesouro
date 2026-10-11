@@ -71,13 +71,13 @@
       "label": "Celular em pé",
       "layout": "mobile",
       "match": {},
-      "assets": { "startBackground": "/assets/game/backgrounds/start-screen-tall.png" }
+      "assets": { "startBackground": "/assets/game/backgrounds/background-menu-tall.png" }
     },
     "tablet": {
       "label": "Tablet em pé",
       "layout": "tablet",
       "match": { "minWidth": 600 },
-      "assets": { "startBackground": "/assets/game/backgrounds/start-screen-portrait.png" },
+      "assets": { "startBackground": "/assets/game/backgrounds/background-menu-portrait.png" },
       "sizes": {
         "island-width": "min(14cqw, 16cqh, 10rem)",
         "dense-island-width": "min(11cqw, 12cqh, 8rem)",
@@ -98,7 +98,7 @@
       "label": "Desktop, tablet deitado e widescreen",
       "layout": "wide",
       "match": { "minAspectRatio": 1 },
-      "assets": { "startBackground": "/assets/game/backgrounds/start-screen-wide.png" },
+      "assets": { "startBackground": "/assets/game/backgrounds/background-menu-wide.png" },
       "sizes": {
         "island-width": "min(8cqw, 13cqh, 10rem)",
         "dense-island-width": "min(7cqw, 11cqh, 8rem)",

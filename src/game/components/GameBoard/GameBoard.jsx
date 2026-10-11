@@ -45,7 +45,7 @@ export function GameBoard({
 
   return (
     <section className="game-board" data-layout={graph.metadata.layout}>
-      <audio ref={musicRef} src="/assets/game/audio/blackmoor-tides-loop.wav" loop preload="auto" />
+      <audio ref={musicRef} src="/assets/game/audio/music-gameplay.wav" loop preload="auto" />
       <picture className="game-board__background">
         <img
           src={mapProfile.asset}

@@ -1,7 +1,7 @@
 export const GAME_ASSETS = {
   islandSheets: [
     {
-      src: '/assets/game/islands/islands-sheet-1.png',
+      src: '/assets/game/islands/sheet-islands-1.png',
       width: 1448,
       height: 1086,
       columns: 9,
@@ -10,7 +10,7 @@ export const GAME_ASSETS = {
       yBounds: [0, 121, 229, 329, 429, 540, 648, 752, 863, 972, 1086]
     },
     {
-      src: '/assets/game/islands/islands-sheet-2.png',
+      src: '/assets/game/islands/sheet-islands-2.png',
       width: 1448,
       height: 1086,
       columns: 10,

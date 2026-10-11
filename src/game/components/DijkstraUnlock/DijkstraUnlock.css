@@ -17,7 +17,7 @@
   max-width: 100%;
   padding: 0.875rem 1.25rem;
   border: 0;
-  background: url('/assets/game/ui/pirate-button-rectangle.png') center / 100% 100% no-repeat;
+  background: url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
   color: #fff8db;
   font: 400 1.2rem/1.2 var(--font-title);
   cursor: pointer;

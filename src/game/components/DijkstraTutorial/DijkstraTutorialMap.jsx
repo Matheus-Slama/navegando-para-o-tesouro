@@ -22,7 +22,7 @@ export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile', routeSt
   const [run, setRun] = useState(0);
   // Os formatos usam mapas distintos: uma mudança de formato reinicia as contas.
   return <>
-    <audio ref={musicRef} src="/assets/game/audio/a-sailors-chant.ogg" loop preload="auto" />
+    <audio ref={musicRef} src="/assets/game/audio/music-dijkstra-tutorial.ogg" loop preload="auto" />
     <DijkstraWalkthrough key={`${layout}-${run}`} onExit={onExit} onPlay={onPlay} onRestart={() => setRun((value) => value + 1)} layout={layout} routeStyle={routeStyle} onChangeRouteStyle={onChangeRouteStyle} />
   </>;
 }
