@@ -41,7 +41,7 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
       assert.equal(graph.results.winner.shortestPathCount, 1);
       assert.equal(graph.results.ordered.length, 4);
       assert.ok(graph.edges.every((edge) => Number.isInteger(edge.weight)
-        && edge.weight >= phase.weights.min && edge.weight <= phase.weights.max),
+        && edge.weight >= phase.weights.minimumEdgeWeight && edge.weight <= phase.weights.maximumEdgeWeight),
       `Peso fora da dificuldade: ${layout}, fase ${phase.id}, seed ${graph.seed}`);
       const profile = getMapProfile(layout);
       const islands = graph.nodes.filter((node) => node.type === 'intermediate');

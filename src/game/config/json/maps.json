@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "Primeiros custos",
-      "difficulty": "fácil",
+      "difficulty": "easy",
       "enableDijkstraTutorial": false,
       "hints": [
         "Antes de mover o barco, tente visualizar uma rota completa até o tesouro.",
@@ -16,7 +16,7 @@
     {
       "id": 2,
       "name": "Comparando custos",
-      "difficulty": "fácil",
+      "difficulty": "easy",
       "enableDijkstraTutorial": false,
       "hints": [
         "Existem vários caminhos possíveis. Não escolha o primeiro que encontrar.",
@@ -29,7 +29,7 @@
     {
       "id": 3,
       "name": "Custos enganosos",
-      "difficulty": "média",
+      "difficulty": "medium",
       "enableDijkstraTutorial": false,
       "hints": [
         "Não escolha apenas olhando o custo da primeira conexão.",
@@ -42,7 +42,7 @@
     {
       "id": 4,
       "name": "Somas estratégicas",
-      "difficulty": "média",
+      "difficulty": "medium",
       "enableDijkstraTutorial": false,
       "hints": [
         "Observe os números dos caminhos, não apenas a quantidade de ilhas.",
@@ -56,7 +56,7 @@
     {
       "id": 5,
       "name": "Custo acumulado",
-      "difficulty": "difícil",
+      "difficulty": "hard",
       "enableDijkstraTutorial": true,
       "hints": [
         "Não tente escolher a rota completa de uma vez. Compare os custos para chegar às próximas ilhas.",
@@ -70,7 +70,7 @@
     {
       "id": 6,
       "name": "Rotas alternativas",
-      "difficulty": "difícil",
+      "difficulty": "hard",
       "enableDijkstraTutorial": true,
       "hints": [
         "Compare os caminhos que chegam à mesma ilha antes de seguir em frente.",
@@ -83,7 +83,7 @@
     {
       "id": 7,
       "name": "Navegando pelas setas",
-      "difficulty": "difícil",
+      "difficulty": "hard",
       "enableDijkstraTutorial": true,
       "hints": [
         "Agora as rotas têm sentido obrigatório. Siga apenas as setas que saem da ilha atual.",
@@ -96,7 +96,7 @@
     {
       "id": 8,
       "name": "Explorando com Dijkstra",
-      "difficulty": "muito difícil",
+      "difficulty": "veryHard",
       "enableDijkstraTutorial": true,
       "hints": [
         "Comece com custo 0 no barco e custo desconhecido nas outras ilhas.",
@@ -109,7 +109,7 @@
     {
       "id": 9,
       "name": "Travessia estratégica",
-      "difficulty": "muito difícil",
+      "difficulty": "veryHard",
       "enableDijkstraTutorial": true,
       "hints": [
         "Divida o mapa em etapas e mantenha os menores custos acumulados.",
@@ -122,7 +122,7 @@
     {
       "id": 10,
       "name": "Desafio final de Dijkstra",
-      "difficulty": "muito difícil",
+      "difficulty": "veryHard",
       "enableDijkstraTutorial": true,
       "hints": [
         "Comece atribuindo custo 0 à posição inicial do barco e considere as ilhas ainda sem custo conhecido.",

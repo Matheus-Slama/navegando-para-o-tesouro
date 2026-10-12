@@ -76,7 +76,7 @@ function buildCandidateGraph(phase, seed, layout) {
   // Todos os barcos sorteiam pesos na mesma faixa, sem favorecer uma cor.
   // O vencedor é definido pelo caminho completo e validado após a geração.
   START_ISLANDS.forEach((start) => {
-    const weight = randomInt(random, phase.weights.min, phase.weights.max);
+    const weight = randomInt(random, phase.weights.minimumEdgeWeight, phase.weights.maximumEdgeWeight);
     const destinations = shuffle(
       random,
       intermediateNodes.filter((node) => node.y >= 260)
@@ -113,7 +113,7 @@ function buildCandidateGraph(phase, seed, layout) {
       nodes,
       from,
       to,
-      randomInt(random, phase.weights.min, phase.weights.max),
+      randomInt(random, phase.weights.minimumEdgeWeight, phase.weights.maximumEdgeWeight),
       (phase.directed ?? true)
     );
   });
@@ -146,7 +146,7 @@ function connectRandomBackbone(edges, nodes, intermediateNodes, phase, random, a
       nodes,
       node.id,
       parent.id,
-      randomInt(random, phase.weights.min, phase.weights.max),
+      randomInt(random, phase.weights.minimumEdgeWeight, phase.weights.maximumEdgeWeight),
       (phase.directed ?? true)
     ));
 
@@ -204,7 +204,7 @@ function getIslandCount(configuredCount, random) {
   // A primeira amostra do LCG varia pouco entre seeds próximas; a segunda
   // distribui corretamente a quantidade ao regenerar mapas em sequência.
   random();
-  return randomInt(random, configuredCount.min, configuredCount.max);
+  return randomInt(random, configuredCount.minimumIslandCount, configuredCount.maximumIslandCount);
 }
 
 function createRandomIslandSprite(random) {

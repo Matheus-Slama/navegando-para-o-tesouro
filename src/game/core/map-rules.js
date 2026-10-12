@@ -31,7 +31,7 @@ export function completeIslandConnections(edges, nodes, intermediateNodes, phase
         edges, nodes,
         incoming ? candidate.id : node.id,
         incoming ? node.id : candidate.id,
-        randomInt(random, phase.weights.min, phase.weights.max), (phase.directed ?? true)
+        randomInt(random, phase.weights.minimumEdgeWeight, phase.weights.maximumEdgeWeight), (phase.directed ?? true)
       ));
     }
   });

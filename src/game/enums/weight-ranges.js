@@ -1,26 +1,32 @@
-// Pesos, ilhas e rotas extras pertencem ao mesmo perfil de dificuldade.
-// As faixas de ilhas variam os mapas sem repetir configurações nas fases.
+/**
+ * Configurações usadas para gerar o grafo de cada dificuldade.
+ * O peso é o custo de atravessar uma conexão entre ilhas; o custo de uma
+ * rota é a soma dos pesos das conexões percorridas.
+ *
+ * minimumEdgeWeight / maximumEdgeWeight: limites inclusivos do peso sorteado
+ * para cada conexão (aresta).
+ * islandCount.minimumIslandCount / maximumIslandCount: limites da quantidade
+ * de ilhas intermediárias, sem contar as origens dos barcos e o tesouro.
+ * extraRouteCount: parâmetro que controla a quantidade de conexões extras
+ * na geração do mapa.
+ * minimumEdgeCount: quantidade mínima de conexões exigida no grafo.
+ * minimumWinnerPathNodes: quantidade mínima de vértices no caminho vencedor,
+ * contando a origem do barco e o tesouro.
+ */
 export const WEIGHT_RANGES = Object.freeze({
-  facil: Object.freeze({ min: 1, max: 4, extraRouteCount: 2, islandCount: Object.freeze({ min: 6, max: 7 }) }),
-  media: Object.freeze({ min: 1, max: 8, extraRouteCount: 10, islandCount: Object.freeze({ min: 8, max: 9 }) }),
-  dificil: Object.freeze({ min: 2, max: 20, extraRouteCount: 18, islandCount: Object.freeze({ min: 10, max: 15 }) }),
-  muitoDificil: Object.freeze({
-    min: 2, max: 35, extraRouteCount: 32,
-    islandCount: Object.freeze({ min: 17, max: 23 }),
+  easy: Object.freeze({ minimumEdgeWeight: 1, maximumEdgeWeight: 4, extraRouteCount: 2, islandCount: Object.freeze({ minimumIslandCount: 6, maximumIslandCount: 7 }) }),
+  medium: Object.freeze({ minimumEdgeWeight: 1, maximumEdgeWeight: 8, extraRouteCount: 10, islandCount: Object.freeze({ minimumIslandCount: 8, maximumIslandCount: 9 }) }),
+  hard: Object.freeze({ minimumEdgeWeight: 2, maximumEdgeWeight: 20, extraRouteCount: 18, islandCount: Object.freeze({ minimumIslandCount: 10, maximumIslandCount: 15 }) }),
+  veryHard: Object.freeze({
+    minimumEdgeWeight: 2, maximumEdgeWeight: 35, extraRouteCount: 32,
+    islandCount: Object.freeze({ minimumIslandCount: 17, maximumIslandCount: 23 }),
     // Exige alternativas suficientes e um caminho vencedor com várias etapas.
     minimumEdgeCount: 24, minimumWinnerPathNodes: 6,
   }),
 });
 
-const DIFFICULTY_KEYS = Object.freeze({
-  'fácil': 'facil',
-  'média': 'media',
-  'difícil': 'dificil',
-  'muito difícil': 'muitoDificil',
-});
-
 export function getWeightRange(difficulty) {
-  const range = WEIGHT_RANGES[DIFFICULTY_KEYS[difficulty]];
+  const range = WEIGHT_RANGES[difficulty];
   if (!range) throw new Error(`Faixa de pesos ausente para a dificuldade ${difficulty}.`);
   return range;
 }

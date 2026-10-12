@@ -116,7 +116,7 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
     && Number.isFinite(blueFrames[index - 1].distances[frame.targetId])),
   `${layout}: a demonstração deve melhorar um custo já conhecido.`);
   for (const edge of graph.edges) {
-    assert.ok(Number.isInteger(edge.weight) && edge.weight >= DIJKSTRA_FIXED_PHASE.weights.min && edge.weight <= DIJKSTRA_FIXED_PHASE.weights.max,
+    assert.ok(Number.isInteger(edge.weight) && edge.weight >= DIJKSTRA_FIXED_PHASE.weights.minimumEdgeWeight && edge.weight <= DIJKSTRA_FIXED_PHASE.weights.maximumEdgeWeight,
       `${layout}: peso inválido em ${edge.id}.`);
   }
   for (const result of graph.results.all) {
