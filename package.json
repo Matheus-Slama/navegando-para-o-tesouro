@@ -11,7 +11,14 @@
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "eslint .",
-    "test:maps": "node scripts/verify-maps.mjs"
+    "test": "node scripts/verify-all.mjs",
+    "test:maps": "node scripts/verify-maps.mjs",
+    "test:highscore": "node scripts/verify-highscore.mjs",
+    "test:devices": "node scripts/verify-device-config.mjs",
+    "test:dijkstra": "node scripts/verify-dijkstra-walkthrough.mjs && node scripts/verify-dijkstra-selection.mjs",
+    "test:browser:hint": "node scripts/verify-game-hint.mjs",
+    "test:browser:pause": "node scripts/verify-game-pause.mjs",
+    "check": "pnpm lint && pnpm test && pnpm build"
   },
   "dependencies": {
     "graphology": "^0.26.0",

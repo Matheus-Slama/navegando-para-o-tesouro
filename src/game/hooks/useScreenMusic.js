@@ -7,6 +7,7 @@ export function useScreenMusic(paused = false) {
 
   useEffect(() => {
     const music = musicRef.current;
+    if (!music) return;
     let disposed = false;
     music.volume = 0.35;
     if (paused) {
@@ -37,6 +38,7 @@ export function useScreenMusic(paused = false) {
 
   useEffect(() => {
     const music = musicRef.current;
+    if (!music) return;
     return () => {
       music.pause();
       music.currentTime = 0;

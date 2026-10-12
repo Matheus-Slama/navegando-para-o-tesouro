@@ -8,22 +8,22 @@
 - License: CC0 — https://creativecommons.org/publicdomain/zero/1.0/
 - Changes: None; original OGG played in a loop.
 
-- File: `music-gameplay.wav`
+- File: `music-gameplay.ogg`
 - Title: Blackmoor Tides (Epic Pirate Battle Theme)
 - Author: Matthew Pablo — https://www.matthewpablo.com/
 - Source: https://opengameart.org/content/blackmoor-tides-epic-pirate-battle-theme
 - Download: https://opengameart.org/sites/default/files/Blackmoor%20Tides%20Collection.zip
 - Original file: `Epic Pirate Battle Theme/Blackmoor Tides Loop.wav`
 - License: CC BY 3.0 — https://creativecommons.org/licenses/by/3.0/
-- Changes: None; original loop version played in a loop.
+- Changes: WAV transcoded to OGG Vorbis (quality 4) for web delivery; played in a loop.
 
-- File: `music-tutorial.wav`
+- File: `music-tutorial.ogg`
 - Title: Pirate tavern loop
 - Author: ©2017 Emma Andersson (Emma_MA)
 - Source: https://opengameart.org/content/pirate-tavern-loop
 - Download: https://opengameart.org/sites/default/files/pirate_tavern_loop.wav
 - License: CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
-- Changes: None; original WAV played in a loop.
+- Changes: WAV transcoded to OGG Vorbis (quality 4) for web delivery; played in a loop.
 
 - File: `music-menu.mp3`
 - Title: Treasure Hunter

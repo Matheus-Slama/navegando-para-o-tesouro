@@ -34,7 +34,7 @@ export function TutorialScreen({ steps, onFinish, onBackToMenu, layout = 'mobile
 
   return (
     <section className="tutorial-screen" data-step={index} data-layout={layout}>
-      <audio ref={musicRef} src="/assets/game/audio/music-tutorial.wav" loop preload="auto" />
+      <audio ref={musicRef} src="/assets/game/audio/music-tutorial.ogg" loop preload="auto" />
       <picture className="tutorial-screen__background">
         <img src={getMapProfile(layout).asset} alt="" />
       </picture>

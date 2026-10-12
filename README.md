@@ -1,311 +1,107 @@
-# Navegando para o Tesouro
+﻿# Navegando para o Tesouro
 
-Jogo educativo web para o ensino do **problema do caminho mínimo em grafos**.
+Jogo educativo web sobre o problema do caminho mínimo em grafos, desenvolvido com Next.js, React, SVG e CSS. As ilhas representam vértices; as conexões representam arestas com custos e direção.
 
-Consulte o [FAQ do projeto](FAQ.md) para perguntas sobre Next.js, arquitetura, Dijkstra e funcionamento do jogo.
+Consulte o [FAQ](FAQ.md) para explicações das escolhas técnicas e a [convenção dos assets](public/assets/README.md) para nomes de imagens, músicas e fontes.
 
-Os arquivos de mídia seguem a [convenção de nomes dos assets](public/assets/README.md).
+## Executar
 
-O projeto foi feito em **Next.js + React + SVG/CSS**, sem Phaser. A ideia é manter uma arquitetura simples para o TCC: mapa fixo, ilhas como vértices, rotas como arestas, pesos, direção, dicas, animação dos barcos e cálculo do vencedor com o algoritmo de Dijkstra.
-
-## Por que não Phaser?
-
-O Phaser é ótimo para jogos com física, colisão, tiles, câmera e spritesheets complexos. Neste projeto, as principais mecânicas são:
-
-- tela inicial;
-- tutorial fixo;
-- mapa fixo;
-- ilhas posicionadas como vértices;
-- rotas com direção e peso;
-- geração controlada de grafos;
-- cálculo do menor caminho;
-- animação dos barcos seguindo vértices;
-- feedback pedagógico e dicas.
-
-Tudo isso funciona bem com **React + SVG**, deixando o código mais fácil de explicar, testar e adaptar.
-
-## Como rodar
-
-### 1. Instale as dependências
+Requisitos: Node.js 20.9 ou superior e pnpm 9.12.3.
 
 ```bash
 pnpm install
-```
-
-### 2. Rode o projeto
-
-```bash
 pnpm dev
 ```
 
-O jogo abre em:
+Abra `http://localhost:3000`. Para produção, use `pnpm build` e depois `pnpm start`. No PowerShell com scripts bloqueados, use `pnpm.cmd` no lugar de `pnpm`.
+
+## Verificar
 
 ```bash
-http://localhost:3000
+pnpm check
 ```
 
-## Estrutura do projeto
+Executa lint, todas as verificações que não precisam de navegador e o build. Uma falha interrompe a sequência.
 
-```text
-app/
-  layout.jsx
-  page.jsx
-  globals.css
-
-src/game/
-  components/
-    GameShell/
-    StartScreen/
-    TutorialScreen/
-    DijkstraTutorial/
-    GameBoard/
-    GraphCanvas/
-    HintDialog/
-    PhaseInfo/
-    ResultsPanel/
-
-  config/
-    gameAssets.js
-    phases.js
-    tutorial.js
-
-  core/
-    dijkstra.js
-    gameMath.js
-    graphGenerator.js
-    random.js
-
-  hooks/
-    useBoatRace.js
-
-public/assets/game/
-  backgrounds/
-  islands/
-  boats/
-  ui/
-  audio/
-```
-
-## Fluxo do jogo
-
-1. O jogador entra na **tela inicial**.
-2. O jogo mostra o **tutorial fixo**.
-3. A fase é gerada a partir do arquivo `phases.js`.
-4. O jogador escolhe um dos barcos.
-5. Os barcos fazem a corrida.
-6. O algoritmo de Dijkstra calcula o melhor caminho de cada origem até a ilha do tesouro.
-7. O jogo mostra se a escolha do jogador estava correta.
-8. O jogador avança para a próxima fase.
-
-## Arquivo principal de fases
-
-As fases ficam em:
-
-```text
-src/game/config/json/maps.json
-```
-
-Exemplo de configuração:
-
-```js
-{
-  id: 3,
-  name: 'Pesos nas rotas',
-  difficulty: 'médio',
-  objective: 'Somar os pesos das arestas para encontrar o menor custo.',
-  islandCount: 8,
-  extraRouteCount: 6,
-  weights: { min: 1, max: 9 },
-  directed: false,
-  uniqueWinnerGap: 4,
-  score: { base: 250, hintPenalty: 25, wrongChoicePenalty: 40 },
-  hints: [
-    'Some os números das rotas para comparar os caminhos.',
-    'O menor caminho é aquele com menor soma de pesos.',
-    'Um caminho com mais arestas pode vencer se os pesos forem pequenos.'
-  ]
-}
-```
-
-### Campos importantes
-
-| Campo | Função |
+| Comando | Verificação |
 |---|---|
-| `islandCount` | Quantidade fixa ou intervalo `{ min, max }` de ilhas intermediárias |
-| `extraRouteCount` | Quantidade de rotas extras entre ilhas |
-| `weights` | Peso mínimo e máximo; os pesos são sempre exibidos no mapa |
-| `difficulty` | Dificuldade apresentada para a fase |
-| `score` | Pontuação base e penalidades |
-| `directed` | Define se as rotas têm direção |
-| `uniqueWinnerGap` | Diferença mínima entre o vencedor e o segundo colocado |
-| `hints` | Dicas pedagógicas da fase |
+| `pnpm test` | Todas as verificações de lógica abaixo |
+| `pnpm test:maps` | 300 mapas gerados nos três formatos |
+| `pnpm test:highscore` | Recordes, armazenamento, adulteração e pontuação |
+| `pnpm test:devices` | Perfis e limites de tamanho de tela |
+| `pnpm test:dijkstra` | Tutorial, ordem de seleção e custos dos quatro barcos |
+| `pnpm lint` | Regras de código |
+| `pnpm build` | Compilação de produção |
 
-## Tutorial fixo
+As verificações de interface precisam da aplicação rodando e de um Chrome de teste com perfil separado e depuração remota:
 
-O tutorial fica em:
+- `pnpm test:browser:hint`: porta padrão 9224; aceita `GAME_HINT_URL` e `GAME_HINT_CDP`.
+- `pnpm test:browser:pause`: porta padrão 9226; aceita `GAME_PAUSE_URL` e `GAME_PAUSE_CDP`.
 
-```text
-src/game/config/tutorial.js
-```
+Exemplo de argumentos para o Chrome de teste: `--remote-debugging-port=9224 --user-data-dir=<pasta-temporaria-do-teste>`. Essas verificações não fazem parte de `pnpm check`, pois dependem do navegador externo.
 
-Ele é separado das fases para deixar claro que o tutorial não é gerado aleatoriamente.
-
-## Tutorial Dijkstra
-
-O botão **Tutorial Dijkstra**, abaixo de **Tutorial** na tela inicial, demonstra o algoritmo sobre o mapa fixo da última fase. Um popover compacto com setas acompanha cada escolha, soma e atualização. Custos acumulados aparecem junto aos pontos: 0 no barco azul, ∞ nos demais e ✓ nos custos confirmados. Os pesos das rotas permanecem os mesmos. A rota analisada e o caminho final recebem destaque dourado.
-
-Os dois botões de seta avançam e desfazem as contas; no teclado, use ← e →. Também é possível recolher a explicação e comparar os quatro barcos no último passo. O barco azul tem o menor custo, sem empate, nos três formatos de tela. Os nove conceitos ficam em `src/game/config/dijkstra-steps.js`; as cenas são calculadas em `src/game/core/dijkstra-walkthrough.js`. Ao mudar o formato da tela, a demonstração reinicia no mapa correspondente. Execute `node scripts/verify-dijkstra-walkthrough.mjs` para validar os estados e as rotas.
-
-Os mapas de celular, tablet e tela horizontal estão salvos em `src/game/config/json/dijkstra-fixed-maps.json`. Cada formato mantém as mesmas ilhas, rotas e pesos ao reabrir o tutorial. A tela é implementada em `src/game/components/DijkstraTutorial/DijkstraTutorialMap.jsx`.
-
-## Como trocar imagens
-
-O projeto já está preparado para receber imagens aos poucos.
-
-Arquivo:
+## Organização
 
 ```text
-src/game/config/gameAssets.js
+app/                     Páginas principal e de créditos, layout e estilos globais
+src/game/components/     Telas, tabuleiro, diálogos e controles
+src/game/hooks/          Jornada, áudio, dispositivos e animação
+src/game/core/           Algoritmos, geração, validação e persistência
+src/game/config/json/    Fases, mapas fixos, posições e perfis de tela
+src/game/config/         Composição das configurações e balanceamento
+src/game/enums/          Faixas de dificuldade
+public/assets/game/      Imagens e músicas
+public/fonts/            Fonte local
+public/licenses/         Licenças das fontes
+scripts/                 Verificações e geração da fonte
 ```
 
-Exemplo:
+## Fluxo e pontuação
 
-```js
-export const GAME_ASSETS = {
-  backgrounds: {
-    menu: '/assets/game/backgrounds/background-menu-portrait.png',
-    board: '/assets/game/backgrounds/background-map-mobile.png'
-  },
+O jogador inicia uma jornada de dez fases com três vidas. Em cada fase, compara os custos e escolhe um dos quatro barcos. Cada barco percorre seu menor caminho; vence o de menor custo total. Uma escolha incorreta remove uma vida e desconta até 250 pontos, sem pontuação negativa.
 
-  boats: {
-    red: '/assets/game/boats/boat-red.png',
-    blue: '/assets/game/boats/boat-blue.png',
-    green: '/assets/game/boats/boat-green.png',
-    black: '/assets/game/boats/boat-black.png'
-  }
-};
-```
+O máximo de pontos por fase é `id × 1000`. O tempo de referência é `20 + (id - 1) × 15` segundos. Até esse tempo, uma vitória concede o máximo; depois, os pontos diminuem proporcionalmente. As regras ficam em `config/balance.js` e `core/scoring.js`.
 
-### Pastas sugeridas
+O recorde é salvo no navegador, sem sincronização entre dispositivos. A proteção com AES-GCM dificulta edição casual, mas a chave também fica no cliente e não impede trapaças. A jornada em andamento não é restaurada após recarregar a página.
 
-```text
-public/assets/game/backgrounds
-public/assets/game/islands
-public/assets/game/boats
-public/assets/game/ui
-public/assets/game/audio
-```
+## Fases e mapas
 
-Enquanto você não adiciona sprites reais, o jogo usa desenhos SVG/CSS simples.
+`src/game/config/json/maps.json` define as dez fases. Exemplo de estrutura:
 
-## Algoritmo de Dijkstra
-
-O algoritmo está em:
-
-```text
-src/game/core/dijkstra.js
-```
-
-Ele recebe:
-
-- lista de nós;
-- lista de arestas;
-- origem;
-- destino;
-- se o grafo é direcionado ou não.
-
-Retorna:
-
-```js
+```json
 {
-  distance: 12,
-  path: ['start-blue', 'island-2', 'island-5', 'finish']
+  "id": 1,
+  "name": "Primeiros custos",
+  "difficulty": "easy",
+  "enableDijkstraTutorial": false,
+  "hints": ["Some os custos de todas as conexões até o tesouro."]
 }
 ```
 
-O vencedor da fase é o barco cujo caminho possui o menor custo até o tesouro.
+`enums/weight-ranges.js` define pesos, quantidade de ilhas e rotas extras por dificuldade. `config/phases.js` combina esses perfis com o balanceamento. Grafos são direcionados por padrão; `directed: false` permite configurar exercícios sem direção.
 
-## Geração dos grafos
+O gerador usa uma semente numérica, calcula os resultados com Dijkstra e rejeita candidatos sem conectividade, sem vencedor único ou com mais de uma rota mínima para o vencedor. Também verifica as restrições geométricas e de dificuldade. Há um limite de 2.000 tentativas; se nenhuma funcionar, a geração informa um erro.
 
-O gerador fica em:
+## Tutorial de Dijkstra
 
-```text
-src/game/core/graphGenerator.js
-```
+Os mapas demonstrativos ficam em `config/json/dijkstra-fixed-maps.json`, com versões mobile, tablet e wide. Os conceitos ficam em `config/json/dijkstra-steps.json`; as cenas são calculadas em `core/dijkstra-walkthrough.js`.
 
-Ele faz:
+O tutorial mostra inicialização, escolha do menor custo provisório, relaxamento das conexões, confirmação e caminho final. Permite avançar, voltar e comparar os barcos. O barco azul tem uma única rota mínima vencedora nos três formatos.
 
-1. cria as quatro posições iniciais dos barcos;
-2. cria a ilha final fixa;
-3. gera ilhas intermediárias;
-4. cria rotas principais para cada barco;
-5. adiciona rotas extras;
-6. roda Dijkstra;
-7. valida se existe um vencedor único;
-8. se houver empate, gera outro grafo.
+Os mapas do tutorial são compactos: `config/dijkstra-fixed-map.js` mantém a faixa de pesos da última fase, mas define mínimos próprios de 23 conexões e cinco vértices no caminho vencedor. As fases geradas mantêm as exigências de seu perfil de dificuldade.
 
-Isso evita fases ambíguas.
+## Imagens e responsividade
 
-## Animação dos barcos
+`config/gameAssets.js` define barcos, tesouros e folhas de sprites das ilhas. Os fundos do mapa ficam em `config/json/islandPlacement.json`; os perfis de dispositivo ficam em `config/json/device-sizes.json`.
 
-A animação fica em:
+`useDeviceConfig` observa as dimensões da janela; `useMapLayout` fornece o formato do mapa. A seleção não depende do nome do aparelho. O projeto usa imagens próprias, SVG para conexões e CSS para disposição e apresentação.
 
-```text
-src/game/hooks/useBoatRace.js
-```
+## Música e volume
 
-Ela pega o caminho calculado pelo Dijkstra e move os barcos de vértice em vértice.
+`useScreenMusic` mantém o volume em 35% e acompanha a pausa. Se o navegador bloquear o início automático, uma interação por toque, clique ou teclado permite tentar novamente.
 
-Cada barco percorre o seu menor caminho. A duração é proporcional ao custo total da rota. Assim, o barco com menor custo chega primeiro.
+As faixas ficam em `public/assets/game/audio/`. As músicas do mapa e do tutorial foram convertidas de WAV para OGG Vorbis, qualidade 4, para reduzir o download. Autores, fontes, licenças e alterações estão em [CREDITS.md](public/assets/game/audio/CREDITS.md) e na página `/creditos`.
 
-## Responsividade
+## Explicação para o TCC
 
-A interface foi pensada para:
-
-- celular vertical;
-- celular horizontal;
-- tablet vertical;
-- tablet horizontal;
-- desktop.
-
-O SVG usa `viewBox`, então o tabuleiro se adapta ao espaço disponível.
-
-Arquivos principais de responsividade:
-
-```text
-src/game/components/GameBoard/GameBoard.css
-src/game/components/GraphCanvas/GraphCanvas.css
-src/game/components/StartScreen/StartScreen.css
-```
-
-## Como adicionar música
-
-Coloque arquivos em:
-
-```text
-public/assets/game/audio
-```
-
-Exemplo:
-
-```text
-public/assets/game/audio/music-menu.mp3
-public/assets/game/audio/music-gameplay.wav
-```
-
-O hook `useScreenMusic` controla a reprodução nas telas. Ao trocar uma faixa, atualize o caminho no componente correspondente e os créditos em `public/assets/game/audio/CREDITS.md`.
-
-## Próximos passos sugeridos
-
-1. Trocar o fundo da tela inicial pelo layout final.
-2. Trocar o fundo do tabuleiro pelo mapa fixo.
-3. Adicionar sprites reais de barcos.
-4. Adicionar sprites reais das ilhas.
-5. Melhorar a tela de resultado com explicação passo a passo do menor caminho.
-6. Ampliar os exemplos do tutorial Dijkstra.
-7. Adicionar som e botão de volume.
-8. Salvar progresso do jogador no `localStorage`.
-
-## Explicação curta para o TCC
-
-O jogo foi desenvolvido como uma aplicação web em Next.js, utilizando React para a organização da interface e SVG para representar visualmente o grafo. As ilhas correspondem aos vértices, enquanto as rotas correspondem às arestas, podendo possuir pesos e direção conforme a fase. A cada fase, o grafo é gerado de forma controlada a partir de um arquivo de configuração, garantindo a existência de um único menor caminho. O algoritmo de Dijkstra é utilizado para calcular o custo mínimo entre cada ilha inicial e a ilha final, definindo o barco vencedor. A proposta também incorpora dicas e mensagens educativas para tornar os conceitos trabalhados mais explícitos durante a experiência do jogador.
+O jogo representa o problema do caminho mínimo por meio de uma jornada de barcos até um tesouro. Dijkstra calcula o menor custo de cada origem ao destino, enquanto dicas e demonstrações explicitam os conceitos. React organiza a interface e SVG representa as conexões. Next.js fornece a estrutura web e o processo de build. A geração controlada e as verificações automatizadas ajudam a evitar mapas ambíguos e erros no cálculo dos caminhos.

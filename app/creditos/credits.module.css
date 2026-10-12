@@ -1,18 +1,14 @@
 .page {
   min-height: 100svh;
   padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
-  background: radial-gradient(ellipse at top, #55300f, #120b07);
+  background: #2b1408 url('/assets/game/ui/panel-modal.png') center / 100% 100% no-repeat;
 }
 
 .panel {
   max-width: 60rem;
   margin: 0 auto;
-  padding: clamp(1rem, 4vw, 3rem);
-  border: 3px solid #8c5517;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #ffe6b1, #efd09a);
+  padding: clamp(2rem, 6vw, 5rem);
   color: var(--ink);
-  box-shadow: 0 1rem 3rem #0005;
 }
 
 .back {

@@ -90,6 +90,8 @@ O código escolhe um perfil de acordo com as dimensões e a proporção da área
 
 A reprodução automática com áudio pode ser bloqueada pelo navegador. O hook `useScreenMusic` tenta iniciar a música e, se necessário, tenta novamente após uma interação por toque, clique ou teclado. Ele também pausa a música conforme o estado recebido pela tela.
 
+O volume da música é fixado em 35% pelo hook `useScreenMusic`.
+
 ## Como executar e verificar o projeto?
 
 Instale as dependências com `pnpm install` e inicie o ambiente de desenvolvimento com `pnpm dev`. A aplicação fica disponível em `http://localhost:3000`.
@@ -97,10 +99,7 @@ Instale as dependências com `pnpm install` e inicie o ambiente de desenvolvimen
 As principais verificações são:
 
 ```bash
-pnpm lint
-pnpm build
-pnpm test:maps
-node scripts/verify-dijkstra-walkthrough.mjs
+pnpm check
 ```
 
-Esses comandos verificam, respectivamente, regras de código, geração da aplicação para produção, mapas gerados e estados do tutorial de Dijkstra. Executá-los não substitui conferir a experiência visual e a interação no navegador.
+Esse comando executa lint, verificações de mapas, recordes, dispositivos e Dijkstra, além do build de produção. O README descreve os comandos individuais e os testes que precisam de navegador. Executá-los não substitui conferir a experiência visual e a interação no navegador.

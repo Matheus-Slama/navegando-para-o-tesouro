@@ -19,6 +19,7 @@ const musicCredits = [
     author: 'Matthew Pablo',
     authorUrl: 'https://www.matthewpablo.com/',
     usage: 'Música do mapa',
+    changes: 'Convertida de WAV para OGG Vorbis para reduzir o download; reproduzida em loop.',
     source: 'https://opengameart.org/content/blackmoor-tides-epic-pirate-battle-theme',
     license: 'CC BY 3.0',
     licenseUrl: 'https://creativecommons.org/licenses/by/3.0/',
@@ -35,6 +36,7 @@ const musicCredits = [
     title: 'Pirate tavern loop',
     author: '©2017 Emma Andersson (Emma_MA)',
     usage: 'Música do tutorial',
+    changes: 'Convertida de WAV para OGG Vorbis para reduzir o download; reproduzida em loop.',
     source: 'https://opengameart.org/content/pirate-tavern-loop',
     license: 'CC BY 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
@@ -64,7 +66,7 @@ export default function CreditsPage() {
                   Licença: <a href={music.licenseUrl} target="_blank" rel="noreferrer">{music.license}</a>
                 </p>
                 <a href={music.source} target="_blank" rel="noreferrer">Página original no OpenGameArt</a>
-                <p className={styles.note}>Faixa original, sem alterações, reproduzida em loop.</p>
+                <p className={styles.note}>{music.changes ?? 'Faixa original, sem alterações, reproduzida em loop.'}</p>
               </section>
             ))}
           </div>
