@@ -87,7 +87,7 @@
 .start-screen__highscore strong { font-weight: 400; font-variant-numeric: tabular-nums; }
 
 .start-screen__content button {
-  width: min(100%, 16rem);
+  width: min(100%, 12rem);
   min-width: 0;
   min-height: clamp(2.75rem, 6.5vmin, 5rem);
   line-height: 1.2;
@@ -142,11 +142,11 @@
   .start-screen__content {
     grid-row: 1;
     align-self: end;
-    width: min(78vw, 36rem);
+    width: min(78vw, 25rem);
     margin-bottom: max(12svh, env(safe-area-inset-bottom));
     padding-block: 0;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: clamp(12px, 2vw, 32px);
+    gap: clamp(12px, 1.5vw, 20px);
     font-size: clamp(max(18px, 1rem), 2.8svh, 2rem);
   }
 
