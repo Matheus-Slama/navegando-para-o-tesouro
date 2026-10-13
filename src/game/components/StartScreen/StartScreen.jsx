@@ -38,7 +38,7 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
         </h1>
 
         <div className="start-screen__highscore" aria-label={`Recorde: ${formatScore(highscore)} pontos`}>
-          <Image src="/assets/game/ui/icon-highscore.png" alt="" width={1254} height={1254} sizes="(min-width: 1024px) 200px, 88px" draggable={false} />
+          <Image src="/assets/game/ui/icon-highscore.png" alt="" width={1254} height={1254} sizes="54px" draggable={false} />
           <span>Recorde <strong>{formatScore(highscore)}</strong></span>
         </div>
 
