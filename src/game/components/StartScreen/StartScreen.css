@@ -91,20 +91,19 @@
   min-height: clamp(2.75rem, 6.5vmin, 5rem);
   line-height: 1.2;
   overflow-wrap: anywhere;
-  border: clamp(0.125rem, 0.3vmin, 0.1875rem) solid #55300f;
-  border-radius: 62.4375rem;
+  border: 0;
+  border-radius: 0;
   padding: 0.5rem clamp(0.75rem, 2vmin, 1.5rem);
-  background: linear-gradient(180deg, #ffe08a, #f2b332 58%, #d68a19);
-  color: #2b1608;
+  background: transparent url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  color: #fff8db;
+  text-shadow: 0 1px 2px #120b07;
   font-family: var(--font-title);
   font-size: clamp(1rem, 0.875rem + 1vmin, 2rem);
   font-weight: 400;
   letter-spacing: 0.02em;
-  box-shadow:
-    0 clamp(0.25rem, 0.6vmin, 0.4375rem) 0 #794310,
-    0 0.5rem 1rem rgba(46, 22, 6, 0.32),
-    inset 0 0.125rem 0 rgba(255, 247, 199, 0.8);
-  transition: transform 150ms ease, filter 150ms ease, box-shadow 150ms ease;
+  box-shadow: none;
+  transition: transform 150ms ease, filter 150ms ease;
 }
 
 .start-screen__content button:hover {
@@ -118,10 +117,7 @@
 }
 
 .start-screen__content button:active {
-  transform: translateY(0.3125rem);
-  box-shadow:
-    0 0.125rem 0 #794310,
-    0 0.4375rem 1rem rgba(46, 22, 6, 0.3);
+  transform: translateY(0.125rem);
 }
 
 @media (min-width: 600px) {
