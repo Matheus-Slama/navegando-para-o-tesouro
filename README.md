@@ -58,9 +58,9 @@ scripts/                 Verificações e geração da fonte
 
 ## Fluxo e pontuação
 
-O jogador inicia uma jornada de dez fases com três vidas. Em cada fase, compara os custos e escolhe um dos quatro barcos. Cada barco percorre seu menor caminho; vence o de menor custo total. Uma escolha incorreta remove uma vida e desconta até 250 pontos, sem pontuação negativa.
+O jogador inicia uma jornada de dez fases com três vidas. Em cada fase, compara os custos e escolhe um dos quatro barcos. Cada barco percorre seu menor caminho; vence o de menor custo total. Uma escolha incorreta remove uma vida e desconta `250 ÷ tempo de escolha em segundos`. Quanto mais rápido o erro, maior a perda. O total pode ficar negativo e aparece em vermelho no HUD.
 
-O máximo de pontos por fase é `id × 1000`. O tempo de referência é `20 + (id - 1) × 15` segundos. Até esse tempo, uma vitória concede o máximo; depois, os pontos diminuem proporcionalmente. As regras ficam em `config/balance.js` e `core/scoring.js`.
+Uma escolha correta concede `(id × 1000) ÷ tempo de escolha em segundos`, sem limite máximo: quanto mais rápido o acerto, maior a recompensa. Os cálculos usam frações de segundo e arredondam o resultado para um inteiro. Tempos iguais a zero, negativos ou não finitos resultam em zero pontos. As regras ficam em `config/balance.js` e `core/scoring.js`. O HUD ajusta a fonte para acomodar pontuações maiores.
 
 O recorde é salvo no navegador, sem sincronização entre dispositivos. A proteção com AES-GCM dificulta edição casual, mas a chave também fica no cliente e não impede trapaças. A jornada em andamento não é restaurada após recarregar a página.
 

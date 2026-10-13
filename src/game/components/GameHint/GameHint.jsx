@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ArrowRight, ChevronsRight } from 'lucide-react';
 import './GameHint.css';
+import { MusicToggle } from '@/game/components/MusicToggle/MusicToggle';
 
 const EDGES = { top: 'superior', right: 'direita', bottom: 'inferior', left: 'esquerda' };
 const CORNERS = { 'top-left': 'superior esquerdo', 'top-right': 'superior direito', 'bottom-left': 'inferior esquerdo', 'bottom-right': 'inferior direito' };
@@ -219,6 +220,7 @@ export function GameHint({
             <Image src="/assets/game/ui/icon-pause.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
           </button>
         )}
+        <MusicToggle />
         {minimizable && <button
           className="game-hint__toggle"
           type="button"
@@ -278,7 +280,7 @@ export function GameHint({
             }}
           >
             <Image src="/assets/game/ui/icon-dijkstra.svg" alt="" width={64} height={64} sizes="36px" draggable={false} />
-            {highlightDijkstra && <span className="game-hint__power-label">Novo poder!</span>}
+            {highlightDijkstra && <span className="game-hint__power-label">Novo</span>}
           </button>
         )}
       </div>

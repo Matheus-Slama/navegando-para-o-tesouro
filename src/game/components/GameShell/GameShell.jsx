@@ -19,10 +19,7 @@ export function GameShell() {
   const [previousLayout, setPreviousLayout] = useState(layout);
   const [screen, setScreen] = useState('start');
   const [paused, setPaused] = useState(false);
-  const [dijkstraAnnounced, setDijkstraAnnounced] = useState(() => {
-    try { return typeof window !== 'undefined' && window.localStorage.getItem('dijkstra-unlock-seen') === 'true'; }
-    catch { return false; }
-  });
+  const [dijkstraAnnounced, setDijkstraAnnounced] = useState(false);
   const [highlightDijkstra, setHighlightDijkstra] = useState(false);
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [seedNonce, setSeedNonce] = useState(1);
@@ -81,6 +78,8 @@ export function GameShell() {
   }, [phase, seedNonce, layout]);
 
   function startGame() {
+    setDijkstraAnnounced(false);
+    setHighlightDijkstra(false);
     journey.reset();
     setPhaseIndex(0);
     setSeedNonce((value) => value + 1);
@@ -90,6 +89,8 @@ export function GameShell() {
   }
 
   function openTutorial() {
+    setDijkstraAnnounced(false);
+    setHighlightDijkstra(false);
     journey.reset();
     setPhaseIndex(0);
     setSeedNonce((value) => value + 1);
@@ -171,7 +172,6 @@ export function GameShell() {
   function acknowledgeDijkstra() {
     setDijkstraAnnounced(true);
     setHighlightDijkstra(true);
-    try { window.localStorage.setItem('dijkstra-unlock-seen', 'true'); } catch { /* Keep the announcement dismissed for this session. */ }
   }
 
   if (screen === 'start') {
@@ -187,7 +187,7 @@ export function GameShell() {
   }
 
   if (screen === 'tutorial') {
-    return <main className="game-page"><TutorialScreen steps={TUTORIAL_STEPS} onFinish={startPhase} onBackToMenu={returnToMenu} layout={layout} paused={paused} />{pauseModal}</main>;
+    return <main className="game-page"><TutorialScreen onPause={() => setPaused(true)} steps={TUTORIAL_STEPS} onFinish={startPhase} onBackToMenu={returnToMenu} layout={layout} paused={paused} />{pauseModal}</main>;
   }
 
   if (screen === 'dijkstra-tutorial') {

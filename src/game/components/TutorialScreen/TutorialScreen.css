@@ -1,4 +1,6 @@
 .tutorial-screen {
+  --game-hud-width: min(clamp(210px, 30vw, 440px), calc(100vw - var(--screen-inset-left) - var(--screen-inset-right) - 60px));
+  --game-hint-top: calc(var(--screen-inset-top) + var(--game-hud-width) / 3 + 12px);
   position: relative;
   isolation: isolate;
   container-type: size;
@@ -54,8 +56,7 @@
 .tutorial-screen[data-step='1'] .map-graph__island,
 .tutorial-screen[data-step='1'] .map-graph__canvas,
 .tutorial-screen[data-step='2'] .map-graph__weight,
-.tutorial-screen[data-step='3'] .boat-dock__boat,
-.tutorial-screen[data-step='4'] .game-hint-tools > .game-hint__toggle {
+.tutorial-screen[data-step='3'] .boat-dock__boat {
   filter: drop-shadow(0 0 0.7rem #fff2a8) brightness(1.2);
 }
 
@@ -64,41 +65,25 @@
 }
 
 .tutorial-screen[data-step='2'] .map-graph__weight,
-.tutorial-screen[data-step='3'] .boat-dock__boat,
-.tutorial-screen[data-step='4'] .game-hint-tools > .game-hint__toggle {
+.tutorial-screen[data-step='3'] .boat-dock__boat {
   transform: scale(1.12);
 }
 
-.tutorial-screen__menu-button {
-  position: fixed;
-  top: clamp(0.75rem, 1.5vw, 1.1rem);
-  left: clamp(0.75rem, 1.5vw, 1.1rem);
-  z-index: 40;
-  min-width: 7.5rem;
-  min-height: 44px;
-  padding: 0.75rem 0.875rem;
-  border: 0;
-  border-radius: 0;
-  background: transparent url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
-  image-rendering: pixelated;
-  color: #fff8db;
-  font: 600 0.78rem/1.2 var(--font-ui);
-  cursor: pointer;
-  text-shadow: 0 1px 2px #120b07;
-  transition: filter 180ms ease, transform 180ms ease;
+.tutorial-screen .game-hud { z-index: 20; }
+.tutorial-screen[data-highlight='hud'] .game-hud {
+  filter: drop-shadow(0 0 0.7rem #fff2a8) brightness(1.2);
 }
-
-.tutorial-screen__menu-button:hover {
-  filter: brightness(1.15);
+.tutorial-screen[data-highlight='lives'] .game-hud__lives {
+  filter: drop-shadow(0 0 0.7rem #fff2a8) brightness(1.2);
+  transform: scale(1.12);
 }
-
-.tutorial-screen__menu-button:active {
-  transform: translateY(1px);
+.tutorial-screen[data-highlight='score'] .game-hud__score {
+  filter: drop-shadow(0 0 0.7rem #fff2a8) brightness(1.2);
+  transform: scale(1.12);
 }
-
-.tutorial-screen__menu-button:focus-visible {
-  outline: 3px solid #ffda70;
-  outline-offset: 2px;
+.tutorial-screen[data-highlight='pause'] .game-hint__pause {
+  filter: drop-shadow(0 0 0.7rem #fff2a8) brightness(1.2);
+  transform: scale(1.12);
 }
 
 @media (prefers-reduced-motion: reduce) {

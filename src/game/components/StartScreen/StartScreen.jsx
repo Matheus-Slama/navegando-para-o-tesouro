@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useScreenMusic } from '@/game/hooks/useScreenMusic';
 import './StartScreen.css';
+import { MusicToggle } from '@/game/components/MusicToggle/MusicToggle';
 
 export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
   const musicRef = useScreenMusic();
@@ -12,6 +13,7 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
   return (
     <section className="start-screen" aria-labelledby="start-screen-title">
       <audio ref={musicRef} src="/assets/game/audio/music-menu.mp3" loop preload="auto" />
+      <MusicToggle variant="bare" className="start-screen__music" />
       <Link className="start-screen__credits" href="/creditos">Créditos</Link>
       <div className="start-screen__frame">
       <picture className="start-screen__art">

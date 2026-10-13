@@ -56,14 +56,16 @@ As configurações estão divididas por responsabilidade:
 |---|---|
 | [maps.json](src/game/config/json/maps.json) | Nomes, dificuldades, dicas e disponibilidade do tutorial de Dijkstra nas dez fases |
 | [weight-ranges.js](src/game/enums/weight-ranges.js) | Faixas de pesos, quantidade de ilhas e rotas extras por dificuldade |
-| [balance.js](src/game/config/balance.js) | Pontuação máxima, tempo de referência e penalidade por erro |
+| [balance.js](src/game/config/balance.js) | Cálculo dos pontos pelo tempo e penalidade por erro |
 | [phases.js](src/game/config/phases.js) | Combinação dessas informações para uso no jogo |
 
 ## Como funcionam a pontuação e as vidas?
 
-A jornada começa com três vidas. Uma escolha incorreta remove uma vida e desconta até 250 pontos, sem deixar a pontuação negativa. Uma escolha correta concede pontos conforme a fase e o tempo gasto.
+A jornada começa com três vidas. Uma escolha incorreta remove uma vida e desconta `250 ÷ tempo de escolha em segundos`, arredondado para um inteiro. Quanto mais rápida a escolha errada, maior a perda: errar em 0,5 segundo desconta 500 pontos; em 5 segundos, desconta 50 pontos. O total pode ficar negativo e, nesse caso, aparece em vermelho no HUD. Uma escolha correta concede pontos conforme a fase e o tempo gasto para escolher o barco.
 
-Até o tempo de referência da fase, o jogador recebe a pontuação máxima. Depois disso, os pontos diminuem proporcionalmente: gastar o dobro do tempo de referência rende metade do máximo. A fórmula está em [scoring.js](src/game/core/scoring.js).
+Os pontos são calculados por `(ID da fase × 1000) ÷ tempo em segundos`, arredondados para um inteiro. Quanto menor o tempo, maior a recompensa, sem limite máximo. Por exemplo, acertar na fase 2 em 5 segundos rende 400 pontos; em 10 segundos, rende 200 pontos. O cálculo usa também as frações de segundo. Tempo zero, negativo ou inválido retorna zero para evitar uma divisão inválida.
+
+A função `getPhaseBalance(id, timeSeconds)` recebe o ID da fase e o tempo gasto e retorna `{ score }`. A fórmula fica em [balance.js](src/game/config/balance.js), chamada por [scoring.js](src/game/core/scoring.js).
 
 ## O recorde fica salvo? É necessário um banco de dados?
 

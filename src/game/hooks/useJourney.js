@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { calculateScore } from '@/game/core/scoring';
 import { readHighscore, saveHighscore } from '@/game/core/highscore';
-import { WRONG_BOAT_PENALTY } from '@/game/config/balance';
+import { getWrongBoatPenalty } from '@/game/config/balance';
 
 export function useJourney(running) {
   const [score, setScore] = useState(0);
@@ -63,8 +63,8 @@ export function useJourney(running) {
     if (settled.current) return;
     settled.current = true;
     if (!won) {
-      const lost = Math.min(score, WRONG_BOAT_PENALTY);
-      setScore(score - lost);
+      const penalty = getWrongBoatPenalty(currentTime());
+      setScore((value) => value - penalty);
       setLives((value) => Math.max(0, value - 1));
       return;
     }

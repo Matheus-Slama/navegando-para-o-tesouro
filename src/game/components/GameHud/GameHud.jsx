@@ -4,6 +4,8 @@ import './GameHud.css';
 
 export function GameHud({ lives, elapsed = 0, score = 0 }) {
   const time = formatElapsedTime(elapsed);
+  const formattedScore = formatScore(score);
+  const scoreFontScale = Math.min(1, 5 / formattedScore.length);
 
   return (
     <div className="game-hud">
@@ -30,8 +32,8 @@ export function GameHud({ lives, elapsed = 0, score = 0 }) {
           />
         )}
       </span>
-      <span className="game-hud__score" role="status" aria-label={`Pontuação: ${score} pontos`}>
-        {formatScore(score)}
+      <span className="game-hud__score" style={{ '--score-font-scale': scoreFontScale }} data-negative={score < 0} role="status" aria-label={`Pontuação: ${score} pontos`}>
+        {formattedScore}
       </span>
       <span className="game-hud__time" role="timer" aria-label={`Tempo da fase: ${time}`}>
         {time}

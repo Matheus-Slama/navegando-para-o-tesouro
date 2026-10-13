@@ -1,5 +1,3 @@
-import { WRONG_BOAT_PENALTY } from '@/game/config/balance';
-
 export const TUTORIAL_STEPS = [
   {
     title: 'Bem-vindo ao Navegando para o Tesouro',
@@ -18,12 +16,35 @@ export const TUTORIAL_STEPS = [
     text: 'Escolha um barco para iniciar a corrida. O barco com menor custo chega primeiro.'
   },
   {
-    title: 'Pontuação e vidas',
-    text: `Ao acertar, você ganha pontos e avança de fase. Ao escolher o barco errado, perde uma vida e até ${WRONG_BOAT_PENALTY} pontos. A pontuação nunca fica abaixo de zero. Com três erros, a jornada termina.`
+    title: 'Vidas',
+    highlight: 'lives',
+    text: 'Os corações no painel mostram suas vidas. Você começa com três. Cada escolha errada tira uma vida. Ao errar três vezes, a jornada termina e você volta ao menu.'
+  },
+  {
+    title: 'Pontuação',
+    highlight: 'score',
+    text: 'O número no centro do painel mostra seus pontos. Acertar dá pontos: quanto mais rápido o acerto, mais você ganha. Errar tira pontos: quanto mais rápido o erro, mais pontos você perde.'
+  },
+  {
+    title: 'Pause',
+    highlight: 'pause',
+    text: 'Nos mapas do jogo, use o botão Pause para interromper a partida e o tempo de escolha. No modal, escolha Voltar pro jogo para continuar ou Voltar ao menu para encerrar a jornada. Experimente pausar e retomar o tutorial antes de continuar.'
+  },
+  {
+    title: 'Música',
+    text: 'Use o botão Música, com o ícone de alto-falante, para ligar ou mutar a música. O ícone com um X indica que ela está mutada. Sua escolha é mantida ao trocar entre menu, mapas e tutoriais.'
   },
   {
     title: 'Dicas',
-    text: 'Use a lâmpada quando precisar de ajuda. As dicas explicam os conceitos de forma mais explícita durante o jogo.'
+    text: 'O botão Dicas, com o ícone de lâmpada, esconde ou mostra este painel de explicações. Arraste o balão pelas bordas para mudar sua posição e pelos cantos para redimensioná-lo. Durante o jogo, use a lâmpada quando precisar de ajuda para comparar as rotas.'
+  },
+  {
+    title: 'Arestas',
+    text: 'Use o botão Arestas para escolher o desenho das conexões entre as ilhas: setas brancas, setas pretas ou chevrons. Essa mudança altera apenas a aparência; os caminhos e seus custos continuam iguais. Experimente os estilos antes de começar a jornada.'
+  },
+  {
+    title: 'Tudo pronto!',
+    text: 'Você já conhece o jogo. Inicie sua jornada ou volte ao menu.'
   }
 ];
 

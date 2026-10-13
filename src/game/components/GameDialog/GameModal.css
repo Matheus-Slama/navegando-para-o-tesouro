@@ -1,0 +1,13 @@
+.game-dialog.game-modal {
+  position: fixed;
+  width: fit-content;
+  max-width: calc(100vw - 1rem);
+  max-height: calc(100svh - 1rem);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}

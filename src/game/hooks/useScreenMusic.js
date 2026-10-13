@@ -1,16 +1,18 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useMusicMuted } from './useMusicMuted';
 
 export function useScreenMusic(paused = false) {
   const musicRef = useRef(null);
+  const [muted] = useMusicMuted();
 
   useEffect(() => {
     const music = musicRef.current;
     if (!music) return;
     let disposed = false;
     music.volume = 0.35;
-    if (paused) {
+    if (paused || muted) {
       music.pause();
       return;
     }
@@ -34,7 +36,7 @@ export function useScreenMusic(paused = false) {
       window.removeEventListener('keydown', playMusic);
       music.pause();
     };
-  }, [paused]);
+  }, [paused, muted]);
 
   useEffect(() => {
     const music = musicRef.current;

@@ -49,7 +49,12 @@
 .game-hud__score {
   left: 48%;
   width: 16%;
-  font-size: calc(var(--game-hud-width) * 0.04);
+  /* Reduz a fonte conforme o número de caracteres, incluindo sinal e separadores. */
+  font-size: calc(var(--game-hud-width) * 0.04 * var(--score-font-scale, 1));
+}
+
+.game-hud__score[data-negative='true'] {
+  color: #ff6464;
 }
 
 @media (width < 600px) {

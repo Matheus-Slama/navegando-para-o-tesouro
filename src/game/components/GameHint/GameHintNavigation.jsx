@@ -7,6 +7,7 @@ export function GameHintNavigation({
   total,
   onPrevious,
   onNext,
+  nextDisabled = false,
   nextLabel = 'Próximo passo',
   nextTitle = 'Avançar (→)',
   keyboardShortcuts = false
@@ -28,6 +29,7 @@ export function GameHintNavigation({
       <button
         className="game-hint__arrow"
         type="button"
+        disabled={nextDisabled}
         aria-label={nextLabel}
         aria-keyshortcuts={keyboardShortcuts ? 'ArrowRight' : undefined}
         title={nextTitle}

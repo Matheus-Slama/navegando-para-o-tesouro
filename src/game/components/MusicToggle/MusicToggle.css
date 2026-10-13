@@ -1,0 +1,28 @@
+.music-toggle {
+  position: relative;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--game-tool-size, 48px);
+  height: var(--game-tool-size, 48px);
+  flex: 0 0 auto;
+  padding: calc(var(--game-tool-size, 48px) * 0.26);
+  border: 0;
+  border-radius: 0.55rem;
+  background: transparent url('/assets/game/ui/button-default.png') center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  box-shadow: none;
+  cursor: pointer;
+}
+.music-toggle--bare { padding: 0; background: transparent; border-radius: 0; }
+.music-toggle img { width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; pointer-events: none; }
+.music-toggle:hover { filter: brightness(1.15); }
+.music-toggle:focus-visible { outline: 3px solid #ffda70; outline-offset: 2px; }
+.start-screen__music {
+  position: absolute;
+  z-index: 2;
+  top: var(--screen-inset-top);
+  right: var(--screen-inset-right);
+  width: clamp(48px, 7vmin, 72px);
+  height: clamp(48px, 7vmin, 72px);
+}
