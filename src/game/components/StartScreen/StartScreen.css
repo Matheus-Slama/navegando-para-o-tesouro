@@ -86,7 +86,7 @@
 .start-screen__highscore strong { font-weight: 400; font-variant-numeric: tabular-nums; }
 
 .start-screen__content button {
-  width: 100%;
+  width: min(100%, 16rem);
   min-width: 0;
   min-height: clamp(2.75rem, 6.5vmin, 5rem);
   line-height: 1.2;
@@ -141,8 +141,7 @@
   .start-screen__content {
     grid-row: 1;
     align-self: end;
-    /* A largura acompanha o texto ampliado sem invadir as cordas laterais. */
-    width: min(78vw, max(58vw, 22em), 52rem);
+    width: min(78vw, 36rem);
     margin-bottom: max(12svh, env(safe-area-inset-bottom));
     padding-block: 0;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -159,7 +158,6 @@
 
 @media (max-height: 500px) and (min-aspect-ratio: 1/1) {
   .start-screen__content {
-    width: min(78vw, max(52vw, 20em), 52rem);
     margin-bottom: max(10svh, env(safe-area-inset-bottom));
     row-gap: 4px;
   }
