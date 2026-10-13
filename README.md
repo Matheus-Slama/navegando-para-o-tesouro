@@ -15,6 +15,26 @@ pnpm dev
 
 Abra `http://localhost:3000`. Para produção, use `pnpm build` e depois `pnpm start`. No PowerShell com scripts bloqueados, use `pnpm.cmd` no lugar de `pnpm`.
 
+## Publicar no GitHub Pages
+
+O workflow `.github/workflows/deploy-pages.yml` verifica e publica o site a cada push na branch `master`. Também pode ser executado manualmente na aba Actions.
+
+No repositório do GitHub, abra **Settings → Pages → Build and deployment → Source** e selecione **GitHub Actions**. Envie os arquivos desta configuração para `master` para iniciar a primeira publicação.
+
+Endereço esperado: https://matheus-slama.github.io/navegando-ao-tesouro-nextjs/
+
+O build do Pages exporta o site para `out/`, desativa a otimização de imagens que depende de servidor e aplica o prefixo do repositório às rotas e aos arquivos públicos. O workflow obtém esse prefixo da configuração do Pages, inclusive para domínios personalizados. O desenvolvimento local e o build padrão continuam usando o servidor Next.js.
+
+Para verificar a exportação no PowerShell:
+
+```powershell
+$env:GITHUB_PAGES = 'true'
+$env:PAGES_BASE_PATH = '/navegando-ao-tesouro-nextjs'
+pnpm.cmd build
+node scripts/prepare-pages.mjs
+Remove-Item Env:GITHUB_PAGES, Env:PAGES_BASE_PATH
+```
+
 ## Verificar
 
 ```bash
