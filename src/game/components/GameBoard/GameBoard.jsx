@@ -78,16 +78,18 @@ export function GameBoard({
           <p>{hint}</p>
         </GameHint>
 
-        <DevPanel
-          open={devMode}
-          graph={graph}
-          phase={phase}
-          phaseIndex={phaseIndex}
-          phases={phases}
-          onToggle={onToggleDevMode}
-          onSelectPhase={onSelectPhase}
-          onRegenerateMap={onRegenerateMap}
-        />
+        {process.env.NODE_ENV === 'development' && (
+          <DevPanel
+            open={devMode}
+            graph={graph}
+            phase={phase}
+            phaseIndex={phaseIndex}
+            phases={phases}
+            onToggle={onToggleDevMode}
+            onSelectPhase={onSelectPhase}
+            onRegenerateMap={onRegenerateMap}
+          />
+        )}
 
         <div className="game-board__map">
           <MapGraph graph={graph} phase={phase} selectedStartId={selectedStartId} animationKey={animationKey} onWinnerArrive={onWinnerArrive} routeStyle={routeStyle} paused={paused} />
