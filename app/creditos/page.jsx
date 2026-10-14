@@ -55,6 +55,11 @@ export default function CreditsPage() {
             <h1>Créditos</h1>
             <p>Os talentos por trás da aventura.</p>
           </header>
+          <section className={styles.section} aria-labelledby="developer-title">
+            <h2 id="developer-title">Desenvolvimento</h2>
+            <h3>Matheus Slama</h3>
+            <p className={styles.author}>Desenvolvedor do jogo Navegando para o Tesouro.</p>
+          </section>
           <section className={styles.section} aria-labelledby="music-title">
             <h2 id="music-title">Trilha sonora</h2>
             <ul className={styles.tracks}>
