@@ -57,6 +57,7 @@ As verificações de interface precisam da aplicação rodando e de um Chrome de
 
 - `pnpm test:browser:hint`: porta padrão 9224; aceita `GAME_HINT_URL` e `GAME_HINT_CDP`.
 - `pnpm test:browser:pause`: porta padrão 9226; aceita `GAME_PAUSE_URL` e `GAME_PAUSE_CDP`.
+- `pnpm test:browser:responsive`: porta padrão 9227; testa o site publicado em 10 tamanhos, com toque, tutorial, pausa, rotação e corrida. Aceita `GAME_RESPONSIVE_URL` e `GAME_RESPONSIVE_CDP`; salva relatório e capturas em `.next/responsive-*`.
 
 Exemplo de argumentos para o Chrome de teste: `--remote-debugging-port=9224 --user-data-dir=<pasta-temporaria-do-teste>`. Essas verificações não fazem parte de `pnpm check`, pois dependem do navegador externo.
 
