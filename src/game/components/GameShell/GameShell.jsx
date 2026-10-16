@@ -223,6 +223,7 @@ export function GameShell() {
         onWinnerArrive={finishRace}
         raceResult={raceResult}
         onContinue={continueAfterRace}
+        onBackToMenu={returnToMenu}
         devMode={devMode}
         onToggleDevMode={() => setDevMode((value) => !value)}
         onRegenerateMap={regenerateMap}

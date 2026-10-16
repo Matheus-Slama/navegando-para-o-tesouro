@@ -8,6 +8,14 @@ export const metadata = {
 
 const musicCredits = [
   {
+    title: 'Win Jingle',
+    author: 'Fupi',
+    usage: 'Abertura do baú de vitória',
+    source: 'https://opengameart.org/content/win-jingle',
+    license: 'CC0',
+    licenseUrl: 'https://creativecommons.org/publicdomain/zero/1.0/',
+  },
+  {
     title: "A sailor's chant",
     author: 'Thimras',
     usage: 'Música do tutorial de Dijkstra',

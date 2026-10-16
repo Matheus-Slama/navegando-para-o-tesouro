@@ -24,6 +24,7 @@ export function GameBoard({
   onWinnerArrive,
   raceResult,
   onContinue,
+  onBackToMenu,
   devMode,
   onToggleDevMode,
   onRegenerateMap,
@@ -38,7 +39,8 @@ export function GameBoard({
   onChangeRouteStyle,
   onDijkstraTutorial
 }) {
-  const musicRef = useScreenMusic(paused);
+  const finalVictory = raceResult === 'victory' && phaseIndex === totalPhases - 1;
+  const musicRef = useScreenMusic(paused || finalVictory);
   const treasure = graph.nodes.find((node) => node.type === 'finish');
   const boats = graph.nodes.filter((node) => node.type === 'start');
   const mapProfile = getMapProfile(graph.metadata.layout);
@@ -115,6 +117,7 @@ export function GameBoard({
           winner={boats.find((boat) => boat.id === graph.results.winner.startId)}
           isFinalPhase={phaseIndex === totalPhases - 1}
           onContinue={onContinue}
+          onBackToMenu={onBackToMenu}
         />
 
       </div>

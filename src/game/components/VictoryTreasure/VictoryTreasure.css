@@ -1,0 +1,120 @@
+.game-dialog.victory-treasure {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  background: transparent;
+  color: #3e210c;
+  font-family: var(--font-pirate), Georgia, serif;
+  text-align: center;
+  overflow-x: hidden;
+}
+.victory-treasure::backdrop {
+  background: #060910ed;
+  backdrop-filter: blur(5px);
+  animation: victory-darken 2s ease-out both;
+}
+.victory-treasure__stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(80vw, 34rem, 65svh);
+  aspect-ratio: 1;
+  margin: max(0rem, calc((100svh - min(80vw, 34rem, 65svh)) / 2 - 2rem)) auto 0;
+  transition: width 1.2s ease, margin 1.2s ease;
+  isolation: isolate;
+}
+.victory-treasure__zoom { width: 100%; z-index: 1; }
+.victory-treasure--playing .victory-treasure__zoom { animation: victory-zoom 7s ease-out both; }
+.victory-treasure--playing .victory-treasure__shake { animation: victory-shake .16s 2s 27; }
+.victory-treasure__sprite {
+  width: 100%;
+  aspect-ratio: 1;
+  background: url('/assets/game/treasures/treasure-victory-sheet.png') 0 0 / 300% 200% no-repeat;
+  image-rendering: pixelated;
+  /* The supplied sheet has an amber background: soften its edges into the halo. */
+  mask-image: radial-gradient(ellipse 70% 65% at center, #000 58%, transparent 74%);
+}
+.victory-treasure__halo, .victory-treasure__rays {
+  position: absolute;
+  inset: -25%;
+  pointer-events: none;
+  opacity: 0;
+}
+.victory-treasure__halo { background: radial-gradient(ellipse, #fffad5 0%, #ffcf68aa 20%, #ec98122b 45%, transparent 67%); }
+.victory-treasure__rays {
+  background: repeating-conic-gradient(from 0deg, transparent 0deg 12deg, #ffdf8c88 15deg, transparent 22deg 30deg);
+  mask-image: radial-gradient(circle, transparent 8%, #000 22%, transparent 66%);
+}
+.victory-treasure--playing .victory-treasure__halo { animation: victory-light 7s ease-in-out both; }
+.victory-treasure--playing .victory-treasure__rays { animation: victory-light 7s ease-in-out both, victory-turn 45s linear infinite; }
+.victory-treasure__spark {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 5px; height: 5px;
+  background: #fff3b8;
+  box-shadow: 0 0 12px 3px #ffce53;
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 2;
+}
+.victory-treasure--playing .victory-treasure__spark { animation: victory-spark 2.8s var(--delay) 3 both; }
+.victory-treasure__preload { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.victory-treasure--revealed .victory-treasure__stage { width: min(52vw, 19rem, 35svh); margin-top: 0; }
+.victory-treasure__paper {
+  position: relative;
+  z-index: 3;
+  width: min(100%, 35rem);
+  margin: -1rem auto 0;
+  padding: clamp(2.5rem, 7vw, 3.5rem) clamp(2.5rem, 9vw, 5rem);
+  background: url('/assets/game/ui/panel-modal.png') center / 100% 100% no-repeat;
+  filter: drop-shadow(0 12px 28px #0009);
+  animation: victory-paper 1s ease-out both;
+}
+.victory-treasure__eyebrow { font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; }
+.victory-treasure__paper h3 { margin: .5rem 0; font-size: clamp(1.7rem, 5vw, 2.4rem); font-weight: 400; line-height: 1.1; }
+.victory-treasure__paper p { margin: .6rem 0; font-size: clamp(1.1rem, 3vw, 1.4rem); line-height: 1.3; }
+.victory-treasure__paper strong { display: block; margin: .8rem 0; font-size: 1.5rem; font-weight: 400; }
+.victory-treasure__paper .victory-treasure__score { font-size: .9rem; }
+.victory-treasure__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem;
+  margin-top: .5rem;
+}
+.victory-treasure__actions button,
+.victory-treasure__actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-min-height, 2.75rem);
+  max-width: 100%;
+  text-decoration: none;
+  border: 0; padding: .9rem 1.8rem;
+  background: url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
+  color: #fff5ce; font: inherit; text-shadow: 0 2px 2px #000;
+}
+@keyframes victory-darken { from { background: #06091033; backdrop-filter: blur(0); } }
+@keyframes victory-zoom { 0% { transform: scale(.4); opacity: 0; } 18% { opacity: 1; } 80% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@keyframes victory-shake { 0%, 100% { transform: translate(0) rotate(0); } 25% { transform: translate(-3px, 1px) rotate(-1deg); } 75% { transform: translate(3px, -2px) rotate(1deg); } }
+@keyframes victory-light { 0%, 15% { opacity: 0; } 45% { opacity: .35; } 68% { opacity: .65; } 85% { opacity: 1; } 100% { opacity: .65; } }
+@keyframes victory-turn { to { transform: rotate(360deg); } }
+@keyframes victory-spark { 0% { opacity: 0; transform: rotate(var(--angle)) translateX(15px) scale(.3); } 25% { opacity: 1; } 100% { opacity: 0; transform: rotate(var(--angle)) translateX(var(--distance)) scale(.1); } }
+@keyframes victory-paper { from { opacity: 0; transform: translateY(25px) scale(.92); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .victory-treasure, .victory-treasure *, .victory-treasure::backdrop { animation: none !important; transition: none !important; }
+  .victory-treasure__halo { opacity: .5; }
+  .victory-treasure__spark, .victory-treasure__rays { display: none; }
+}
+@media (max-height: 500px) and (min-width: 600px) {
+  .victory-treasure--revealed[open] { display: flex; align-items: center; justify-content: center; gap: 1rem; }
+  .victory-treasure--revealed .victory-treasure__stage { width: min(32vw, 65svh); flex-shrink: 0; margin: 0; }
+  .victory-treasure__paper { margin: 0; padding-top: 2rem; padding-bottom: 2rem; }
+}

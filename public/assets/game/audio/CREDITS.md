@@ -1,5 +1,22 @@
 # Music
 
+## Sound effects
+
+- File: `sfx-victory-jingle.ogg`
+- Title: Win Jingle (winfretless variation)
+- Author: Fupi
+- Source: https://opengameart.org/content/win-jingle
+- Download: https://opengameart.org/sites/default/files/winfretless_0.ogg
+- License: CC0 — https://creativecommons.org/publicdomain/zero/1.0/
+- Changes: None; played once as the victory chest starts opening.
+
+- File: `sfx-dijkstra-unlock.wav`
+- Title: Small win (Mixkit, item 2020)
+- Source: https://mixkit.co/free-sound-effects/win/
+- Download: https://assets.mixkit.co/active_storage/sfx/2020/2020.wav
+- License: Mixkit Sound Effects Free License — https://mixkit.co/license/#sfxFree
+- Changes: None; played once when the Dijkstra power is unlocked.
+
 - File: `music-dijkstra-tutorial.ogg`
 - Title: A sailor's chant
 - Author: Thimras

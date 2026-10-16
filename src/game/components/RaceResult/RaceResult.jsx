@@ -1,9 +1,13 @@
 import { formatScore } from '@/game/core/text';
 import { BOAT_COLORS } from '@/game/enums/boat-colors';
 import './RaceResult.css';
+import { VictoryTreasure } from '@/game/components/VictoryTreasure/VictoryTreasure';
 
-export function RaceResult({ result, winner, isFinalPhase, onContinue, lives, score, highscore }) {
+export function RaceResult({ result, winner, isFinalPhase, onContinue, onBackToMenu, lives, score, highscore }) {
   if (!result) return null;
+  if (result === 'victory' && isFinalPhase) {
+    return <VictoryTreasure onContinue={onContinue} onBackToMenu={onBackToMenu} score={score} highscore={highscore} />;
+  }
 
   const winnerBoatName = `barco ${BOAT_COLORS[winner.boat]}`;
 
