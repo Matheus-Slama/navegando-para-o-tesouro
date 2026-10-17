@@ -5,7 +5,7 @@ import { getPhaseResults } from '@/game/core/dijkstra';
 // O tutorial usa mapas compactos, com menos conexões e etapas que a fase gerada.
 export const DIJKSTRA_FIXED_PHASE = {
   ...PHASES.at(-1),
-  weights: { ...PHASES.at(-1).weights, minimumEdgeCount: 23, minimumWinnerPathNodes: 5 },
+  weights: { ...PHASES.at(-1).weights, minimumEdgeCount: 13, minimumWinnerPathNodes: 5 },
 };
 
 // Mapas salvos: entrar novamente no tutorial não sorteia ilhas, rotas ou pesos.

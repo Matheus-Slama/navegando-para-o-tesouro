@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { writeFile } from 'node:fs/promises';
 
 
-const baseUrl = process.env.GAME_RESPONSIVE_URL ?? 'https://matheus-slama.github.io/navegando-para-o-tesouro/';
+const baseUrl = process.env.GAME_RESPONSIVE_URL ?? 'http://localhost:3000';
 const browserUrl = process.env.GAME_RESPONSIVE_CDP ?? 'http://127.0.0.1:9227';
 const target = await (await fetch(`${browserUrl}/json/new?${encodeURIComponent('about:blank')}`, { method: 'PUT' })).json();
 const socket = new WebSocket(target.webSocketDebuggerUrl);
@@ -69,11 +69,34 @@ async function audit(screen,w,h) {
 try {
   await send('Runtime.enable'); await send('Page.enable');
   await send('Emulation.setTouchEmulationEnabled',{enabled:true});
-  for (const [w,h] of [[320,568],[360,640],[375,667],[390,844],[412,915],[568,320],[667,375],[844,390],[768,1024],[1366,768]]) {
+  for (const [w,h] of [[320,568],[350,600],[350,700],[360,640],[375,667],[390,844],[412,915],[568,320],[700,350],[667,375],[844,390],[768,1024],[1366,768]]) {
     await send('Emulation.setDeviceMetricsOverride',{width:w,height:h,deviceScaleFactor:1,mobile:true});
     await send('Page.navigate',{url:baseUrl});
     await waitFor("document.querySelector('.start-screen button')"); await pause(1000);
     await audit('menu',w,h);
+    const menuTools = await evaluate(`(() => {
+      const c=document.querySelector('.start-screen__credits').getBoundingClientRect();
+      const m=document.querySelector('.start-screen__music').getBoundingClientRect();
+      const start=document.querySelector('.start-screen__content button:last-of-type').getBoundingClientRect();
+      return {credits:{width:c.width,height:c.height,top:c.top},start:{width:start.width,bottom:start.bottom},music:{width:m.width,height:m.height},overlap:c.right>m.left,verticalScroll:document.documentElement.scrollHeight>innerHeight+1};
+    })()`);
+    assert.equal(menuTools.overlap,false,'Menu tools must not overlap');
+    assert.equal(menuTools.verticalScroll,false,'Menu must fit without vertical scrolling');
+    if (Math.min(w,h)<=375) {
+      assert.ok(menuTools.music.width<=38 && menuTools.music.height<=38,'Music must remain compact on narrow phones');
+      assert.ok(menuTools.credits.width<=menuTools.start.width+1 && menuTools.credits.height<=38,'Credits must remain compact on narrow phones');
+    }
+    if (w<600 || h<500) assert.ok(menuTools.credits.top>=menuTools.start.bottom,'Mobile credits must appear below Start');
+    const mutedBefore=await evaluate("document.querySelector('.start-screen__music').getAttribute('aria-pressed')");
+    await touch('.start-screen__music');
+    assert.notEqual(await evaluate("document.querySelector('.start-screen__music').getAttribute('aria-pressed')"),mutedBefore);
+    await touch('.start-screen__music');
+    await touch('.start-screen__credits');
+    await waitFor("document.querySelector('main article')");
+    assert.ok(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),'Credits page must fit the viewport');
+    await touch('main a[href="/"]');
+    await waitFor("document.querySelector('.start-screen button')");
+    await pause(250);
     await touch('.start-screen__content button');
     await waitFor("document.querySelector('.tutorial-screen')");
     await audit('tutorial',w,h);

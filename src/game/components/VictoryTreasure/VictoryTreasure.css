@@ -13,7 +13,11 @@
   color: #3e210c;
   font-family: var(--font-pirate), Georgia, serif;
   text-align: center;
-  overflow-x: hidden;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+.game-dialog.victory-treasure--revealed {
+  overflow-y: auto;
 }
 .victory-treasure::backdrop {
   background: #060910ed;

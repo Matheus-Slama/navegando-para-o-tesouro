@@ -116,7 +116,10 @@
   width: 100%;
   padding: calc(2.5rem * var(--game-hint-scale, 1)) calc(2rem * var(--game-hint-scale, 1)) calc(0.75rem * var(--game-hint-scale, 1));
 }
-.game-hint__content { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; }
+/* Flex/grid children must shrink with the parchment, including custom content. */
+.game-hint__panel,
+.game-hint__panel * { box-sizing: border-box; min-width: 0; max-width: 100%; }
+.game-hint__content { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 0; overflow-wrap: anywhere; }
 .game-hint__content[hidden] { display: none; }
 .game-hint__body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; overflow-wrap: anywhere; scrollbar-width: thin; scrollbar-color: #8b501f #e4c38c; padding: calc(0.2rem * var(--game-hint-scale, 1)); }
 @supports selector(::-webkit-scrollbar) {
@@ -146,13 +149,13 @@
 .game-hint__title { margin: 0 0 calc(0.5rem * var(--game-hint-scale, 1)); color: #492508; font: 400 calc(1.2rem * var(--game-hint-scale, 1))/1.15 var(--font-pirate, Georgia), Georgia, serif; }
 .game-hint__body p { margin: calc(0.45rem * var(--game-hint-scale, 1)) 0; }
 .game-hint__body img { max-width: 100%; height: auto; }
-.game-hint__footer { flex: 0 0 auto; margin-top: auto; padding-top: calc(0.4rem * var(--game-hint-scale, 1)); }
+.game-hint__footer { flex: 0 0 auto; min-height: 0; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; margin-top: auto; padding-top: calc(0.4rem * var(--game-hint-scale, 1)); }
 .game-hint__footer > :first-child { margin-top: 0; }
 .game-hint__actions { display: flex; flex-wrap: wrap; gap: calc(0.5rem * var(--game-hint-scale, 1)); }
 .game-hint__actions > button { flex: 1 1 calc(5rem * var(--game-hint-scale, 1)); }
 .game-hint__body button,
 .game-hint__footer button {
-  min-width: calc(44px * var(--game-hint-scale, 1));
+  min-width: min(100%, calc(44px * var(--game-hint-scale, 1)));
   min-height: calc(44px * var(--game-hint-scale, 1));
   padding: calc(0.75rem * var(--game-hint-scale, 1)) calc(0.875rem * var(--game-hint-scale, 1));
   border: 0;
@@ -162,6 +165,8 @@
   text-shadow: 0 1px 2px #120b07;
   color: #fff8db;
   font: inherit;
+  white-space: normal;
+  overflow-wrap: anywhere;
   cursor: pointer;
 }
 .game-hint__body button:hover:not(:disabled),
@@ -170,7 +175,7 @@
 .game-hint button:focus-visible { outline: 3px solid #492508; outline-offset: 2px; }
 
 .game-hint__navigation { display: flex; align-items: center; justify-content: center; width: fit-content; max-width: 100%; gap: calc(0.2rem * var(--game-hint-scale, 1)); margin: calc(0.45rem * var(--game-hint-scale, 1)) auto 0; }
-.game-hint__navigation > span { flex: 0 0 auto; color: #795c32; font-size: calc(0.7rem * var(--game-hint-scale, 1)); text-align: center; font-variant-numeric: tabular-nums; }
+.game-hint__navigation > span { flex: 0 1 auto; color: #795c32; font-size: calc(0.7rem * var(--game-hint-scale, 1)); text-align: center; font-variant-numeric: tabular-nums; }
 .game-hint .game-hint__navigation .game-hint__arrow {
   flex: 0 1 calc(3rem * var(--game-hint-scale, 1));
   width: calc(3rem * var(--game-hint-scale, 1));

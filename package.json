@@ -16,6 +16,7 @@
     "test:highscore": "node scripts/verify-highscore.mjs",
     "test:devices": "node scripts/verify-device-config.mjs",
     "test:dijkstra": "node scripts/verify-dijkstra-walkthrough.mjs && node scripts/verify-dijkstra-selection.mjs",
+    "test:browser:hint-responsive": "node scripts/verify-game-hint-responsive.mjs",
     "test:browser:hint": "node scripts/verify-game-hint.mjs",
     "test:browser:pause": "node scripts/verify-game-pause.mjs",
     "test:browser:responsive": "node scripts/verify-responsive.mjs",

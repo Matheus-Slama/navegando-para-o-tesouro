@@ -31,14 +31,10 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
     assert.equal(frames.at(-1).distances.finish, costs.finish);
     assert.equal(result.distance, costs.finish);
     assert.deepEqual(frames.at(-1).path, result.path);
-    if (layout === 'wide' && result.startId === 'start-blue') {
-      const confirmations = frames.filter((frame) => frame.step === 5);
-      const island = confirmations.findIndex((frame) => frame.currentId === 'island-8');
-      const treasure = confirmations.findIndex((frame) => frame.currentId === 'finish');
-      assert.ok(island >= 0 && island < treasure);
-      assert.equal(confirmations[island].distances['island-8'], 49);
-      assert.equal(confirmations[treasure].distances.finish, 54);
-      console.log('Ilha 8 (49) confirmada antes do tesouro (54).');
+    if (result.startId === 'start-blue') {
+      assert.equal(frames.at(-1).distances.finish, 20);
+      assert.ok(frames.at(-1).confirmed.includes('island-4'));
+      assert.ok(!frames.at(-1).confirmed.includes('island-6'), 'Pare no tesouro sem visitar a ilha mais cara.');
     }
   }
   console.log(`${layout}: ordem de seleção e custos dos quatro barcos verificados.`);

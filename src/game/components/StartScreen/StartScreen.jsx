@@ -14,7 +14,6 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
     <section className="start-screen" aria-labelledby="start-screen-title">
       <audio ref={musicRef} src="/assets/game/audio/music-menu.mp3" loop preload="auto" />
       <MusicToggle variant="bare" className="start-screen__music" />
-      <Link className="start-screen__credits" href="/creditos">Créditos</Link>
       <div className="start-screen__frame">
       <picture className="start-screen__art">
         <source
@@ -49,6 +48,7 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
         <button type="button" onClick={onStart}>
           Iniciar jornada
         </button>
+        <Link className="start-screen__credits" href="/creditos">Créditos</Link>
       </div>
       </div>
     </section>

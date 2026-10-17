@@ -3,7 +3,8 @@ import { register } from 'node:module';
 
 register('./map-test-loader.mjs', import.meta.url);
 const { DIJKSTRA_FIXED_PHASE, getDijkstraFixedMap } = await import('../src/game/config/dijkstra-fixed-map.js');
-const { createDijkstraWalkthrough } = await import('../src/game/core/dijkstra-walkthrough.js');
+const { createDijkstraWalkthrough } = await import('../src/game/core/dijkstra-walkthrough-old.js');
+const { createDijkstraWalkthrough: createCondensedWalkthrough } = await import('../src/game/core/dijkstra-walkthrough.js');
 const { isValidGraph } = await import('../src/game/core/map-rules.js');
 const { dijkstra } = await import('../src/game/core/dijkstra.js');
 
@@ -79,8 +80,8 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   assert.equal(graph.metadata.fixed, true);
   const islands = graph.nodes.filter((node) => node.type === 'intermediate');
   assert.equal(graph.metadata.islandCount, islands.length);
-  assert.ok(islands.length >= 15, `${layout}: o tutorial deve ter pelo menos 15 ilhas intermediárias.`);
-  assert.ok(graph.edges.length >= 23, `${layout}: o tutorial deve ter pelo menos 23 arestas.`);
+  assert.equal(islands.length, 6, 'O tutorial deve usar apenas seis ilhas.');
+  assert.equal(graph.edges.length, 13, 'O tutorial deve usar treze rotas.');
   assert.ok(!graph.nodes.some((node) => node.id === 'island-18'), `${layout}: a Ilha 18 foi removida.`);
   assert.ok(!graph.edges.some((edge) => edge.from === 'island-18' || edge.to === 'island-18'),
     `${layout}: nenhuma conexão deve apontar para a Ilha 18.`);
@@ -94,16 +95,8 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   assert.ok(blueFrames.slice(0, 3).every((frame) => !frame.showCosts && frame.confirmed.length === 0),
     'A apresentação deve vir antes das contas.');
   assert.equal(blueFrames[2].currentId, 'start-blue', 'O terceiro passo deve destacar o barco azul.');
-  if (layout === 'wide') {
-    const islandIndex = blueFrames.findIndex((frame) => frame.step === 5 && frame.currentId === 'island-8');
-    const treasureIndex = blueFrames.findIndex((frame) => frame.step === 4 && frame.currentId === 'finish');
-    assert.ok(islandIndex >= 0 && islandIndex < treasureIndex,
-      'A Ilha 8, de custo 49, deve ser confirmada antes de selecionar o tesouro de custo 54.');
-    assert.equal(blueFrames[islandIndex].distances['island-8'], 49);
-    assert.equal(blueFrames[treasureIndex].distances.finish, 54);
-    assert.ok(blueFrames.some((frame) => frame.targetId === 'island-8'),
-      'A rota que chega à Ilha 8 continua sendo calculada no sentido correto.');
-  }
+  assert.equal(blueFrames.at(-1).confirmed.filter((id) => graph.nodes.find((node) => node.id === id)?.type === 'intermediate').length, 4,
+    'O barco azul deve confirmar somente quatro ilhas antes do tesouro.');
   // A bifurcação deve aparecer na demonstração, antes de confirmar o tesouro.
   assert.ok(graph.nodes.some((node) => node.type === 'intermediate'
     && graph.results.winner.path.includes(node.id)
@@ -119,6 +112,18 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   }
   for (const result of graph.results.all) {
     const frames = createDijkstraWalkthrough(graph, result.startId);
+    const condensed = createCondensedWalkthrough(graph, result.startId);
+    assert.equal(condensed.length + 1, 25, 'Incluindo a conclus?o, devem ser 25 passos.');
+    assert.deepEqual(condensed.slice(0, 4), frames.slice(0, 4));
+    assert.deepEqual(condensed.slice(-3), frames.slice(-3));
+    let sourceIndex = 3;
+    for (const frame of condensed.slice(4, -3)) {
+      const nextIndex = frames.findIndex((source, index) => index > sourceIndex
+        && JSON.stringify(source.distances) === JSON.stringify(frame.distances)
+        && JSON.stringify(source.confirmed) === JSON.stringify(frame.confirmed));
+      assert.ok(nextIndex > sourceIndex, 'Os estados devem seguir a ordem original.');
+      sourceIndex = nextIndex;
+    }
     const oracle = shortestCosts(graph, result.startId);
     const initial = frames[3];
     assert.equal(initial.step, 3);

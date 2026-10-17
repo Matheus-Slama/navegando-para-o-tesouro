@@ -1,7 +1,9 @@
 .start-screen {
+  --menu-tool-size: clamp(36px, 10vmin, 48px);
   position: relative;
   width: 100%;
-  min-height: 100svh;
+  height: 100dvh;
+  min-height: 0;
   overflow: hidden;
   isolation: isolate;
   background: #2b1408;
@@ -23,8 +25,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0.75rem 1.25rem;
+  min-height: var(--menu-tool-size);
+  padding: 0.45rem 0.85rem;
+  font-size: clamp(0.8rem, 2.5vmin, 1rem);
+  line-height: 1.2;
   background: url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
   color: #fff8db;
   text-decoration: none;
@@ -44,7 +48,6 @@
 
 .start-screen__content {
   grid-row: 2;
-  position: relative;
   width: min(56vw, 22rem);
   margin-inline: auto;
   padding-block: 0 max(1rem, env(safe-area-inset-bottom));
@@ -58,8 +61,10 @@
 .start-screen__frame {
   position: relative;
   display: grid;
-  grid-template-rows: 56svh auto minmax(0, 1fr);
-  min-height: 100svh;
+  grid-template-rows: minmax(0, 1fr) auto;
+  height: 100%;
+  min-height: 0;
+  padding-bottom: 6dvh;
 }
 
 .start-screen__highscore {
@@ -132,7 +137,8 @@
 /* Telas largas usam uma linha abaixo do título, inclusive no celular deitado. */
 @media (min-aspect-ratio: 1/1) {
   .start-screen__frame {
-    grid-template-rows: minmax(100svh, auto);
+    grid-template-rows: minmax(0, 1fr);
+    padding-bottom: 0;
   }
 
   .start-screen__art img {
@@ -169,5 +175,15 @@
 @media (prefers-reduced-motion: reduce) {
   .start-screen__content button {
     transition: none;
+  }
+}
+
+@media (width < 600px), (height < 500px) and (orientation: landscape) {
+  .start-screen__credits {
+    position: static;
+    grid-column: 1 / -1;
+    width: min(100%, 12rem);
+    min-width: 0;
+    box-sizing: border-box;
   }
 }

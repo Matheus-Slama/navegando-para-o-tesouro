@@ -23,6 +23,6 @@
   z-index: 2;
   top: var(--screen-inset-top);
   right: var(--screen-inset-right);
-  width: clamp(48px, 7vmin, 72px);
-  height: clamp(48px, 7vmin, 72px);
+  width: var(--menu-tool-size);
+  height: var(--menu-tool-size);
 }
