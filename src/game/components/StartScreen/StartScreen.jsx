@@ -4,14 +4,23 @@ import { formatScore } from '@/game/core/text';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useScreenMusic } from '@/game/hooks/useScreenMusic';
+import { useDeviceConfig } from '@/game/hooks/useDeviceConfig';
 import './StartScreen.css';
 import { MusicToggle } from '@/game/components/MusicToggle/MusicToggle';
 
+const MENU_SPACING_BY_DEVICE = {
+  mobile: { '--menu-bottom': '22dvh', '--menu-gap': '0.5rem', '--menu-width': 'min(56vw, 22rem)' },
+  tablet: { '--menu-bottom': '17dvh', '--menu-gap': '0.75rem', '--menu-width': 'min(54vw, 22rem)' },
+  wide: { '--menu-bottom': '12dvh', '--menu-gap': '0.625rem', '--menu-width': 'min(48vw, 25rem)' },
+  wideCompact: { '--menu-bottom': '11dvh', '--menu-gap': '0.25rem', '--menu-width': 'min(52vw, 25rem)' }
+};
+
 export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
   const musicRef = useScreenMusic();
+  const device = useDeviceConfig();
 
   return (
-    <section className="start-screen" aria-labelledby="start-screen-title">
+    <section className="start-screen" style={MENU_SPACING_BY_DEVICE[device.id]} aria-labelledby="start-screen-title">
       <audio ref={musicRef} src="/assets/game/audio/music-menu.mp3" loop preload="auto" />
       <MusicToggle variant="bare" className="start-screen__music" />
       <div className="start-screen__frame">

@@ -49,10 +49,6 @@
     top: max(0px, calc((var(--game-hud-bottom) + min(18cqw, 14cqh, 7rem) / 2 - 100cqh * 55 / 650) * 650 / 595));
   }
 
-  .dijkstra-fixed-map .game-hint-tools {
-    top: var(--game-hud-bottom);
-  }
-
   .game-board:not(.dijkstra-fixed-map) .game-hint-layer {
     --game-hint-top: var(--game-hud-bottom);
   }

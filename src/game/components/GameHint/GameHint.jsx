@@ -5,6 +5,9 @@ import Image from 'next/image';
 import { ArrowRight, ChevronsRight } from 'lucide-react';
 import './GameHint.css';
 import { MusicToggle } from '@/game/components/MusicToggle/MusicToggle';
+import { useDeviceConfig } from '@/game/hooks/useDeviceConfig';
+
+const ACTION_COLUMNS_BY_DEVICE = { mobile: 1, wideCompact: 1, tablet: 2, wide: 2 };
 
 const EDGES = { top: 'superior', right: 'direita', bottom: 'inferior', left: 'esquerda' };
 const CORNERS = { 'top-left': 'superior esquerdo', 'top-right': 'superior direito', 'bottom-left': 'inferior esquerdo', 'bottom-right': 'inferior direito' };
@@ -40,6 +43,7 @@ export function GameHint({
   style
 }) {
   const id = useId();
+  const device = useDeviceConfig();
   const boundsRef = useRef(null);
   const cardRef = useRef(null);
   const dragRef = useRef(null);
@@ -214,14 +218,15 @@ export function GameHint({
   return (
     <>
       <div className="game-hint-tools">
-        {onPause && (
-          <button className="game-hint__route-toggle game-hint__pause" type="button"
+        {[
+        onPause && (
+          <button key="pause" className="game-hint__route-toggle game-hint__pause" type="button"
             aria-label="Pausar jogo" title="Pausar jogo" onClick={onPause}>
             <Image src="/assets/game/ui/icon-pause.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
           </button>
-        )}
-        <MusicToggle />
-        {minimizable && <button
+        ),
+        <MusicToggle key="music" />,
+        minimizable && <button key="hint"
           className="game-hint__toggle"
           type="button"
           aria-label={`${isMinimized ? 'Mostrar' : 'Minimizar'} ${label.toLowerCase()}`}
@@ -231,9 +236,9 @@ export function GameHint({
           onClick={toggleMinimized}
         >
           <Image src="/assets/game/ui/icon-hint.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
-        </button>}
-        {onChangeRouteStyle && (
-          <div className="game-hint__route-control" ref={routeMenuRef}
+        </button>,
+        onChangeRouteStyle && (
+          <div key="style" className="game-hint__route-control" ref={routeMenuRef}
             onBlur={(event) => {
               if (!event.currentTarget.contains(event.relatedTarget)) setRouteMenuOpen(false);
             }}
@@ -269,9 +274,9 @@ export function GameHint({
               </button>)}
             </div>}
           </div>
-        )}
-        {onDijkstraTutorial && (
-          <button className="game-hint__route-toggle game-hint__dijkstra-toggle" type="button"
+        ),
+        onDijkstraTutorial && (
+          <button key="dijkstra" className="game-hint__route-toggle game-hint__dijkstra-toggle" type="button"
             data-highlighted={highlightDijkstra}
             aria-label="Abrir tutorial de Dijkstra" title="Tutorial de Dijkstra"
             onClick={() => {
@@ -282,9 +287,10 @@ export function GameHint({
             <Image src="/assets/game/ui/icon-dijkstra.svg" alt="" width={64} height={64} sizes="36px" draggable={false} />
             {highlightDijkstra && <span className="game-hint__power-label">Novo</span>}
           </button>
-        )}
+        )
+        ].filter(Boolean)}
       </div>
-    <div ref={boundsRef} className={`game-hint-layer ${className}`} style={style}>
+    <div ref={boundsRef} className={`game-hint-layer ${className}`} style={{ '--hint-action-columns': ACTION_COLUMNS_BY_DEVICE[device.id], ...style }}>
       <aside
         ref={cardRef}
         hidden={isMinimized}
