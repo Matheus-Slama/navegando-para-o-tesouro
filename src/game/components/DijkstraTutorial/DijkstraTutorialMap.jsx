@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useScreenMusic } from '@/game/hooks/useScreenMusic';
+import { useDeviceConfig } from '@/game/hooks/useDeviceConfig';
 import { formatCost, shortBoatLabel } from '@/game/core/text';
 import { TutorialText } from './TutorialText';
 import { PHASES } from '@/game/config/phases';
@@ -16,6 +17,12 @@ import { GameHintNavigation } from '@/game/components/GameHint/GameHintNavigatio
 import '@/game/components/GameBoard/GameBoard.css';
 import './DijkstraTutorialMap.css';
 
+const EDGE_NAVIGATION_BY_DEVICE = {
+  mobile: 'clamp(12px, 4vw, 20px)',
+  wideCompact: 'clamp(12px, 2vw, 20px)',
+  tablet: null,
+  wide: null
+};
 
 export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile', routeStyle = 'chevrons', onChangeRouteStyle, paused = false }) {
   const musicRef = useScreenMusic(paused);
@@ -28,6 +35,8 @@ export function DijkstraTutorialMap({ onExit, onPlay, layout = 'mobile', routeSt
 }
 
 function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout, routeStyle, onChangeRouteStyle }) {
+  const device = useDeviceConfig();
+  const edgeWidth = EDGE_NAVIGATION_BY_DEVICE[device.id];
   const [index, setIndex] = useState(0);
   const [comparedBoat, setComparedBoat] = useState('start-blue');
   const graph = getDijkstraFixedMap(layout);
@@ -72,6 +81,14 @@ function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout, routeStyle, on
 
   return (
     <section className="game-board dijkstra-fixed-map" data-layout={layout} aria-label="Tutorial Dijkstra: mapa fixo da última fase">
+      {edgeWidth && [
+        { side: 'left', label: 'Passo anterior pela borda esquerda', action: previousStep, disabled: index === 0 },
+        { side: 'right', label: 'Próximo passo pela borda direita', action: nextStep, disabled: isComplete }
+      ].map(({ side, label, action, disabled }) => (
+        <button key={side} className="dijkstra-fixed-map__edge-navigation" data-side={side}
+          style={{ '--tutorial-edge-width': edgeWidth }} type="button" aria-label={label}
+          disabled={disabled} onClick={action} />
+      ))}
       <picture className="game-board__background">
         <img src={mapProfile.asset} alt="" fetchPriority="high" />
       </picture>

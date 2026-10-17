@@ -86,6 +86,13 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   assert.ok(!graph.edges.some((edge) => edge.from === 'island-18' || edge.to === 'island-18'),
     `${layout}: nenhuma conexão deve apontar para a Ilha 18.`);
   const blueFrames = createDijkstraWalkthrough(graph);
+  const discoveries = createCondensedWalkthrough(graph).filter((frame) => frame.step === 7 && frame.targetId === 'finish');
+  assert.ok(discoveries.length >= 2, 'Mostrar a descoberta do tesouro e a melhoria posterior em cenas separadas.');
+  assert.ok(discoveries[0].distances.finish > discoveries.at(-1).distances.finish,
+    'A primeira rota encontrada deve ser mais cara que a melhor rota.');
+  assert.ok(discoveries.every((frame) => !frame.confirmed.includes('finish')),
+    'Descobrir o tesouro não pode confirmar seu custo.');
+  assert.ok(discoveries.every((frame) => frame.text.includes('Pare apenas quando')));
   assert.deepEqual(blueFrames.slice(0, 4).map((frame) => frame.title), [
     'Conheça o algoritmo de Dijkstra',
     'Mova e redimensione o card de dicas',
@@ -113,11 +120,12 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   for (const result of graph.results.all) {
     const frames = createDijkstraWalkthrough(graph, result.startId);
     const condensed = createCondensedWalkthrough(graph, result.startId);
-    assert.equal(condensed.length + 1, 25, 'Incluindo a conclus?o, devem ser 25 passos.');
+    assert.equal(condensed.length + 1, 28, 'Incluindo a conclusão, devem ser 28 passos.');
+    assert.equal(condensed.filter((frame) => frame.lesson).length, 3);
     assert.deepEqual(condensed.slice(0, 4), frames.slice(0, 4));
     assert.deepEqual(condensed.slice(-3), frames.slice(-3));
     let sourceIndex = 3;
-    for (const frame of condensed.slice(4, -3)) {
+    for (const frame of condensed.slice(4, -3).filter((frame) => !frame.lesson)) {
       const nextIndex = frames.findIndex((source, index) => index > sourceIndex
         && JSON.stringify(source.distances) === JSON.stringify(frame.distances)
         && JSON.stringify(source.confirmed) === JSON.stringify(frame.confirmed));

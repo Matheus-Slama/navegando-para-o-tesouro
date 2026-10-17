@@ -1,15 +1,15 @@
 [
   {
     "title": "Conheça o algoritmo de Dijkstra",
-    "text": "O algoritmo de Dijkstra encontra o menor caminho. Ele compara a soma dos pesos das rotas para descobrir o melhor caminho."
+    "text": "Dijkstra encontra o caminho com a menor soma dos pesos."
   },
   {
     "title": "Mova e redimensione o card de dicas",
-    "text": "Arraste o card pelas bordas para movê-lo. Para redimensioná-lo, arraste um dos cantos. Ajuste a posição e o tamanho para acompanhar o mapa."
+    "text": "Arraste as bordas do painel para mover e os cantos para redimensionar."
   },
   {
     "title": "Comece escolhendo o barco azul",
-    "text": "Vamos começar pelo barco azul, destacado no mapa. Acompanhe os próximos passos para encontrar o melhor caminho dele até o tesouro."
+    "text": "Parta do barco azul destacado e encontre o menor custo até o tesouro."
   },
   {
     "title": "Anote os custos",

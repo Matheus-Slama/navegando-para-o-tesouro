@@ -164,8 +164,8 @@
       },
       {
         "from": "island-3",
-        "to": "island-5",
-        "weight": 14,
+        "to": "finish",
+        "weight": 20,
         "id": "edge-8"
       },
       {
@@ -382,8 +382,8 @@
       },
       {
         "from": "island-3",
-        "to": "island-5",
-        "weight": 14,
+        "to": "finish",
+        "weight": 20,
         "id": "edge-8"
       },
       {
@@ -600,8 +600,8 @@
       },
       {
         "from": "island-3",
-        "to": "island-5",
-        "weight": 14,
+        "to": "finish",
+        "weight": 20,
         "id": "edge-8"
       },
       {
