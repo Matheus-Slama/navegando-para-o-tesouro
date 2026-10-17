@@ -47,7 +47,13 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
   const exceptions = [
     {
       title: 'Empates e pesos especiais',
-      text: 'Empate entre os menores pendentes: escolha qualquer um. Rota de custo igual: mantenha o anterior; pode haver vários caminhos mínimos. Peso zero vale; negativo não permite usar Dijkstra.'
+      text: 'Como lidar com empates e pesos:',
+      items: [
+        'Dois pontos com o menor custo? Escolha qualquer um primeiro.',
+        'Outra rota com custo igual? Mantenha o anterior: ambas podem ser mínimas.',
+        'Peso zero é permitido.',
+        'Peso negativo: Dijkstra não se aplica.'
+      ]
     },
     {
       title: 'Setas, ciclos e becos sem saída',

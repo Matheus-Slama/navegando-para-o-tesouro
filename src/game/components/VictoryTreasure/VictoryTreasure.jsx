@@ -19,15 +19,14 @@ export function VictoryTreasure({ onContinue, onBackToMenu, score, highscore }) 
   const [muted] = useMusicMuted();
 
   useEffect(() => {
-    if (!loaded) return;
+    if (!loaded || revealed) return;
     const sound = jingleRef.current;
     sound.volume = 0.45;
-    let ready = false;
     let started = false;
     let pending = false;
     let disposed = false;
     function playJingle() {
-      if (!ready || started || pending || disposed || sound.muted) return;
+      if (started || pending || disposed || sound.muted) return;
       pending = true;
       sound.play().then(() => {
         started = true;
@@ -35,22 +34,17 @@ export function VictoryTreasure({ onContinue, onBackToMenu, score, highscore }) 
         // Retry on interaction when automatic playback is blocked.
       }).finally(() => { pending = false; });
     }
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const timer = setTimeout(() => {
-      ready = true;
-      playJingle();
-    }, reduced ? 0 : POSES[1]);
+    playJingle();
     window.addEventListener('pointerdown', playJingle);
     window.addEventListener('keydown', playJingle);
     return () => {
       disposed = true;
-      clearTimeout(timer);
       window.removeEventListener('pointerdown', playJingle);
       window.removeEventListener('keydown', playJingle);
       sound.pause();
       sound.currentTime = 0;
     };
-  }, [loaded]);
+  }, [loaded, revealed]);
 
   useEffect(() => {
     if (!loaded) return;
@@ -67,7 +61,7 @@ export function VictoryTreasure({ onContinue, onBackToMenu, score, highscore }) 
 
   return (
     <GameDialog labelledBy="victory-title" className={`victory-treasure ${loaded ? 'victory-treasure--playing' : ''} ${revealed ? 'victory-treasure--revealed' : ''}`}>
-      <audio ref={jingleRef} src="/assets/game/audio/sfx-victory-jingle.ogg" preload="auto" muted={muted} />
+      <audio ref={jingleRef} src="/assets/game/audio/sfx-victory-jingle.ogg" preload="auto" muted={muted} loop={!revealed} />
       <h2 id="victory-title" className="sr-only">Você venceu! O verdadeiro tesouro</h2>
       <div className="victory-treasure__stage" aria-hidden="true">
         <div className="victory-treasure__rays" />

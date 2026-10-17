@@ -2,7 +2,6 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 import Image from 'next/image';
-import { ArrowRight, ChevronsRight } from 'lucide-react';
 import './GameHint.css';
 import { MusicToggle } from '@/game/components/MusicToggle/MusicToggle';
 import { useDeviceConfig } from '@/game/hooks/useDeviceConfig';
@@ -269,7 +268,11 @@ export function GameHint({
                 }}
               >
                 <span className="game-hint__route-preview" data-style={option.value}>
-                  {option.value === 'chevrons' ? <ChevronsRight aria-hidden="true" size={24} /> : <ArrowRight aria-hidden="true" size={24} />}
+                  <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    {option.value === 'chevrons'
+                      ? <path d="m6 6 6 6-6 6m7-12 6 6-6 6" />
+                      : <path d="M5 12h14m-7-7 7 7-7 7" />}
+                  </svg>
                 </span>
               </button>)}
             </div>}

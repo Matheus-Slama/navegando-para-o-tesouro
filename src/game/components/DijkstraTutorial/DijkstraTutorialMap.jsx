@@ -122,7 +122,7 @@ function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout, routeStyle, on
 
         <button className="dijkstra-fixed-map__exit" type="button" onClick={onExit}>← Voltar ao jogo</button>
 
-        <GameHint minimizable={false} title={isComplete ? 'Tutorial concluído!' : frame.title} label="Regras de Dijkstra" routeStyle={routeStyle} onChangeRouteStyle={onChangeRouteStyle} dock={dock} className={`dijkstra-fixed-map__hint${comparing ? ' dijkstra-fixed-map__hint--comparison' : ''}`} footer={isComplete ? (
+        <GameHint title={isComplete ? 'Tutorial concluído!' : frame.title} label="Regras de Dijkstra" routeStyle={routeStyle} onChangeRouteStyle={onChangeRouteStyle} dock={dock} className={`dijkstra-fixed-map__hint${comparing ? ' dijkstra-fixed-map__hint--comparison' : ''}`} footer={isComplete ? (
           <div className="dijkstra-fixed-map__completion-actions">
             <button type="button" onClick={onRestart}>Reiniciar tutorial</button>
             <button type="button" onClick={onPlay}>Voltar ao jogo</button>
@@ -141,6 +141,11 @@ function DijkstraWalkthrough({ onExit, onPlay, onRestart, layout, routeStyle, on
           <p>{isComplete
             ? 'Você concluiu o tutorial de Dijkstra! Agora é sua vez de encontrar o caminho de menor custo até o tesouro. Reinicie para rever os passos ou volte ao jogo para praticar.'
             : comparing ? 'Cada barco começa do zero. Toque abaixo para comparar as rotas.' : <TutorialText text={frame.text} />}</p>
+          {!isComplete && !comparing && frame.items && (
+            <ul className="dijkstra-fixed-map__lesson-list">
+              {frame.items.map((item) => <li key={item}><TutorialText text={item} /></li>)}
+            </ul>
+          )}
           {!isComplete && frame.formula && <p className="dijkstra-fixed-map__formula"><TutorialText text={frame.formula} /></p>}
           {comparing &&
             <div className="dijkstra-fixed-map__comparison" aria-label="Comparar custos dos barcos">

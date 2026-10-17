@@ -1,3 +1,16 @@
+.dijkstra-fixed-map__lesson-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.dijkstra-fixed-map__lesson-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.4em;
+  margin-block: 0.45em;
+}
+.dijkstra-fixed-map__lesson-list li::before { content: '.'; }
+
 .dijkstra-fixed-map__edge-navigation {
   position: absolute;
   z-index: 32;
