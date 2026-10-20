@@ -28,6 +28,7 @@ export function BoatDock({ boats, selectedStartId, onSelect }) {
               width={1254}
               height={1254}
               sizes="(max-width: 37.5rem) 25vw, 20vw"
+              loading="eager"
               draggable="false"
             />
           </button>

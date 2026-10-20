@@ -20,7 +20,7 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
   const device = useDeviceConfig();
 
   return (
-    <section className="start-screen" style={MENU_SPACING_BY_DEVICE[device.id]} aria-labelledby="start-screen-title">
+    <section className="start-screen" data-device={device.id} style={MENU_SPACING_BY_DEVICE[device.id]} aria-labelledby="start-screen-title">
       <audio ref={musicRef} src="/assets/game/audio/music-menu.mp3" loop preload="auto" />
       <MusicToggle variant="bare" className="start-screen__music" />
       <div className="start-screen__frame">

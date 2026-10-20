@@ -26,3 +26,9 @@
   width: var(--menu-tool-size);
   height: var(--menu-tool-size);
 }
+
+@media (max-width: 599px), (max-height: 500px) and (pointer: coarse) {
+  .start-screen__music {
+    top: calc(var(--screen-inset-top) + 12px);
+  }
+}

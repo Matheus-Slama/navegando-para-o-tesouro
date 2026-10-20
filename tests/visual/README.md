@@ -14,6 +14,28 @@ pnpm test:pre-push
 pnpm hooks:install
 ```
 
+## Firefox e WebKit
+
+Instale os motores de teste após instalar as dependências:
+
+```sh
+pnpm test:browsers:install
+pnpm test:cross-browser
+```
+
+Além da comparação de pixels no Chromium, `test:cross-browser` percorre os mesmos 64 estados nos 11 viewports em **Firefox e WebKit**, com Playwright instalado apenas como dependência de desenvolvimento. Verifica os fluxos, toque nos perfis móveis, pausa, imagens, erros JavaScript, geometria e acesso às ações até a vitória final. O hook de pre-push e o CI exigem essa matriz inteira também. Os navegadores e os testes não são incluídos no jogo publicado.
+
+Cada motor gera sua própria galeria e capturas PNG: `results/firefox/index.html` e `results/webkit/index.html`. Esses dois motores validam funcionamento e geometria; **não comparam pixels com as referências do Chromium**, pois fontes e rasterização variam entre motores. As referências WebP existentes e a comparação de pixels do Chromium continuam em uso, sem atualização automática.
+
+WebKit é o motor usado pelo Safari, mas o WebKit do Playwright no Windows não é o Safari instalado em um Mac ou iPhone. Firefox usa Gecko; seus perfis pequenos verificam viewport responsivo e toque, pois Playwright não oferece emulação móvel completa nesse motor. Testes em Safari/iOS e aparelhos reais continuam necessários para confirmar particularidades dessas plataformas.
+
+Para diagnosticar um único motor ou viewport (não substitui a matriz completa):
+
+```sh
+pnpm test:visual --engine=webkit --devices=mobile-compact,mobile-landscape
+pnpm test:visual --engine=firefox --devices=desktop-hd
+```
+
 O hook é instalado automaticamente por `pnpm install` (script `prepare`); `pnpm hooks:install` permite reinstalá-lo. Ele exige alterações já commitadas e executa lint, regras do jogo, build de produção e a matriz visual inteira antes de cada push. Um erro bloqueia o envio. O deploy no GitHub também depende da regressão visual; pull requests executam a mesma suíte e guardam os resultados como artefato. Hooks locais podem ser ignorados pelo Git, por isso existe também a verificação no CI.
 
 Configuração opcional:
@@ -24,6 +46,12 @@ Configuração opcional:
 - `pnpm test:visual --devices=mobile-compact,mobile-landscape`: diagnóstico parcial; não substitui a matriz antes do push.
 
 ## Capturas e revisão
+
+O padrão aprovado do menu mantém recorde e botões centralizados. No celular em pé, os créditos ficam independentes do bloco, junto à corda inferior, e o volume fica 12px mais baixo. No tablet, os botões são mais largos; na horizontal, ficam lado a lado. As áreas de toque têm pelo menos 44px e não podem se sobrepor. Nos celulares deitados, a margem inferior dos créditos é de 4px; nos demais perfis, de pelo menos 24px, respeitando também a área segura do aparelho.
+
+A auditoria verifica alinhamento com o recorde, ordem dos controles e tamanho de toque, além de cortes e sobreposições. As referências de pixels registram a posição aprovada do bloco e dos créditos em cada viewport. As guardas incluem um menu válido e versões propositalmente desalinhadas ou pequenas para toque, para confirmar que essas regressões são detectadas.
+
+O Chromium usa Playwright para controlar o Chrome/Edge instalado, incluindo toque nos perfis móveis. A rasterização de testes é feita em software para evitar variações de tiles da GPU, e a captura aguarda dois frames após aplicar as máscaras. As capturas continuam em WebP qualidade 95 pelo protocolo CDP; a tolerância de comparação permanece a mesma.
 
 - `baselines/<dispositivo>/<tela>.webp`: referências versionadas, em WebP qualidade 95 para limitar o tamanho do repositório.
 - `baselines/manifest.json`: matriz e inventário das capturas, plataforma e versão do navegador.
@@ -48,10 +76,14 @@ Com uma referência completa já existente e a mesma cobertura, é possível atu
 
 ## O que bloqueia
 
-Controles cortados, cobertos, sobrepostos ou com texto transbordando; recorde deslocado pelo rodapé; Créditos sem margem inferior; sobreposição visível de HUD e tesouro; rolagem horizontal; rolagem vertical inesperada no jogo; imagens quebradas, recursos HTTP indisponíveis e erros JavaScript; relógio avançando na pausa; ações de vitória inacessíveis; diferenças acima de **0,2%** dos pixels, com tolerância de 24 níveis por canal para pequenas variações de renderização. As margens transparentes dos PNGs são consideradas na geometria de HUD/tesouro. Créditos e diálogos longos podem rolar internamente: o teste verifica o acesso às ações.
+Controles cortados, cobertos, sobrepostos ou com texto transbordando; recorde desalinhado ou coberto; Créditos sem margem inferior; sobreposição visível de HUD e tesouro; rolagem horizontal; rolagem vertical inesperada no jogo; imagens quebradas, recursos HTTP indisponíveis e erros JavaScript; relógio avançando na pausa; ações de vitória inacessíveis; diferenças acima de **0,2%** dos pixels, com tolerância de 24 níveis por canal para pequenas variações de renderização. As margens transparentes dos PNGs são consideradas na geometria de HUD/tesouro. Créditos e diálogos longos podem rolar internamente: o teste verifica o acesso às ações.
 
 Animações CSS são desativadas durante a captura, barcos são posicionados no mesmo instante da corrida, e apenas valores dependentes do tempo (cronômetro e pontuações variáveis) são mascarados. Sua geometria continua sendo auditada. O armazenamento é limpo ao iniciar cada dispositivo para que recordes e preferências não vazem entre perfis. A vitória final usa o ciclo real de carregamento e revelação do baú.
 
 A entrada animada do painel de vitória é desativada na suíte para estabilizar a medição dos botões. As duas capturas da vitória usam posições de rolagem explícitas: início do diálogo e final do conteúdo, sem depender da velocidade da máquina.
+
+A suíte aguarda a transição de tamanho do baú terminar antes de definir essas posições. Assim, a animação não altera a altura rolável entre a medição e a captura.
+
+Antes das capturas, a suíte também aguarda a decodificação das imagens de fundo CSS, incluindo as folhas de sprites das ilhas, além das fontes e imagens HTML. Recursos CSS ausentes falham o fluxo em vez de gerar uma captura incompleta.
 
 As referências foram produzidas no Windows; o CI usa Windows para reduzir diferenças de fontes. Atualizações de Chrome, fontes ou sistema podem exigir revisão das referências. Isso detecta muitas regressões, mas **não garante ausência de todo problema visual**, especialmente em Safari/iOS, zoom, fontes alternativas, teclado virtual e aparelhos físicos. Revise visualmente as mudanças e complemente com esses cenários quando forem relevantes.

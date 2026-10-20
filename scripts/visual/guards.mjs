@@ -3,12 +3,21 @@ import { openPage } from './browser.mjs';
 import { auditLayout, compareImages } from './audit.mjs';
 
 // Intentionally break small fixtures so an accidentally disabled audit cannot pass.
-export async function verifyGuards(endpoint) {
-  const page = await openPage(endpoint);
+export async function verifyGuards(endpoint, createPage = openPage) {
+  const page = await createPage(endpoint);
+  const menuFixture = `<section class="start-screen" style="position:absolute;inset:0;width:390px;height:844px">
+    <div class="start-screen__highscore" style="position:absolute;left:130px;top:200px;width:130px;height:30px">Recorde 0</div>
+    <div class="start-screen__content">
+      <button style="position:absolute;left:100px;top:245px;width:190px;height:48px">Tutorial</button>
+      <button style="position:absolute;left:100px;top:305px;width:190px;height:48px">Iniciar jornada</button>
+      <a class="start-screen__credits" href="#" style="position:absolute;left:100px;top:720px;width:190px;height:44px">Créditos</a>
+    </div></section>`;
   try {
-    await page.send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 1, mobile: false });
     for (const [name, html, expected] of [
       ['normal', '<button style="position:absolute;left:20px;top:20px;width:100px;height:44px">Normal</button>', null],
+      ['menu', menuFixture, null],
+      ['menu-alignment', menuFixture.replace('left:100px;top:245px', 'left:110px;top:245px'), 'Botão do menu desalinhado'],
+      ['menu-touch', menuFixture.replace('width:190px;height:48px', 'width:190px;height:30px'), 'Botão do menu pequeno para toque'],
       ['overlap', '<button style="position:absolute;left:20px;top:20px;width:100px;height:44px">Um</button><button style="position:absolute;left:40px;top:25px;width:100px;height:44px">Dois</button>', 'Controles sobrepostos'],
       ['cut', '<button style="position:absolute;left:370px;top:20px;width:100px;height:44px">Cortado</button>', 'Controle cortado'],
       ['overflow', '<div style="width:1200px;height:20px">Transbordamento</div>', 'Rolagem horizontal'],

@@ -1,14 +1,25 @@
 import assert from 'node:assert/strict';
+import { register } from 'node:module';
 import { mkdir, readFile, writeFile, copyFile, readdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
-import { launchBrowser, launchServer, openPage } from './visual/browser.mjs';
+import { launchServer, launchBrowser as launchChromium, openPage as openChromiumPage } from './visual/browser.mjs';
 import { auditLayout, compareImages } from './visual/audit.mjs';
 import { verifyGuards } from './visual/guards.mjs';
 import { writeReport } from './visual/report.mjs';
 import { TUTORIAL_STEPS } from '../src/game/config/tutorial.js';
 
+register('./map-test-loader.mjs', import.meta.url);
+const { analyzeDevice } = await import('../src/game/core/device-config.js');
+
 const update = process.argv.includes('--update');
+const engine = process.argv.find(argument => argument.startsWith('--engine='))?.split('=')[1] ?? 'chromium';
+assert.ok(['chromium', 'firefox', 'webkit'].includes(engine), 'Motor desconhecido. Use chromium, firefox ou webkit.');
+const compatibility = engine !== 'chromium';
+assert.ok(!compatibility || !update, 'Referências de pixels pertencem ao Chromium; Firefox/WebKit verificam fluxos e geometria.');
+const { launchBrowser, openPage } = compatibility
+  ? await import('./visual/playwright.mjs')
+  : { launchBrowser: launchChromium, openPage: openChromiumPage };
 assert.ok(typeof WebSocket === 'function', 'A regressão visual requer Node 22 ou superior (WebSocket nativo).');
 const selection = process.argv.find(argument => argument.startsWith('--devices='))?.split('=')[1].split(',');
 const workers = Number(process.argv.find(argument => argument.startsWith('--workers='))?.split('=')[1] ?? 2);
@@ -17,10 +28,10 @@ const profiles = JSON.parse(await readFile('tests/visual/devices.json', 'utf8'))
 if (selection) assert.ok(selection.every(id => profiles.some(profile => profile.id === id)), 'Dispositivo desconhecido');
 const devices = profiles.filter(profile => !selection || selection.includes(profile.id));
 const root = path.resolve('tests/visual');
-const output = path.join(root, 'results');
+const output = path.join(root, 'results', ...(compatibility ? [engine] : []));
 const baseline = path.join(root, 'baselines');
 await mkdir(output, { recursive: true });
-const report = { generatedAt: new Date().toISOString(), platform: process.platform, update, complete: !selection, devices, screenshots: [], errors: [] };
+const report = { generatedAt: new Date().toISOString(), platform: process.platform, engine, mode: compatibility ? 'compatibility' : 'pixels', update, complete: !selection, devices, screenshots: [], errors: [] };
 const server = await launchServer(output);
 let browser;
 const deviceBrowsers = new Set();
@@ -52,10 +63,10 @@ const captureCSS = `
 `;
 
 async function runDevice(device) {
-  const deviceBrowser = await launchBrowser();
+  const deviceBrowser = await launchBrowser(engine);
   deviceBrowsers.add(deviceBrowser);
-  const page = await openPage(deviceBrowser.endpoint);
-  const { send, evaluate, waitFor, click } = page;
+  const page = await openPage(deviceBrowser.endpoint, device);
+  const { evaluate, waitFor, click } = page;
   const directory = path.join(output, device.id);
   await mkdir(directory, { recursive: true });
   await rm(path.join(directory, 'ERRO.png'), { force: true });
@@ -65,35 +76,44 @@ async function runDevice(device) {
     await evaluate(`(async()=>{
       await document.fonts.ready;
       await Promise.all([...document.images].filter(image=>!image.closest('[hidden]')).map(image=>image.decode().catch(()=>{})));
+      const backgrounds = window.__visualDecodedBackgrounds ??= new Map();
+      const sources = new Set([...document.querySelectorAll('*')]
+        .flatMap(element=>getComputedStyle(element).backgroundImage.split('url(').slice(1)
+          .map(value=>value.slice(0,value.indexOf(')')).trim().replaceAll('"','').replaceAll("'",''))));
+      await Promise.all([...sources].map(source=>{
+        if(!backgrounds.has(source)) backgrounds.set(source,(async()=>{
+          const image=new Image(); image.src=source;
+          try { await image.decode(); } catch { throw new Error('Sprite indisponível: '+source); }
+        })());
+        return backgrounds.get(source);
+      }));
       if(!document.getElementById('visual-capture-css')) {const style=document.createElement('style');style.id='visual-capture-css';style.textContent=${JSON.stringify(captureCSS)};document.head.append(style);}
     })()`);
+    // Responsive sources can change while decode() is pending, especially in Firefox.
+    // Wait for the final selected request; failed images still reach the layout audit.
+    await waitFor("[...document.images].filter(image=>!image.closest('[hidden]')).every(image=>image.complete)");
     await delay(100);
   }
   async function snapshot(name, { fullPage = false } = {}) {
     currentScreen = name;
     await ready();
-    await send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 1, y: 1 });
+    await page.moveMouse();
     const audit = await evaluate(`(${auditLayout.toString()})()`);
     if (audit.width !== device.width || audit.height !== device.height) audit.issues.push(`Viewport incorreto: ${audit.width}x${audit.height}; esperado ${device.width}x${device.height}`);
     await evaluate("document.documentElement.dataset.visualCapture='true'");
-    await delay(35);
-    let clip;
-    if (fullPage) {
-      const { cssContentSize } = await send('Page.getLayoutMetrics');
-      clip = { x: 0, y: 0, width: device.width, height: cssContentSize.height, scale: 1 };
-    }
-    const screenshot = await send('Page.captureScreenshot', { format: 'webp', quality: 95, captureBeyondViewport: fullPage, ...(clip ? { clip } : {}) });
+    await evaluate('new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))');
+    const screenshot = await page.screenshot({ fullPage });
     await evaluate("delete document.documentElement.dataset.visualCapture");
-    const file = `${name}.webp`;
+    const file = `${name}.${compatibility ? 'png' : 'webp'}`;
     await rm(path.join(directory, `${name}.diff.png`), { force: true });
-    await writeFile(path.join(directory, file), Buffer.from(screenshot.data, 'base64'));
+    await writeFile(path.join(directory, file), screenshot);
     const entry = { device: device.id, screen: name, file: `${device.id}/${file}`, order: captureOrder++, ...audit };
-    if (!update) {
+    if (!update && !compatibility) {
       let expected;
       try { expected = (await readFile(path.join(baseline, device.id, file))).toString('base64'); }
       catch { entry.issues.push('Referência visual ausente. Revise as capturas e execute test:visual:update.'); }
       if (expected) {
-        const comparison = await evaluate(`(${compareImages.toString()})(${JSON.stringify(expected)},${JSON.stringify(screenshot.data)})`);
+        const comparison = await evaluate(`(${compareImages.toString()})(${JSON.stringify(expected)},${JSON.stringify(screenshot.toString('base64'))})`);
         entry.changedRatio = comparison.ratio;
         if (!comparison.dimensions || comparison.ratio > 0.002) {
           entry.issues.push(`Diferença visual: ${(comparison.ratio * 100).toFixed(3)}% (limite 0,2%)`);
@@ -135,12 +155,9 @@ async function runDevice(device) {
     await ready();
   }
   try {
-    await send('Emulation.setDeviceMetricsOverride', { width: device.width, height: device.height, deviceScaleFactor: 1, mobile: device.mobile });
-    await send('Emulation.setTouchEmulationEnabled', { enabled: device.mobile });
-    await send('Page.addScriptToEvaluateOnNewDocument', { source: 'try { localStorage.clear(); sessionStorage.clear(); } catch { /* Opaque origins have no storage. */ }' });
-    await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] });
-    await send('Page.navigate', { url: server.url });
+    await page.navigate(server.url);
     await waitFor("document.querySelector('.start-screen__content button')");
+    await waitFor(`document.querySelector('.start-screen')?.dataset.device === ${JSON.stringify(analyzeDevice(device).id)}`);
     // Wait for hydration, not just server-rendered markup.
     await ready();
     await delay(500);
@@ -211,6 +228,8 @@ async function runDevice(device) {
     // Normal motion is kept to exercise the chest loading and animation lifecycle.
     await race(finalBest);
     await waitFor("document.querySelector('.victory-treasure--revealed')", 15000);
+    await ready();
+    await waitFor("document.querySelector('.victory-treasure__stage').getAnimations().every(animation=>animation.playState==='finished')");
     await evaluate("document.querySelector('.victory-treasure').scrollTop=0");
     await snapshot('vitoria-tesouro');
     // A scrollable short dialog must still allow reaching every action.
@@ -235,16 +254,17 @@ async function runDevice(device) {
   } catch (error) {
     report.errors.push({ device: device.id, screen: currentScreen, message: error.stack });
     console.error(`${device.id}/${currentScreen}: ${error.message}`);
-    const shot = await send('Page.captureScreenshot').catch(() => null);
-    if (shot) await writeFile(path.join(directory, 'ERRO.png'), Buffer.from(shot.data, 'base64'));
+    const shot = await page.screenshot({ format: 'png' }).catch(() => null);
+    if (shot) await writeFile(path.join(directory, 'ERRO.png'), shot);
   } finally {
     try { await page.close(); } finally { await deviceBrowser.close(); deviceBrowsers.delete(deviceBrowser); }
   }
 }
 
 try {
-  browser = await launchBrowser(); report.browser = browser.version;
-  await verifyGuards(browser.endpoint);
+  browser = await launchBrowser(engine); report.browser = browser.version;
+  await verifyGuards(browser.endpoint, openPage);
+  await browser.close();
   let cursor = 0;
   await Promise.all(Array.from({ length: Math.min(workers, devices.length) }, async () => {
     while (cursor < devices.length) await runDevice(devices[cursor++]);
@@ -271,7 +291,8 @@ try {
     await writeFile(path.join(baseline, 'manifest.json'), JSON.stringify({ platform: process.platform, browser: browser.version, devices: profiles, files: previous?.files ?? inventory }, null, 2) + '\n');
   } else if (!update && report.passed && !selection) {
     const manifest = JSON.parse(await readFile(path.join(baseline, 'manifest.json'), 'utf8'));
-    assert.deepEqual(report.screenshots.map(entry => entry.file), manifest.files, 'A cobertura de telas mudou; revise e atualize as referências.');
+    const inventory = report.screenshots.map(entry => compatibility ? entry.file.replace(/\.png$/, '.webp') : entry.file);
+    assert.deepEqual(inventory, manifest.files, 'A cobertura de telas mudou; revise e atualize as referências.');
     assert.deepEqual(profiles, manifest.devices, 'A matriz de dispositivos mudou.');
     const extra = [];
     for (const device of devices) for (const name of await readdir(path.join(baseline, device.id))) {
@@ -280,7 +301,7 @@ try {
     assert.deepEqual(extra, [], 'Referências obsoletas na pasta baselines.');
   }
   await writeReport(report, output);
-  console.log(`\n${report.screenshots.length} capturas; ${failures.length} telas com problemas; ${report.errors.length} erros de fluxo. Relatório: tests/visual/results/index.html`);
+  console.log(`\n${engine}: ${report.screenshots.length} capturas; ${failures.length} telas com problemas; ${report.errors.length} erros de fluxo. Relatório: ${path.relative(process.cwd(), output)}/index.html`);
   if (!report.passed) process.exitCode = 1;
 } catch (error) {
   report.passed = false;

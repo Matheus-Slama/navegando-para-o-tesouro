@@ -55,7 +55,9 @@ export function auditLayout() {
       if (!hit || !(hit === element || element.contains(hit))) issues.push(`Controle coberto: ${label(element)}`);
     }
     // The floating "Novo" badge intentionally extends beyond its icon button.
+    // Inline links have no client box; Firefox can still report their scrollWidth.
     if (element.textContent.trim() && !element.querySelector('.game-hint__power-label')
+      && getComputedStyle(element).display !== 'inline'
       && element.scrollWidth > element.clientWidth + 2) issues.push(`Texto do controle transbordando: ${label(element)}`);
   }
   for (let index = 0; index < controls.length; index++) {
@@ -80,12 +82,23 @@ export function auditLayout() {
     const menu = document.querySelector('.start-screen');
     if (menu) {
       const credit = menu.querySelector('.start-screen__credits').getBoundingClientRect();
-      if (innerHeight - credit.bottom < 23) issues.push('Créditos sem margem inferior de 24px');
+      const creditBottomMargin = innerHeight <= 500 && innerWidth >= innerHeight ? 4 : 24;
+      if (innerHeight - credit.bottom < creditBottomMargin - 1) issues.push(`Créditos sem margem inferior de ${creditBottomMargin}px`);
       const score = menu.querySelector('.start-screen__highscore');
       const scoreRect = score.getBoundingClientRect();
       if (Math.abs((credit.left + credit.right) / 2 - (scoreRect.left + scoreRect.right) / 2) > 1) issues.push('Créditos desalinhados com o recorde');
-      for (const button of menu.querySelectorAll('.start-screen__content button')) {
-        if (credit.top < button.getBoundingClientRect().bottom) issues.push('Créditos acima dos botões do menu');
+      const menuButtons = [...menu.querySelectorAll('.start-screen__content button')].map(button => button.getBoundingClientRect());
+      const touchMenu = innerWidth < 600 || matchMedia('(pointer: coarse)').matches;
+      const center = (scoreRect.left + scoreRect.right) / 2;
+      for (const button of menuButtons) {
+        if (credit.top < button.bottom) issues.push('Créditos acima dos botões do menu');
+        if (scoreRect.bottom > button.top + 1) issues.push('Recorde abaixo dos botões do menu');
+        if (touchMenu && (button.width < 44 || button.height < 44)) issues.push('Botão do menu pequeno para toque');
+        if (innerWidth < innerHeight && Math.abs((button.left + button.right) / 2 - center) > 1) issues.push('Botão do menu desalinhado com o recorde');
+      }
+      if (menuButtons.length === 2 && innerWidth >= innerHeight
+        && Math.abs(menuButtons[0].top - menuButtons[1].top) > 1) {
+        issues.push('Botões do menu em alturas diferentes na horizontal');
       }
       for (const control of controls) if (overlap(score.getBoundingClientRect(), control.getBoundingClientRect())) issues.push(`Recorde sobreposto a ${label(control)}`);
     }
@@ -93,7 +106,7 @@ export function auditLayout() {
   return { issues: [...new Set(issues)], controls: controls.length, width: innerWidth, height: innerHeight };
 }
 
-// Pixel comparison runs in Chromium so no native image dependency is needed.
+// Pixel comparison runs in the browser so no native image dependency is needed.
 export async function compareImages(expected, actual) {
   const load = source => new Promise((resolve, reject) => {
     const image = new Image(); image.onload = () => resolve(image); image.onerror = reject; image.src = `data:image/webp;base64,${source}`;

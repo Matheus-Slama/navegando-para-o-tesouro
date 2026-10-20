@@ -23,6 +23,8 @@
     "test:browser:responsive": "node scripts/verify-responsive.mjs",
     "test:visual": "node scripts/verify-visual.mjs",
     "test:visual:update": "node scripts/verify-visual.mjs --update",
+    "test:cross-browser": "node scripts/verify-cross-browser.mjs",
+    "test:browsers:install": "playwright install firefox webkit",
     "test:pre-push": "node scripts/pre-push.mjs",
     "hooks:install": "node scripts/install-git-hooks.mjs",
     "check": "pnpm lint && pnpm test && pnpm build"
@@ -36,7 +38,8 @@
   },
   "devDependencies": {
     "eslint": "9.39.5",
-    "eslint-config-next": "16.3.1"
+    "eslint-config-next": "16.3.1",
+    "playwright": "1.64.1"
   },
   "packageManager": "pnpm@9.12.3"
 }

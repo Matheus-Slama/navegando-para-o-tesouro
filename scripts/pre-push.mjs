@@ -13,7 +13,8 @@ for (const [label, args] of [
   ['Lint', ['node_modules/eslint/bin/eslint.js', '.']],
   ['Regras do jogo', ['scripts/verify-all.mjs']],
   ['Build de produção', ['node_modules/next/dist/bin/next', 'build']],
-  ['Regressão visual completa', ['scripts/verify-visual.mjs']]
+  ['Regressão visual completa', ['scripts/verify-visual.mjs']],
+  ['Compatibilidade Firefox e WebKit', ['scripts/verify-cross-browser.mjs']]
 ]) {
   console.log(`\n=== ${label} ===`);
   const environment = { ...process.env, NEXT_DIST_DIR: '.next-visual-build', NEXT_TELEMETRY_DISABLED: '1' };
