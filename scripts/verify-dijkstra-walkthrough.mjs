@@ -86,6 +86,11 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   assert.ok(!graph.edges.some((edge) => edge.from === 'island-18' || edge.to === 'island-18'),
     `${layout}: nenhuma conexão deve apontar para a Ilha 18.`);
   const blueFrames = createDijkstraWalkthrough(graph);
+  const tenthStep = createCondensedWalkthrough(graph)[9];
+  assert.equal(tenthStep.step, 5, 'O passo 10 deve confirmar o custo da ilha destacada.');
+  assert.equal(tenthStep.distances[tenthStep.currentId], 8);
+  assert.ok(tenthStep.confirmed.includes(tenthStep.currentId));
+  assert.match(tenthStep.text, /8 confirmado/);
   const discoveries = createCondensedWalkthrough(graph).filter((frame) => frame.step === 7 && frame.targetId === 'finish');
   assert.ok(discoveries.length >= 2, 'Mostrar a descoberta do tesouro e a melhoria posterior em cenas separadas.');
   assert.ok(discoveries[0].distances.finish > discoveries.at(-1).distances.finish,
@@ -102,8 +107,8 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   assert.ok(blueFrames.slice(0, 3).every((frame) => !frame.showCosts && frame.confirmed.length === 0),
     'A apresentação deve vir antes das contas.');
   assert.equal(blueFrames[2].currentId, 'start-blue', 'O terceiro passo deve destacar o barco azul.');
-  assert.equal(blueFrames.at(-1).confirmed.filter((id) => graph.nodes.find((node) => node.id === id)?.type === 'intermediate').length, 4,
-    'O barco azul deve confirmar somente quatro ilhas antes do tesouro.');
+  assert.equal(blueFrames.at(-1).confirmed.filter((id) => graph.nodes.find((node) => node.id === id)?.type === 'intermediate').length, 5,
+    'O barco azul deve conferir também a ilha da outra rota antes do tesouro.');
   // A bifurcação deve aparecer na demonstração, antes de confirmar o tesouro.
   assert.ok(graph.nodes.some((node) => node.type === 'intermediate'
     && graph.results.winner.path.includes(node.id)
@@ -120,8 +125,8 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
   for (const result of graph.results.all) {
     const frames = createDijkstraWalkthrough(graph, result.startId);
     const condensed = createCondensedWalkthrough(graph, result.startId);
-    assert.equal(condensed.length + 1, 28, 'Incluindo a conclusão, devem ser 28 passos.');
-    assert.equal(condensed.filter((frame) => frame.lesson).length, 3);
+    assert.equal(condensed.length + 1, 25, 'Incluindo a conclusão, devem ser 25 passos.');
+    assert.equal(condensed.filter((frame) => frame.lesson).length, 0);
     assert.deepEqual(condensed.slice(0, 4), frames.slice(0, 4));
     assert.deepEqual(condensed.slice(-3), frames.slice(-3));
     let sourceIndex = 3;

@@ -34,7 +34,17 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
     if (result.startId === 'start-blue') {
       assert.equal(frames.at(-1).distances.finish, 20);
       assert.ok(frames.at(-1).confirmed.includes('island-4'));
-      assert.ok(!frames.at(-1).confirmed.includes('island-6'), 'Pare no tesouro sem visitar a ilha mais cara.');
+      const alternativeIndex = frames.findIndex((frame) => frame.step === 7 && frame.currentId === 'island-6' && frame.targetId === 'finish');
+      const finishIndex = frames.findIndex((frame) => frame.step === 5 && frame.currentId === 'finish');
+      assert.ok(alternativeIndex >= 0 && alternativeIndex < finishIndex,
+        'A outra rota deve ser conferida antes de confirmar o tesouro.');
+      const alternative = frames[alternativeIndex];
+      assert.equal(alternative.distances['island-6'], 18);
+      assert.ok(alternative.confirmed.includes('island-6'));
+      assert.ok(!alternative.confirmed.includes('finish'));
+      assert.equal(alternative.improved, false);
+      assert.equal(alternative.distances.finish, 20);
+      assert.match(alternative.text, /18 \+ 4 = 22/);
     }
   }
   console.log(`${layout}: ordem de seleção e custos dos quatro barcos verificados.`);

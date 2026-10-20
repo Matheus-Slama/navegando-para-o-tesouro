@@ -9,7 +9,8 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
   if (graph.edges.some((edge) => !nodes.has(edge.from) || !nodes.has(edge.to) || !Number.isFinite(edge.weight) || edge.weight < 0)) {
     throw new Error('Dijkstra exige conexões válidas com pesos não negativos.');
   }
-  const name = (id) => nodes.get(id).type === 'intermediate' ? 'Ilha destacada' : nodes.get(id).label;
+  const name = (id, next = false) => nodes.get(id).type === 'intermediate'
+    ? (next ? 'Próxima ilha destacada' : 'Ilha destacada') : nodes.get(id).label;
   const distances = Object.fromEntries(graph.nodes.map((node) => [node.id, Infinity]));
   const previous = Object.fromEntries(graph.nodes.map((node) => [node.id, null]));
   const confirmed = new Set();
@@ -45,7 +46,7 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
       const candidate = distances[currentId] + edge.weight;
       const improved = candidate < oldDistance;
       const focus = { currentId, targetId, edgeIds: [edge.id] };
-      add(6, { ...focus, text: `${name(currentId)} → ${name(targetId)}. Siga a seta que sai do ponto atual e some o custo acumulado ao peso da rota destacada.`, formula: `${distances[currentId]} + ${edge.weight} = ${candidate}` });
+      add(6, { ...focus, text: `${name(currentId)} → ${name(targetId, true)}. Siga a seta que sai do ponto atual e some o custo acumulado ao peso da rota destacada.`, formula: `${distances[currentId]} + ${edge.weight} = ${candidate}` });
       if (improved) {
         distances[targetId] = candidate;
         previous[targetId] = currentId;
@@ -53,7 +54,7 @@ export function createDijkstraWalkthrough(graph, startId = 'start-blue', finishI
       add(7, {
         ...focus, improved,
         title: improved ? 'Atualize o custo' : 'Mantenha o custo',
-        text: improved ? `${name(targetId)} muda de ${formatCost(oldDistance)} para ${candidate}. Anterior: ${name(currentId)}.` : `${name(targetId)} já tem custo ${formatCost(oldDistance)}. Esta alternativa não melhora o caminho.`,
+        text: improved ? `${name(targetId, true)} muda de ${formatCost(oldDistance)} para ${candidate}. Anterior: ${name(currentId)}.` : `${name(targetId, true)} já tem custo ${formatCost(oldDistance)}. Esta alternativa não melhora o caminho.`,
         formula: `${candidate} ${improved ? '<' : '≥'} ${formatCost(oldDistance)}`
       });
     }
