@@ -78,7 +78,8 @@ try {
       const c=document.querySelector('.start-screen__credits').getBoundingClientRect();
       const m=document.querySelector('.start-screen__music').getBoundingClientRect();
       const start=document.querySelector('.start-screen__content button:last-of-type').getBoundingClientRect();
-      return {credits:{width:c.width,height:c.height,top:c.top},start:{width:start.width,bottom:start.bottom},music:{width:m.width,height:m.height},overlap:c.right>m.left,verticalScroll:document.documentElement.scrollHeight>innerHeight+1};
+      const overlap=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+      return {credits:{width:c.width,height:c.height,top:c.top,bottom:c.bottom},start:{width:start.width,bottom:start.bottom},music:{width:m.width,height:m.height},overlap:overlap(c,m)||overlap(c,start),verticalScroll:document.documentElement.scrollHeight>innerHeight+1};
     })()`);
     assert.equal(menuTools.overlap,false,'Menu tools must not overlap');
     assert.equal(menuTools.verticalScroll,false,'Menu must fit without vertical scrolling');
@@ -86,7 +87,8 @@ try {
       assert.ok(menuTools.music.width<=38 && menuTools.music.height<=38,'Music must remain compact on narrow phones');
       assert.ok(menuTools.credits.width<=menuTools.start.width+1 && menuTools.credits.height<=38,'Credits must remain compact on narrow phones');
     }
-    if (w<600 || h<500) assert.ok(menuTools.credits.top>=menuTools.start.bottom,'Mobile credits must appear below Start');
+    if (w<h) assert.ok(menuTools.credits.top>=menuTools.start.bottom,'Portrait credits must appear below Start');
+    assert.ok(h-menuTools.credits.bottom>=23,'Credits must keep a safe bottom margin');
     const mutedBefore=await evaluate("document.querySelector('.start-screen__music').getAttribute('aria-pressed')");
     await touch('.start-screen__music');
     assert.notEqual(await evaluate("document.querySelector('.start-screen__music').getAttribute('aria-pressed')"),mutedBefore);

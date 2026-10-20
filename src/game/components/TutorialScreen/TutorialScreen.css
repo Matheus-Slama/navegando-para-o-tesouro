@@ -1,6 +1,7 @@
 .tutorial-screen {
   --game-hud-width: min(clamp(210px, 30vw, 440px), calc(100vw - var(--screen-inset-left) - var(--screen-inset-right) - 60px));
-  --game-hint-top: calc(var(--screen-inset-top) + var(--game-hud-width) / 3 + 12px);
+  --tutorial-map-top: calc((var(--screen-inset-top) + var(--game-hud-width) / 3 + 16px) * 0.8);
+  --game-hint-top: calc(var(--screen-inset-top) + var(--game-hud-width) / 3 + 16px);
   position: relative;
   isolation: isolate;
   container-type: size;
@@ -34,6 +35,9 @@
 }
 
 .tutorial-screen__map {
+  top: var(--tutorial-map-top);
+  height: calc(100% - var(--tutorial-map-top));
+  container-type: size;
   pointer-events: auto;
 }
 

@@ -1,0 +1,13 @@
+[
+  { "id": "mobile-compact", "name": "Celular compacto", "width": 320, "height": 568, "mobile": true },
+  { "id": "iphone-se", "name": "iPhone SE", "width": 375, "height": 667, "mobile": true },
+  { "id": "iphone-13-14", "name": "iPhone 13/14", "width": 390, "height": 844, "mobile": true },
+  { "id": "android-galaxy", "name": "Android Galaxy", "width": 360, "height": 800, "mobile": true },
+  { "id": "android-pixel", "name": "Android Pixel", "width": 412, "height": 915, "mobile": true },
+  { "id": "mobile-landscape", "name": "Celular horizontal", "width": 844, "height": 390, "mobile": true },
+  { "id": "ipad-mini", "name": "iPad Mini", "width": 768, "height": 1024, "mobile": true },
+  { "id": "ipad-air", "name": "iPad Air", "width": 820, "height": 1180, "mobile": true },
+  { "id": "tablet-landscape", "name": "Tablet horizontal", "width": 1180, "height": 820, "mobile": true },
+  { "id": "desktop-hd", "name": "Notebook HD", "width": 1366, "height": 768, "mobile": false },
+  { "id": "desktop-full-hd", "name": "Desktop Full HD", "width": 1920, "height": 1080, "mobile": false }
+]

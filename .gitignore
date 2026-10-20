@@ -1,5 +1,8 @@
 node_modules
 .next
+.next-visual
+.next-visual-build
+tests/visual/results/
 out
 dist
 .env

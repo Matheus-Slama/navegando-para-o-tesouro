@@ -78,11 +78,12 @@ export function VictoryTreasure({ onContinue, onBackToMenu, score, highscore }) 
       {/* Wait for the actual sheet before starting the cinematic clock. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className="victory-treasure__preload" src="/assets/game/treasures/treasure-victory-sheet.png" alt="" onLoad={() => setLoaded(true)} onError={() => { setLoaded(true); setRevealed(true); }} />
-      <p className="sr-only" role="status">{revealed ? 'O verdadeiro tesouro foi aprender a encontrar o melhor caminho. Obrigado por jogar!' : 'O baú do tesouro está se abrindo…'}</p>
+      <p className="sr-only" role="status">{revealed ? 'O verdadeiro tesouro é o que você aprendeu nesta jornada! Entre ilhas e rotas, você explorou grafos, conectou vértices por arestas e comparou custos para encontrar o caminho de menor custo até o tesouro. Obrigado por jogar!' : 'O baú do tesouro está se abrindo…'}</p>
       <div className="victory-treasure__paper" hidden={!revealed}>
         <span className="victory-treasure__eyebrow">Jornada concluída</span>
-        <h3>O verdadeiro tesouro…</h3>
-        <p>foi aprender a encontrar o melhor caminho.</p>
+        <h3>O verdadeiro tesouro é…</h3>
+        <p>o que você aprendeu nesta jornada!</p>
+        <p>Entre ilhas e rotas, você explorou grafos, conectou vértices por arestas e comparou custos para encontrar o caminho de menor custo até o tesouro.</p>
         <strong>Obrigado por jogar!</strong>
         <p className="victory-treasure__score">Pontuação: {formatScore(score)} · Recorde: {formatScore(highscore)}</p>
         <div className="victory-treasure__actions">

@@ -13,7 +13,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  visual-regression:
+    uses: ./.github/workflows/visual-regression.yml
+
   build:
+    needs: visual-regression
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

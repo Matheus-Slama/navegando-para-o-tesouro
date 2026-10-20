@@ -22,7 +22,7 @@ export function RaceResult({ result, winner, isFinalPhase, onContinue, onBackToM
         <p>
           {result === 'victory'
             ? isFinalPhase
-              ? 'O verdadeiro tesouro é aprender o conceito de melhor caminho em grafos.'
+              ? 'O verdadeiro tesouro é o que você aprendeu nesta jornada! Entre ilhas e rotas, você explorou grafos, conectou vértices por arestas e comparou custos para encontrar o caminho de menor custo até o tesouro.'
               : 'Siga para a próxima fase.'
             : `O ${winnerBoatName} foi o vencedor.`}
         </p>

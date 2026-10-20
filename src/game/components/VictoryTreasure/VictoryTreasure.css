@@ -124,5 +124,5 @@
 @media (max-height: 500px) and (min-width: 600px) {
   .victory-treasure--revealed[open] { display: flex; align-items: center; justify-content: center; gap: 1rem; }
   .victory-treasure--revealed .victory-treasure__stage { width: min(32vw, 65svh); flex-shrink: 0; margin: 0; }
-  .victory-treasure__paper { margin: 0; padding-top: 2rem; padding-bottom: 2rem; }
+  .victory-treasure__paper { align-self: flex-start; margin: 0; padding-top: 2rem; padding-bottom: 2rem; }
 }

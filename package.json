@@ -7,6 +7,7 @@
   },
   "description": "Jogo educativo web para ensino do problema do caminho mínimo em grafos.",
   "scripts": {
+    "prepare": "node scripts/install-git-hooks.mjs",
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start -p 3000",
@@ -20,6 +21,10 @@
     "test:browser:hint": "node scripts/verify-game-hint.mjs",
     "test:browser:pause": "node scripts/verify-game-pause.mjs",
     "test:browser:responsive": "node scripts/verify-responsive.mjs",
+    "test:visual": "node scripts/verify-visual.mjs",
+    "test:visual:update": "node scripts/verify-visual.mjs --update",
+    "test:pre-push": "node scripts/pre-push.mjs",
+    "hooks:install": "node scripts/install-git-hooks.mjs",
     "check": "pnpm lint && pnpm test && pnpm build"
   },
   "dependencies": {

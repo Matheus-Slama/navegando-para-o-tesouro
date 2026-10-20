@@ -67,7 +67,7 @@ export const TUTORIAL_GRAPH = {
     { id: 'island-left', label: 'Ilha esquerda', type: 'intermediate', x: 275, y: 365, sprite: islandSprites.left },
     { id: 'island-right', label: 'Ilha direita', type: 'intermediate', x: 725, y: 365, sprite: islandSprites.right },
     { id: 'island-center', label: 'Ilha central', type: 'intermediate', x: 500, y: 225, sprite: islandSprites.center },
-    { id: 'finish', label: 'Ilha do Tesouro', type: 'finish', x: 500, y: 55 }
+    { id: 'finish', label: 'Ilha do Tesouro', type: 'finish', x: 500, y: 70 }
   ],
   edges: [
     { id: 'tutorial-edge-1', from: 'start-red', to: 'island-left', weight: 2 },
