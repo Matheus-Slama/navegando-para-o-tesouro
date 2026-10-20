@@ -23,7 +23,12 @@ export const TUTORIAL_STEPS = [
   {
     title: 'Pontuação',
     highlight: 'score',
-    text: 'O número no centro do painel mostra seus pontos. Acertar dá pontos: quanto mais rápido o acerto, mais você ganha. Errar tira pontos: quanto mais rápido o erro, mais pontos você perde.'
+    text: 'O número no centro do painel mostra seus pontos. Acertar dá pontos e errar tira pontos.'
+  },
+  {
+    title: 'Tempo',
+    highlight: 'time',
+    text: 'O relógio no painel mostra seu tempo de escolha. Quanto mais rápido você acertar, mais pontos ganha. Mas cuidado: quanto mais rápido você errar, mais pontos perde. Compare os caminhos antes de escolher!'
   },
   {
     title: 'Pause',

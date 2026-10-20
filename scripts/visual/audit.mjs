@@ -82,10 +82,11 @@ export function auditLayout() {
       const credit = menu.querySelector('.start-screen__credits').getBoundingClientRect();
       if (innerHeight - credit.bottom < 23) issues.push('Créditos sem margem inferior de 24px');
       const score = menu.querySelector('.start-screen__highscore');
-      const currentTop = score.getBoundingClientRect().top;
-      menu.style.setProperty('--menu-content-bottom', 'max(var(--menu-bottom), env(safe-area-inset-bottom))');
-      if (Math.abs(score.getBoundingClientRect().top - currentTop) > 1) issues.push('Créditos deslocaram o recorde');
-      menu.style.removeProperty('--menu-content-bottom');
+      const scoreRect = score.getBoundingClientRect();
+      if (Math.abs((credit.left + credit.right) / 2 - (scoreRect.left + scoreRect.right) / 2) > 1) issues.push('Créditos desalinhados com o recorde');
+      for (const button of menu.querySelectorAll('.start-screen__content button')) {
+        if (credit.top < button.getBoundingClientRect().bottom) issues.push('Créditos acima dos botões do menu');
+      }
       for (const control of controls) if (overlap(score.getBoundingClientRect(), control.getBoundingClientRect())) issues.push(`Recorde sobreposto a ${label(control)}`);
     }
   }

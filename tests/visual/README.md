@@ -2,7 +2,7 @@
 
 A matriz em `devices.json` cobre 11 viewports: celular compacto 320×568, iPhone SE, iPhone 13/14, Android Galaxy e Pixel, celular horizontal, iPad Mini e Air, tablet horizontal, notebook HD e desktop Full HD. Os nomes representam **tamanhos de viewport**, com Chromium e toque emulados; não são aparelhos físicos nem emulação do Safari.
 
-Cada perfil percorre 63 telas/estados reais: menu e áudio, créditos completos, os 11 passos do tutorial inicial e sua pausa, dez fases, dica aberta, estilos das arestas, pausa, corrida, derrota, vitória de fase, desbloqueio de Dijkstra, seus 25 passos e comparações entre barcos, vitória final com texto e ações, e fim da jornada após três erros. O teste usa os controles existentes do jogo; ferramentas de desenvolvimento apenas selecionam fases e informam o vencedor.
+Cada perfil percorre 64 telas/estados reais: menu e áudio, créditos completos, os 12 passos do tutorial inicial e sua pausa, dez fases, dica aberta, estilos das arestas, pausa, corrida, derrota, vitória de fase, desbloqueio de Dijkstra, seus 25 passos e comparações entre barcos, vitória final com texto e ações, e fim da jornada após três erros. O teste usa os controles existentes do jogo; ferramentas de desenvolvimento apenas selecionam fases e informam o vencedor.
 
 ## Executar
 

@@ -6,6 +6,7 @@ import { launchBrowser, launchServer, openPage } from './visual/browser.mjs';
 import { auditLayout, compareImages } from './visual/audit.mjs';
 import { verifyGuards } from './visual/guards.mjs';
 import { writeReport } from './visual/report.mjs';
+import { TUTORIAL_STEPS } from '../src/game/config/tutorial.js';
 
 const update = process.argv.includes('--update');
 assert.ok(typeof WebSocket === 'function', 'A regressão visual requer Node 22 ou superior (WebSocket nativo).');
@@ -155,9 +156,9 @@ async function runDevice(device) {
     await waitFor("document.querySelector('.start-screen__content button')");
     await click('.start-screen__content button');
     await waitFor("document.querySelector('.tutorial-screen')");
-    for (let step = 1; step <= 11; step++) {
+    for (let step = 1; step <= TUTORIAL_STEPS.length; step++) {
       await snapshot(`tutorial-${String(step).padStart(2, '0')}`);
-      if (step < 11) await nextTutorial();
+      if (step < TUTORIAL_STEPS.length) await nextTutorial();
     }
     await click('.game-hint__pause');
     await waitFor("document.querySelector('.pause-game')");

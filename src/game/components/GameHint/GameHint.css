@@ -151,7 +151,9 @@
 .game-hint__title { margin: 0 0 calc(0.5rem * var(--game-hint-scale, 1)); color: #492508; font: 400 calc(1.2rem * var(--game-hint-scale, 1))/1.15 var(--font-pirate, Georgia), Georgia, serif; }
 .game-hint__body p { margin: calc(0.45rem * var(--game-hint-scale, 1)) 0; }
 .game-hint__body img { max-width: 100%; height: auto; }
-.game-hint__footer { flex: 0 0 auto; min-height: 0; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; margin-top: auto; padding-top: calc(0.4rem * var(--game-hint-scale, 1)); }
+.game-hint__footer { flex: 0 0 auto; min-height: 0; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; margin-top: auto; padding-top: calc(0.4rem * var(--game-hint-scale, 1)); }
+/* Mantém a rolagem disponível sem mostrar uma barra ao lado das setas. */
+.game-hint__footer::-webkit-scrollbar { display: none; }
 .game-hint__footer > :first-child { margin-top: 0; }
 .game-hint__actions { display: grid; grid-template-columns: repeat(var(--hint-action-columns, 1), minmax(0, 1fr)); gap: calc(0.5rem * var(--game-hint-scale, 1)); }
 .game-hint__actions > button { width: 100%; }
