@@ -11,7 +11,7 @@ export function GameHud({ lives, elapsed = 0, score = 0 }) {
     <div className="game-hud">
       <Image
         className="game-hud__panel"
-        src="/assets/game/ui/panel-hud.png"
+        src="/assets/game/ui/panel-hud.webp"
         alt="Painel de vida, pontos e tempo"
         width={2172}
         height={724}
@@ -22,7 +22,7 @@ export function GameHud({ lives, elapsed = 0, score = 0 }) {
       <span className="game-hud__lives" role="status" aria-label={`${lives} ${lives === 1 ? 'vida restante' : 'vidas restantes'}`}>
         {lives > 0 && (
           <Image
-            src={`/assets/game/ui/indicator-lives-${lives}.png`}
+            src={`/assets/game/ui/indicator-lives-${lives}.webp`}
             alt=""
             width={2172}
             height={724}

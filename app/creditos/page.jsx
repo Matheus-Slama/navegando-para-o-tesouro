@@ -59,7 +59,7 @@ export default function CreditsPage() {
         <Link className={styles.back} href="/">← Voltar ao menu</Link>
         <article className={styles.panel}>
           <header className={styles.header}>
-            <Image src="/assets/game/ui/icon-highscore.png" alt="" width={1254} height={1254} sizes="64px" className={styles.treasure} />
+            <Image src="/assets/game/ui/icon-highscore.webp" alt="" width={1254} height={1254} sizes="64px" className={styles.treasure} />
             <h1>Créditos</h1>
             <p>Os talentos por trás da aventura.</p>
           </header>

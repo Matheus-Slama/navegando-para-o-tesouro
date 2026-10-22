@@ -23,7 +23,7 @@ export function GameHintNavigation({
         title="Voltar (←)"
         onClick={onPrevious}
       >
-        <Image src="/assets/game/ui/icon-tutorial-arrow.png" alt="" width={1717} height={916} sizes="68px" draggable={false} />
+        <Image src="/assets/game/ui/icon-tutorial-arrow.webp" alt="" width={1717} height={916} sizes="68px" draggable={false} />
       </button>
       <span aria-label={`Cena ${index + 1} de ${total}`}>{index + 1}/{total}</span>
       <button
@@ -35,7 +35,7 @@ export function GameHintNavigation({
         title={nextTitle}
         onClick={onNext}
       >
-        <Image src="/assets/game/ui/icon-tutorial-arrow.png" alt="" width={1717} height={916} sizes="68px" draggable={false} />
+        <Image src="/assets/game/ui/icon-tutorial-arrow.webp" alt="" width={1717} height={916} sizes="68px" draggable={false} />
       </button>
     </nav>
   );

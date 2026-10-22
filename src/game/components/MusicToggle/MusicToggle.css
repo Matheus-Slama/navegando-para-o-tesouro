@@ -9,7 +9,7 @@
   padding: calc(var(--game-tool-size, 48px) * 0.26);
   border: 0;
   border-radius: 0.55rem;
-  background: transparent url('/assets/game/ui/button-default.png') center / 100% 100% no-repeat;
+  background: transparent url('/assets/game/ui/button-default.webp') center / 100% 100% no-repeat;
   image-rendering: pixelated;
   box-shadow: none;
   cursor: pointer;

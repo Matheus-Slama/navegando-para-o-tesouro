@@ -2,13 +2,13 @@
   min-height: 100svh;
   padding: max(24px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(40px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   background: #102c34;
-  background-image: linear-gradient(#071c27c9, #071c27ed), url('/assets/game/backgrounds/background-map-desktop.png');
+  background-image: linear-gradient(#071c27c9, #071c27ed), url('/assets/game/backgrounds/background-map-desktop.webp');
   background-position: center;
   background-size: cover;
   color: #fff0ce;
 }
 .shell { max-width: 700px; margin-inline: auto; }
-.back { display: inline-flex; align-items: center; min-height: 48px; margin-bottom: 24px; padding: 12px 24px; background: url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat; color: #fff0ce; font-size: 18px; text-decoration: none; image-rendering: pixelated; text-shadow: 2px 2px #170c06; }
+.back { display: inline-flex; align-items: center; min-height: 48px; margin-bottom: 24px; padding: 12px 24px; background: url('/assets/game/ui/button-rectangle.webp') center / 100% 100% no-repeat; color: #fff0ce; font-size: 18px; text-decoration: none; image-rendering: pixelated; text-shadow: 2px 2px #170c06; }
 .back:hover { filter: brightness(1.15); }
 .panel {
   position: relative;

@@ -7,7 +7,7 @@
   "minimumDistance": { "x": 13, "y": 10 },
   "profiles": {
     "mobile": {
-      "asset": "/assets/game/backgrounds/background-map-mobile.png",
+      "asset": "/assets/game/backgrounds/background-map-mobile.webp",
       "sourceSize": { "width": 941, "height": 1672 },
       "gridPatterns": [
         { "y": 20, "x": [34, 50, 66] },
@@ -37,7 +37,7 @@
       ]
     },
     "tablet": {
-      "asset": "/assets/game/backgrounds/background-map-tablet.png",
+      "asset": "/assets/game/backgrounds/background-map-tablet.webp",
       "sourceSize": { "width": 1086, "height": 1448 },
       "gridPatterns": [
         { "y": 20, "x": [34, 50, 66] },
@@ -58,7 +58,7 @@
       ]
     },
     "desktop": {
-      "asset": "/assets/game/backgrounds/background-map-desktop.png",
+      "asset": "/assets/game/backgrounds/background-map-desktop.webp",
       "sourceSize": { "width": 1448, "height": 1086 },
       "gridPatterns": [
         { "y": 20, "x": [38, 50, 62] },
@@ -81,7 +81,7 @@
       ]
     },
     "tv": {
-      "asset": "/assets/game/backgrounds/background-map-tv.png",
+      "asset": "/assets/game/backgrounds/background-map-tv.webp",
       "sourceSize": { "width": 1672, "height": 941 },
       "gridPatterns": [
         { "y": 20, "x": [39, 50, 61] },

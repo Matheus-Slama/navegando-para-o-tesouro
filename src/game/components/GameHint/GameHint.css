@@ -20,7 +20,7 @@
   max-height: calc(100% - var(--hint-dock-top) - var(--hint-dock-bottom));
   padding: calc(14px * var(--game-hint-scale, 1));
   color: #2e1a09;
-  background: url('/assets/game/ui/panel-modal.png') center / 100% 100% no-repeat;
+  background: url('/assets/game/ui/panel-modal.webp') center / 100% 100% no-repeat;
   font: 400 calc(0.95rem * var(--game-hint-scale, 1))/1.35 var(--font-pirate, Georgia), Georgia, serif;
   pointer-events: auto;
 }
@@ -70,7 +70,7 @@
   padding: calc(var(--hint-tool-size) * 0.26);
   border: 0;
   border-radius: 0.55rem;
-  background: transparent url('/assets/game/ui/button-default.png') center / 100% 100% no-repeat;
+  background: transparent url('/assets/game/ui/button-default.webp') center / 100% 100% no-repeat;
   image-rendering: pixelated;
   color: #fff8db;
   font: 400 0.85rem/1.2 var(--font-ui);
@@ -164,7 +164,7 @@
   padding: calc(0.75rem * var(--game-hint-scale, 1)) calc(0.875rem * var(--game-hint-scale, 1));
   border: 0;
   border-radius: 0;
-  background: transparent url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
+  background: transparent url('/assets/game/ui/button-rectangle.webp') center / 100% 100% no-repeat;
   image-rendering: pixelated;
   text-shadow: 0 1px 2px #120b07;
   color: #fff8db;

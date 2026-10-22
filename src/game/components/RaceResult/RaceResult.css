@@ -22,7 +22,7 @@
   margin: auto;
   border: 0;
   padding: clamp(3rem, 7svh, 3.5rem) calc(var(--result-card-width) * 0.14);
-  background: url('/assets/game/ui/panel-modal.png') center / 100% 100% no-repeat;
+  background: url('/assets/game/ui/panel-modal.webp') center / 100% 100% no-repeat;
   color: #2e1a09;
   font-family: var(--font-pirate), Georgia, serif;
   text-align: center;
@@ -58,7 +58,7 @@
   border: 0;
   border-radius: 0;
   padding: max(0.75rem, var(--control-padding-block)) max(1rem, var(--control-padding-inline));
-  background: transparent url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
+  background: transparent url('/assets/game/ui/button-rectangle.webp') center / 100% 100% no-repeat;
   image-rendering: pixelated;
   color: #fff8db;
   font-family: var(--font-pirate), Georgia, serif;

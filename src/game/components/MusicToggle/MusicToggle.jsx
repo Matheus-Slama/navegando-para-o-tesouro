@@ -10,7 +10,7 @@ export function MusicToggle({ className = '', variant = 'default', children }) {
   return (
     <button type="button" className={`music-toggle music-toggle--${variant} ${className}`} onClick={toggle}
       aria-label={label} title={label} aria-pressed={muted}>
-      <Image src={`/assets/game/ui/icon-music-${muted ? 'off' : 'on'}.png`}
+      <Image src={`/assets/game/ui/icon-music-${muted ? 'off' : 'on'}.webp`}
         alt="" width={1254} height={1254} sizes="64px" draggable={false} />
       {children}
     </button>

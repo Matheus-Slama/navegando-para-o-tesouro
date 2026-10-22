@@ -1,10 +1,12 @@
 'use client';
 
 import { formatScore } from '@/game/core/text';
+import { useCallback, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useScreenMusic } from '@/game/hooks/useScreenMusic';
 import { useDeviceConfig } from '@/game/hooks/useDeviceConfig';
+import { useTutorialImagePreload } from '@/game/hooks/useTutorialImagePreload';
 import './StartScreen.css';
 import { MusicToggle } from '@/game/components/MusicToggle/MusicToggle';
 
@@ -18,6 +20,12 @@ const MENU_SPACING_BY_DEVICE = {
 export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
   const musicRef = useScreenMusic();
   const device = useDeviceConfig();
+  const [menuReady, setMenuReady] = useState(false);
+  const menuImageRef = useCallback((image) => {
+    // A cached background can finish before React attaches its load handler.
+    if (image?.complete) setMenuReady(true);
+  }, []);
+  useTutorialImagePreload(device.layout, menuReady);
 
   return (
     <section className="start-screen" data-device={device.id} style={MENU_SPACING_BY_DEVICE[device.id]} aria-labelledby="start-screen-title">
@@ -27,16 +35,19 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
       <picture className="start-screen__art">
         <source
           media="(min-aspect-ratio: 1/1)"
-          srcSet="/assets/game/backgrounds/background-menu-wide.png"
+          srcSet="/assets/game/backgrounds/background-menu-wide.webp"
         />
         <source
           media="(min-width: 37.5rem)"
-          srcSet="/assets/game/backgrounds/background-menu-portrait.png"
+          srcSet="/assets/game/backgrounds/background-menu-portrait.webp"
         />
         <img
-          src="/assets/game/backgrounds/background-menu-tall.png"
+          ref={menuImageRef}
+          src="/assets/game/backgrounds/background-menu-tall.webp"
           alt=""
           fetchPriority="high"
+          onLoad={() => setMenuReady(true)}
+          onError={() => setMenuReady(true)}
         />
       </picture>
 
@@ -46,7 +57,7 @@ export function StartScreen({ onStart, onTutorial, highscore = 0 }) {
         </h1>
 
         <div className="start-screen__highscore" aria-label={`Recorde: ${formatScore(highscore)} pontos`}>
-          <Image src="/assets/game/ui/icon-highscore.png" alt="" width={1254} height={1254} sizes="54px" draggable={false} />
+          <Image src="/assets/game/ui/icon-highscore.webp" alt="" width={1254} height={1254} sizes="54px" draggable={false} />
           <span>Recorde <strong>{formatScore(highscore)}</strong></span>
         </div>
 

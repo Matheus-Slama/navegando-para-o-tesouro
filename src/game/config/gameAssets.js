@@ -1,7 +1,7 @@
 export const GAME_ASSETS = {
   islandSheets: [
     {
-      src: '/assets/game/islands/sheet-islands-1.png',
+      src: '/assets/game/islands/sheet-islands-1.webp',
       width: 1448,
       height: 1086,
       columns: 9,
@@ -10,7 +10,7 @@ export const GAME_ASSETS = {
       yBounds: [0, 121, 229, 329, 429, 540, 648, 752, 863, 972, 1086]
     },
     {
-      src: '/assets/game/islands/sheet-islands-2.png',
+      src: '/assets/game/islands/sheet-islands-2.webp',
       width: 1448,
       height: 1086,
       columns: 10,
@@ -21,16 +21,16 @@ export const GAME_ASSETS = {
   ],
 
   boats: {
-    red: '/assets/game/boats/boat-red.png',
-    black: '/assets/game/boats/boat-black.png',
-    blue: '/assets/game/boats/boat-blue.png',
-    green: '/assets/game/boats/boat-green.png'
+    red: '/assets/game/boats/boat-red.webp',
+    black: '/assets/game/boats/boat-black.webp',
+    blue: '/assets/game/boats/boat-blue.webp',
+    green: '/assets/game/boats/boat-green.webp'
   },
 
   treasures: {
-    small: '/assets/game/treasures/treasure-small.png',
-    medium: '/assets/game/treasures/treasure-medium.png',
-    large: '/assets/game/treasures/treasure-large.png',
-    legendary: '/assets/game/treasures/treasure-legendary.png'
+    small: '/assets/game/treasures/treasure-small.webp',
+    medium: '/assets/game/treasures/treasure-medium.webp',
+    large: '/assets/game/treasures/treasure-large.webp',
+    legendary: '/assets/game/treasures/treasure-legendary.webp'
   }
 };

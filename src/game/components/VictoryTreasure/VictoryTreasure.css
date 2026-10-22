@@ -41,7 +41,7 @@
 .victory-treasure__sprite {
   width: 100%;
   aspect-ratio: 1;
-  background: url('/assets/game/treasures/treasure-victory-sheet.png') 0 0 / 300% 200% no-repeat;
+  background: url('/assets/game/treasures/treasure-victory-sheet.webp') 0 0 / 300% 200% no-repeat;
   image-rendering: pixelated;
   /* The supplied sheet has an amber background: soften its edges into the halo. */
   mask-image: radial-gradient(ellipse 70% 65% at center, #000 58%, transparent 74%);
@@ -79,7 +79,7 @@
   margin: -1rem auto 0;
   padding: clamp(2.5rem, 7vw, 3.5rem) clamp(2.5rem, 9vw, 5rem);
   padding-bottom: clamp(3.5rem, 10vw, 5rem);
-  background: url('/assets/game/ui/panel-modal.png') center / 100% 100% no-repeat;
+  background: url('/assets/game/ui/panel-modal.webp') center / 100% 100% no-repeat;
   filter: drop-shadow(0 12px 28px #0009);
   animation: victory-paper 1s ease-out both;
 }
@@ -106,7 +106,7 @@
   max-width: 100%;
   text-decoration: none;
   border: 0; padding: .9rem 1.8rem;
-  background: url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
+  background: url('/assets/game/ui/button-rectangle.webp') center / 100% 100% no-repeat;
   color: #fff5ce; font: inherit; text-shadow: 0 2px 2px #000;
 }
 @keyframes victory-darken { from { background: #06091033; backdrop-filter: blur(0); } }

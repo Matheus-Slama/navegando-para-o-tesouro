@@ -17,12 +17,12 @@
   border-radius: 0;
   padding: 0.75rem 0.5rem;
   font-size: clamp(0.875rem, 1.8vmin, 1rem);
-  background: transparent url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
+  background: transparent url('/assets/game/ui/button-rectangle.webp') center / 100% 100% no-repeat;
   image-rendering: pixelated;
   text-shadow: 0 1px 2px #120b07;
 }
 
 .pause-game__actions button:hover {
-  background: transparent url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
+  background: transparent url('/assets/game/ui/button-rectangle.webp') center / 100% 100% no-repeat;
   filter: brightness(1.15);
 }

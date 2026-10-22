@@ -100,7 +100,7 @@
   border: 0;
   border-radius: 0;
   padding: 0.5rem clamp(0.75rem, 2vmin, 1.5rem);
-  background: transparent url('/assets/game/ui/button-rectangle.png') center / 100% 100% no-repeat;
+  background: transparent url('/assets/game/ui/button-rectangle.webp') center / 100% 100% no-repeat;
   image-rendering: pixelated;
   color: #fff8db;
   text-shadow: 0 1px 2px #120b07;

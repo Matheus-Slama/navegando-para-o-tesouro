@@ -221,7 +221,7 @@ export function GameHint({
         onPause && (
           <button key="pause" className="game-hint__route-toggle game-hint__pause" type="button"
             aria-label="Pausar jogo" title="Pausar jogo" onClick={onPause}>
-            <Image src="/assets/game/ui/icon-pause.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
+            <Image src="/assets/game/ui/icon-pause.webp" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
           </button>
         ),
         <MusicToggle key="music" />,
@@ -234,7 +234,7 @@ export function GameHint({
           aria-controls={`${id}-content`}
           onClick={toggleMinimized}
         >
-          <Image src="/assets/game/ui/icon-hint.png" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
+          <Image src="/assets/game/ui/icon-hint.webp" alt="" width={1254} height={1254} sizes="44px" draggable={false} />
         </button>,
         onChangeRouteStyle && (
           <div key="style" className="game-hint__route-control" ref={routeMenuRef}
@@ -254,7 +254,7 @@ export function GameHint({
               aria-expanded={routeMenuOpen} aria-controls={`${id}-routes`}
               onClick={() => setRouteMenuOpen((value) => !value)}
             >
-              <Image src="/assets/game/ui/icon-settings.png" alt="" width={64} height={64} sizes="36px" draggable={false} />
+              <Image src="/assets/game/ui/icon-settings.webp" alt="" width={64} height={64} sizes="36px" draggable={false} />
             </button>
             {routeMenuOpen && <div id={`${id}-routes`} className="game-hint__route-options" role="group" aria-label="Estilo das arestas">
               {ROUTE_STYLES.map((option) => <button key={option.value} type="button"
