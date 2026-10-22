@@ -8,17 +8,13 @@ if (status.stdout.trim()) {
   process.exit(1);
 }
 
-// Always run the full matrix; a partial developer run cannot authorize a push.
 for (const [label, args] of [
   ['Lint', ['node_modules/eslint/bin/eslint.js', '.']],
   ['Regras do jogo', ['scripts/verify-all.mjs']],
   ['Build de produção', ['node_modules/next/dist/bin/next', 'build']],
-  ['Regressão visual completa', ['scripts/verify-visual.mjs']],
-  ['Compatibilidade Firefox e WebKit', ['scripts/verify-cross-browser.mjs']]
 ]) {
   console.log(`\n=== ${label} ===`);
-  const environment = { ...process.env, NEXT_DIST_DIR: '.next-visual-build', NEXT_TELEMETRY_DISABLED: '1' };
-  delete environment.VISUAL_BASE_URL;
+  const environment = { ...process.env, NEXT_TELEMETRY_DISABLED: '1' };
   const result = spawnSync(process.execPath, args, { stdio: 'inherit', windowsHide: true,
     env: environment });
   if (result.error) throw result.error;

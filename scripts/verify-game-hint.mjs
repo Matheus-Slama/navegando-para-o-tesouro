@@ -1,7 +1,7 @@
 // Com o app em localhost:3000 e um Chrome de teste em --remote-debugging-port=9224:
 // node scripts/verify-game-hint.mjs (sem dependências extras).
 import assert from 'node:assert/strict';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 
 const { phases } = JSON.parse(await readFile(new URL('../src/game/config/json/maps.json', import.meta.url), 'utf8'));
 
@@ -90,11 +90,6 @@ async function viewport(width, height, mobile = false) {
   await send('Emulation.setTouchEmulationEnabled', { enabled: mobile });
   await pause(400);
 }
-async function screenshot(name) {
-  const result = await send('Page.captureScreenshot');
-  await mkdir('.next/game-hint-checks', { recursive: true });
-  await writeFile(`.next/game-hint-checks/${name}.png`, Buffer.from(result.data, 'base64'));
-}
 
 try {
   await send('Runtime.enable');
@@ -136,9 +131,7 @@ try {
     assert.equal(await evaluate(`document.querySelector('.dev-panel select').value`), String(phaseIndex));
     assert.equal(await evaluate(`document.querySelector('.map-graph').innerHTML`), mapBefore, 'Voltar mantém o mapa da fase.');
   }
-  await screenshot('dijkstra-button-desktop');
   await viewport(390, 844, true);
-  await screenshot('dijkstra-button-mobile');
   await viewport(1280, 800);
   await click('.game-hint__dijkstra-toggle');
   await waitFor(`!!document.querySelector('.game-hint__title')`);
@@ -192,7 +185,6 @@ try {
   assert.equal(await evaluate(`document.querySelector('.game-hint__content').hidden`), false);
   await dragTo(2000, 1500);
   await assertInside();
-  await screenshot('desktop');
   console.log('Desktop: conteúdo dinâmico, arraste, teclado, limites e tutorial sempre aberto OK.');
 
   await viewport(390, 844, true);
@@ -205,7 +197,6 @@ try {
   await dragTo(100, 420, true);
   assert.notEqual((await rect()).y, touchBefore.y, 'O toque deve mover a dica.');
   await assertInside();
-  await screenshot('mobile');
   await viewport(844, 390, true);
   await assertInside();
   // Conteúdo longo e imagens permanecem dentro da moldura, com rolagem interna.
@@ -213,7 +204,6 @@ try {
   await pause();
   await assertInside();
   assert.ok(await evaluate(`(() => { const b=document.querySelector('.game-hint__body'); return b.scrollHeight > b.clientHeight; })()`));
-  await screenshot('landscape-scroll');
   console.log('Toque, rotação e rolagem interna em tela baixa OK.');
 
   await click('.dijkstra-fixed-map__exit');

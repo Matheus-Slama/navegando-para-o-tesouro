@@ -1,7 +1,6 @@
 // Com o app em localhost:3000 e um Chrome de teste em --remote-debugging-port=9226:
 // node scripts/verify-game-pause.mjs (sem dependências extras).
 import assert from 'node:assert/strict';
-import { writeFile } from 'node:fs/promises';
 
 
 const baseUrl = process.env.GAME_PAUSE_URL ?? 'http://localhost:3000';
@@ -67,8 +66,6 @@ try {
   assert.equal(await evaluate("document.querySelector('.game-hud__time').textContent"), time);
   assert.ok(await evaluate("document.activeElement === document.querySelector('.pause-game button')"));
   assert.ok(await evaluate("(() => { const r = document.querySelector('.pause-game').getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight; })()"));
-  const screenshot = await send('Page.captureScreenshot');
-  await writeFile('.next/game-pause-mobile.png', Buffer.from(screenshot.data, 'base64'));
   await escape();
   assert.ok(await evaluate("!!document.querySelector('.pause-game[open]')"));
   await resume();
