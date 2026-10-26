@@ -8,10 +8,30 @@ const { generateGraphForPhase } = await import('../src/game/core/graphGenerator.
 const { PHASES, START_ISLANDS, FINISH_ISLAND } = await import('../src/game/config/phases.js');
 const { isValidGraph, removeInvalidIslands } = await import('../src/game/core/map-rules.js');
 const { getMapProfile, getWaterBounds, getNodeRadii } = await import('../src/game/core/map-layout.js');
+const { createRandomSeed } = await import('../src/game/core/random.js');
 
 assert.equal(PHASES.length, 10);
 assert.deepEqual(PHASES.map((phase) => phase.id), Array.from({ length: 10 }, (_, index) => index + 1));
 assert.equal(PHASES.at(-1).enableDijkstraTutorial, true);
+
+let previousSeed = null;
+for (let sample = 0; sample < 100; sample += 1) {
+  const seed = createRandomSeed(previousSeed);
+  assert.ok(Number.isInteger(seed) && seed > 0 && seed < 2147483647);
+  assert.notEqual(seed, previousSeed);
+  previousSeed = seed;
+}
+for (const layout of ['mobile', 'tablet', 'wide']) {
+  for (const phase of PHASES) {
+    const first = generateGraphForPhase(phase, undefined, layout);
+    const second = generateGraphForPhase(phase, undefined, layout);
+    assert.ok(isValidGraph(first, first.results, phase));
+    assert.ok(isValidGraph(second, second.results, phase));
+    assert.notDeepEqual({ nodes: first.nodes, edges: first.edges }, { nodes: second.nodes, edges: second.edges },
+      `Novas partidas repetiram o mapa: ${layout}, fase ${phase.id}`);
+    assert.deepEqual(generateGraphForPhase(phase, first.seed, layout), first);
+  }
+}
 
 // Uma remoção pode deixar a próxima ilha sem entrada ou sem saída.
 for (const missing of ['incoming', 'outgoing']) {

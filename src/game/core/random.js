@@ -1,3 +1,12 @@
+export function createRandomSeed(previousSeed = null) {
+  const maximum = 2147483646;
+  const sample = globalThis.crypto?.getRandomValues
+    ? globalThis.crypto.getRandomValues(new Uint32Array(1))[0] / 4294967296
+    : Math.random();
+  const seed = Math.floor(sample * maximum) + 1;
+  return seed === previousSeed ? (seed % maximum) + 1 : seed;
+}
+
 export function createSeededRandom(seed) {
   let value = seed % 2147483647;
 

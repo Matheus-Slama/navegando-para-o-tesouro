@@ -2,7 +2,7 @@ import { completeIslandConnections, isValidGraph, removeInvalidIslands } from '@
 import { FINISH_ISLAND, START_ISLANDS } from '@/game/config/phases';
 import { GAME_ASSETS } from '@/game/config/gameAssets';
 import { getMapProfile, getNodeRadii, getRouteBoundary, getWaterBounds } from '@/game/core/map-layout';
-import { createSeededRandom, randomInt, shuffle } from '@/game/core/random';
+import { createRandomSeed, createSeededRandom, randomInt, shuffle } from '@/game/core/random';
 import { getPhaseResults } from '@/game/core/dijkstra';
 import { DirectedGraph, UndirectedGraph } from 'graphology';
 import erdosRenyi from 'graphology-generators/random/erdos-renyi.js';
@@ -17,7 +17,7 @@ import erdosRenyi from 'graphology-generators/random/erdos-renyi.js';
  * - rotas extras são adicionadas;
  * - Dijkstra valida se existe um único vencedor.
  */
-export function generateGraphForPhase(phase, seed = Date.now(), layout = 'mobile') {
+export function generateGraphForPhase(phase, seed = createRandomSeed(), layout = 'mobile') {
   let attempt = 0;
 
   while (attempt < 2000) {

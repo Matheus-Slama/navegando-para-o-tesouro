@@ -19,6 +19,7 @@
     "test:dijkstra": "node scripts/verify-dijkstra-walkthrough.mjs && node scripts/verify-dijkstra-selection.mjs",
     "test:browser:hint": "node scripts/verify-game-hint.mjs",
     "test:browser:pause": "node scripts/verify-game-pause.mjs",
+    "test:browser:randomness": "node scripts/verify-game-randomness.mjs",
     "test:pre-push": "node scripts/pre-push.mjs",
     "hooks:install": "node scripts/install-git-hooks.mjs",
     "check": "pnpm lint && pnpm test && pnpm build"

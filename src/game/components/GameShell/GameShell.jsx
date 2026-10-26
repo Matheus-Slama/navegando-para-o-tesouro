@@ -5,6 +5,7 @@ import { useJourney } from '@/game/hooks/useJourney';
 import { PHASES } from '@/game/config/phases';
 import { TUTORIAL_STEPS } from '@/game/config/tutorial';
 import { generateGraphForPhase } from '@/game/core/graphGenerator';
+import { createRandomSeed } from '@/game/core/random';
 import { StartScreen } from '@/game/components/StartScreen/StartScreen';
 import { TutorialScreen } from '@/game/components/TutorialScreen/TutorialScreen';
 import { DijkstraTutorialMap } from '@/game/components/DijkstraTutorial/DijkstraTutorialMap';
@@ -22,7 +23,7 @@ export function GameShell() {
   const [dijkstraAnnounced, setDijkstraAnnounced] = useState(false);
   const [highlightDijkstra, setHighlightDijkstra] = useState(false);
   const [phaseIndex, setPhaseIndex] = useState(0);
-  const [seedNonce, setSeedNonce] = useState(1);
+  const [mapSeed, setMapSeed] = useState(null);
   const [selectedStartId, setSelectedStartId] = useState(null);
   const [animationKey, setAnimationKey] = useState(0);
   const [raceResult, setRaceResult] = useState(null);
@@ -73,16 +74,16 @@ export function GameShell() {
   }
 
   const graph = useMemo(() => {
-    const baseSeed = phase.id * 1000 + seedNonce * 101;
-    return generateGraphForPhase(phase, baseSeed, layout);
-  }, [phase, seedNonce, layout]);
+    if (mapSeed === null) return null;
+    return generateGraphForPhase(phase, mapSeed, layout);
+  }, [phase, mapSeed, layout]);
 
   function startGame() {
     setDijkstraAnnounced(false);
     setHighlightDijkstra(false);
     journey.reset();
     setPhaseIndex(0);
-    setSeedNonce((value) => value + 1);
+    setMapSeed(createRandomSeed(mapSeed));
     setSelectedStartId(null);
     setRaceResult(null);
     setScreen('game');
@@ -93,7 +94,7 @@ export function GameShell() {
     setHighlightDijkstra(false);
     journey.reset();
     setPhaseIndex(0);
-    setSeedNonce((value) => value + 1);
+    setMapSeed(createRandomSeed(mapSeed));
     setSelectedStartId(null);
     setRaceResult(null);
     setScreen('tutorial');
@@ -110,7 +111,7 @@ export function GameShell() {
     setPaused(false);
     journey.reset();
     setPhaseIndex(0);
-    setSeedNonce((value) => value + 1);
+    setMapSeed(null);
     setSelectedStartId(null);
     setRaceResult(null);
     setScreen('start');
@@ -141,9 +142,9 @@ export function GameShell() {
       return;
     }
     journey.resetClock();
+    setMapSeed(createRandomSeed(mapSeed));
     if (raceResult === 'victory' && phaseIndex < PHASES.length - 1) {
       setPhaseIndex((value) => value + 1);
-      setSeedNonce((value) => value + 1);
     }
 
     setSelectedStartId(null);
@@ -152,7 +153,7 @@ export function GameShell() {
 
   function regenerateMap() {
     journey.resetClock();
-    setSeedNonce((value) => value + 1);
+    setMapSeed(createRandomSeed(mapSeed));
     setSelectedStartId(null);
     setRaceResult(null);
     setAnimationKey((value) => value + 1);
@@ -161,7 +162,7 @@ export function GameShell() {
   function selectDevPhase(nextPhaseIndex) {
     journey.resetClock();
     setPhaseIndex(nextPhaseIndex);
-    setSeedNonce((value) => value + 1);
+    setMapSeed(createRandomSeed(mapSeed));
     setSelectedStartId(null);
     setRaceResult(null);
     setAnimationKey((value) => value + 1);
