@@ -30,6 +30,11 @@ for (const layout of ['mobile', 'tablet', 'wide']) {
     assert.notDeepEqual({ nodes: first.nodes, edges: first.edges }, { nodes: second.nodes, edges: second.edges },
       `Novas partidas repetiram o mapa: ${layout}, fase ${phase.id}`);
     assert.deepEqual(generateGraphForPhase(phase, first.seed, layout), first);
+    const retry = generateGraphForPhase(phase, first.seed, layout, first.results.winner.startId);
+    assert.ok(isValidGraph(retry, retry.results, phase));
+    assert.notEqual(retry.results.winner.startId, first.results.winner.startId,
+      `Nova tentativa repetiu o vencedor: ${layout}, fase ${phase.id}`);
+    assert.notDeepEqual({ nodes: retry.nodes, edges: retry.edges }, { nodes: first.nodes, edges: first.edges });
   }
 }
 

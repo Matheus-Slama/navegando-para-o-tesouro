@@ -3,7 +3,7 @@ import { BOAT_COLORS } from '@/game/enums/boat-colors';
 import './RaceResult.css';
 import { VictoryTreasure } from '@/game/components/VictoryTreasure/VictoryTreasure';
 
-export function RaceResult({ result, winner, isFinalPhase, onContinue, onBackToMenu, lives, score, highscore }) {
+export function RaceResult({ result, winner, isFinalPhase, onContinue, onBackToMenu, lives, score, highscore, lostPoints = 0 }) {
   if (!result) return null;
   if (result === 'victory' && isFinalPhase) {
     return <VictoryTreasure onContinue={onContinue} onBackToMenu={onBackToMenu} score={score} highscore={highscore} />;
@@ -26,6 +26,7 @@ export function RaceResult({ result, winner, isFinalPhase, onContinue, onBackToM
               : 'Siga para a próxima fase.'
             : `O ${winnerBoatName} foi o vencedor.`}
         </p>
+        {result === 'defeat' && <p>Você perdeu <strong>{formatScore(lostPoints)} pontos</strong>.</p>}
         {lives === 0 && (
           <p>Pontuação final: {formatScore(score)}<br />
             High Score: {formatScore(highscore)}</p>

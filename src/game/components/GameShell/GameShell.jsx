@@ -24,6 +24,7 @@ export function GameShell() {
   const [highlightDijkstra, setHighlightDijkstra] = useState(false);
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [mapSeed, setMapSeed] = useState(null);
+  const [previousWinnerId, setPreviousWinnerId] = useState(null);
   const [selectedStartId, setSelectedStartId] = useState(null);
   const [animationKey, setAnimationKey] = useState(0);
   const [raceResult, setRaceResult] = useState(null);
@@ -75,10 +76,11 @@ export function GameShell() {
 
   const graph = useMemo(() => {
     if (mapSeed === null) return null;
-    return generateGraphForPhase(phase, mapSeed, layout);
-  }, [phase, mapSeed, layout]);
+    return generateGraphForPhase(phase, mapSeed, layout, previousWinnerId);
+  }, [phase, mapSeed, layout, previousWinnerId]);
 
   function startGame() {
+    setPreviousWinnerId(null);
     setDijkstraAnnounced(false);
     setHighlightDijkstra(false);
     journey.reset();
@@ -90,6 +92,7 @@ export function GameShell() {
   }
 
   function openTutorial() {
+    setPreviousWinnerId(null);
     setDijkstraAnnounced(false);
     setHighlightDijkstra(false);
     journey.reset();
@@ -108,6 +111,7 @@ export function GameShell() {
   }
 
   function returnToMenu() {
+    setPreviousWinnerId(null);
     setPaused(false);
     journey.reset();
     setPhaseIndex(0);
@@ -142,6 +146,7 @@ export function GameShell() {
       return;
     }
     journey.resetClock();
+    setPreviousWinnerId(raceResult === 'defeat' ? graph.results.winner.startId : null);
     setMapSeed(createRandomSeed(mapSeed));
     if (raceResult === 'victory' && phaseIndex < PHASES.length - 1) {
       setPhaseIndex((value) => value + 1);
@@ -152,6 +157,7 @@ export function GameShell() {
   }
 
   function regenerateMap() {
+    setPreviousWinnerId(null);
     journey.resetClock();
     setMapSeed(createRandomSeed(mapSeed));
     setSelectedStartId(null);
@@ -160,6 +166,7 @@ export function GameShell() {
   }
 
   function selectDevPhase(nextPhaseIndex) {
+    setPreviousWinnerId(null);
     journey.resetClock();
     setPhaseIndex(nextPhaseIndex);
     setMapSeed(createRandomSeed(mapSeed));

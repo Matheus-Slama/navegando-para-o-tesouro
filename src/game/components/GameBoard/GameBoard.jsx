@@ -111,6 +111,7 @@ export function GameBoard({
         <RaceResult
           lives={journey.lives}
           score={journey.score}
+          lostPoints={journey.lostPoints}
           highscore={journey.highscore}
           result={raceResult}
           selectedBoat={boats.find((boat) => boat.id === selectedStartId)}

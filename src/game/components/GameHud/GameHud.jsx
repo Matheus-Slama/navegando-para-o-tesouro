@@ -32,7 +32,7 @@ export function GameHud({ lives, elapsed = 0, score = 0 }) {
           />
         )}
       </span>
-      <span className="game-hud__score" style={{ '--score-font-scale': scoreFontScale }} data-negative={score < 0} role="status" aria-label={`Pontuação: ${score} pontos`}>
+      <span className="game-hud__score" style={{ '--score-font-scale': scoreFontScale }} data-negative={score < 0} role="status" aria-label={`Pontuação: ${formattedScore} pontos`}>
         {formattedScore}
       </span>
       <span className="game-hud__time" role="timer" aria-label={`Tempo da fase: ${time}`}>

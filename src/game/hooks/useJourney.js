@@ -7,6 +7,7 @@ import { getWrongBoatPenalty } from '@/game/config/balance';
 
 export function useJourney(running) {
   const [score, setScore] = useState(0);
+  const [lostPoints, setLostPoints] = useState(0);
   const [highscore, setHighscore] = useState(0);
   const [lives, setLives] = useState(3);
   const [elapsed, setElapsed] = useState(0);
@@ -45,6 +46,7 @@ export function useJourney(running) {
     clock.current = { accumulated: 0, started: running ? performance.now() : null };
     settled.current = false;
     setElapsed(0);
+    setLostPoints(0);
   }
 
   function reset() {
@@ -64,6 +66,7 @@ export function useJourney(running) {
     settled.current = true;
     if (!won) {
       const penalty = getWrongBoatPenalty(currentTime());
+      setLostPoints(penalty);
       setScore((value) => value - penalty);
       setLives((value) => Math.max(0, value - 1));
       return;
@@ -82,5 +85,5 @@ export function useJourney(running) {
     });
   }
 
-  return { score, highscore, lives, elapsed, reset, resetClock, freeze, finish };
+  return { score, lostPoints, highscore, lives, elapsed, reset, resetClock, freeze, finish };
 }

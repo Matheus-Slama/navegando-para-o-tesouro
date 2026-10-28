@@ -17,7 +17,7 @@ import erdosRenyi from 'graphology-generators/random/erdos-renyi.js';
  * - rotas extras são adicionadas;
  * - Dijkstra valida se existe um único vencedor.
  */
-export function generateGraphForPhase(phase, seed = createRandomSeed(), layout = 'mobile') {
+export function generateGraphForPhase(phase, seed = createRandomSeed(), layout = 'mobile', previousWinnerId = null) {
   let attempt = 0;
 
   while (attempt < 2000) {
@@ -29,7 +29,7 @@ export function generateGraphForPhase(phase, seed = createRandomSeed(), layout =
     }
     const results = getPhaseResults(graph, phase);
 
-    if (isValidGraph(graph, results, phase)) {
+    if (isValidGraph(graph, results, phase) && results.winner.startId !== previousWinnerId) {
       return {
         ...graph,
         seed: seed + attempt * 97,
